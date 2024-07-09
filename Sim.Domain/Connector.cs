@@ -9,9 +9,9 @@ namespace Sim.Domain;
 public class Connector
 {
     public string Id { get; set; }
-    public double X { get; set; } = 0;
-    public double Y { get; set; } = 0;
-    public bool Connected { get; set; } = false;
+    public double X { get; set; }
+    public double Y { get; set; }
+    public bool Connected { get; set; }
     public List<string> JointConnectorsId { get; set; } = [];
     public List<string> JointBindersId { get; set; } = [];
 

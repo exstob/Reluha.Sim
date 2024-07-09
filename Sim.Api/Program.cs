@@ -9,7 +9,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin",
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000") // Replace with your allowed origin(s)
+            policy.WithOrigins("http://localhost:3000")
                   .AllowAnyMethod()
                   .AllowAnyHeader();
         });
@@ -22,11 +22,11 @@ builder.Services
 
 var app = builder.Build();
 
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger()
-//       .UseSwaggerUI();
-//}
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger()
+       .UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
 

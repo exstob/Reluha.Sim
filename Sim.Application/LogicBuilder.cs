@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sim.Domain;
-
-public interface IPoint
+namespace Sim.Application
 {
-    double X { get; set; }
-    double Y { get; set; }
+    internal class LogicBuilder
+    {
+
+    }
 }
-
-
-
