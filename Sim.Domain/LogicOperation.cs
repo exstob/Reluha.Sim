@@ -11,7 +11,7 @@ namespace Sim.Domain
         public LogicOperation() { }
         public ChainValue ChainAnd(params string[] ops) 
         {
-            return ChainValue.O;
+            return ChainValue.U;
         }  
     }
 }
