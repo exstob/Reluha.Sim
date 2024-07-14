@@ -13,29 +13,95 @@ namespace Sim.Tests
         [Fact]
         public void OrOperation_with_Chain_Values_Ok()
         {
-            var x1 = new ChainResult(ChainValue.P);
-            var x2 = new ChainResult(ChainValue.N);
+            var x1 = new ChainState(ChainValue.P);
+            var x2 = new ChainState(ChainValue.N);
             var result = x1 | x2;
-            result.ShouldBe(ChainValue.U);
+            result.Value.ShouldBe(ChainValue.U);
 
-            var x3 = new ChainResult(ChainValue.N);
-            var x4 = new ChainResult(ChainValue.Z);
-            var x5 = new ChainResult(ChainValue.N);
+            var x3 = new ChainState(ChainValue.N);
+            var x4 = new ChainState(ChainValue.Z);
+            var x5 = new ChainState(ChainValue.N);
             result = x3 | x4 | x5;
-            result.ShouldBe(ChainValue.N);
+            result.Value.ShouldBe(ChainValue.N);
+        }
+
+        [Fact]
+        public void AndOperation_with_Chain_Values_Ok()
+        {
+            var x1 = new ChainState(ChainValue.P);
+            var x2 = new ChainState(ChainValue.P);
+            var result = x1 & x2;
+            result.Value.ShouldBe(ChainValue.P);
+
+            x1 = new ChainState(ChainValue.N);
+            x2 = new ChainState(ChainValue.N);
+            result = x1 & x2;
+            result.Value.ShouldBe(ChainValue.N);
+
+            x1 = new ChainState(ChainValue.N);
+            x2 = new ChainState(ChainValue.U);
+            result = x1 & x2;
+            result.Value.ShouldBe(ChainValue.Z);
+        }
+
+        [Fact]
+        public void XorOperation_with_Chain_Values_Ok()
+        {
+            var x1 = new ChainState(ChainValue.P);
+            var x2 = new ChainState(ChainValue.N);
+            var result = x1 ^ x2;
+            result.Value.ShouldBe(ChainValue.P);
+
+            x1 = new ChainState(ChainValue.N);
+            x2 = new ChainState(ChainValue.P);
+            result = x1 ^ x2;
+            result.Value.ShouldBe(ChainValue.N);
+
+            x1 = new ChainState(ChainValue.P);
+            x2 = new ChainState(ChainValue.P);
+            result = x1 ^ x2;
+            result.Value.ShouldBe(ChainValue.Z);
+        }
+
+        [Fact]
+        public void NotOperation_with_Chain_Values_Ok()
+        {
+            var x1 = new ChainState(ChainValue.P);
+            var result = !x1;
+            result.Value.ShouldBe(ChainValue.N);
+
+            x1 = new ChainState(ChainValue.N);
+            result = !x1;
+            result.Value.ShouldBe(ChainValue.P);
+
+        }
+
+        [Fact]
+        public void ImplOperation_with_Chain_Values_Ok()
+        {
+            var x1 = new ChainState(ChainValue.P);
+            var x2 = new ChainState(ChainValue.N);
+
+            var result = (ChainValue.P & x1) & !(ChainValue.N & x2);
+            result.Value.ShouldBe(ChainValue.P);
+
+            x1 = new ChainState(ChainValue.N);
+            x2 = new ChainState(ChainValue.P);
+            result = (ChainValue.P & x1) & !(ChainValue.N & x2);
+            result.Value.ShouldBe(ChainValue.Z);
         }
 
         [Fact]
         public void AndOperation_with_Chain_and_Contact_Values_Ok()
         {
-            var x1 = new ChainResult(ChainValue.P);
+            var x1 = new ChainState(ChainValue.P);
             var x2 = ContactValue.F;
             var result = x1 & x2;
-            result.ShouldBe(ChainValue.Z);
+            result.Value.ShouldBe(ChainValue.Z);
 
 
             result = x2 & x1;
-            result.ShouldBe(ChainValue.Z);
+            result.Value.ShouldBe(ChainValue.Z);
         }
     }
 }
