@@ -89,6 +89,13 @@ namespace Sim.Tests
             x2 = new ChainState(ChainValue.P);
             result = (ChainValue.P & x1) & !(ChainValue.N & x2);
             result.Value.ShouldBe(ChainValue.Z);
+
+
+            x1 = new ChainState(ChainValue.P);
+            x2 = new ChainState(ChainValue.N);
+
+            result = (ChainValue.P & x1) ^ x2;
+            result.Value.ShouldBe(ChainValue.P);
         }
 
         [Fact]

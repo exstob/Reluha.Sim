@@ -23,14 +23,24 @@ public class ContactState
         Value = v;
     }
 
-    public static implicit operator ContactValue(ContactState contactResult)
+    public static implicit operator ContactValue(ContactState state)
     {
-        return contactResult.Value;
+        return state.Value;
     }
+
+    public static implicit operator ContactState(ContactValue value)
+    {
+        return new ContactState(value);
+    }
+
+    //public static explicit operator ContactState(ContactValue value)
+    //{
+    //    return new ContactState(value);
+    //}
 
     public override string ToString() => $"{Value}";
 
-    public static ContactValue operator &(ContactState lhs, ContactState rhs)  // apply where different poles are connected
+    public static ContactState operator &(ContactState lhs, ContactState rhs)  // apply where different poles are connected
     {
         return (lhs.Value, rhs.Value) switch
         {
@@ -39,24 +49,11 @@ public class ContactState
             (ContactValue.T, ContactValue.F) => new ContactState(ContactValue.F),
             (ContactValue.T, ContactValue.T) => new ContactState(ContactValue.T),
 
-            _ => ContactValue.F
+            _ => (ContactState)ContactValue.F
         };
     }
 
-    //public static ContactValue operator &(ContactState lhs, ContactValue rhs)  // apply where different poles are connected
-    //{
-    //    return (lhs.Value, rhs) switch
-    //    {
-    //        (ContactValue.F, ContactValue.F) => new ContactState(ContactValue.F),
-    //        (ContactValue.F, ContactValue.T) => new ContactState(ContactValue.F),
-    //        (ContactValue.T, ContactValue.F) => new ContactState(ContactValue.F),
-    //        (ContactValue.T, ContactValue.T) => new ContactState(ContactValue.T),
-
-    //        _ => ContactValue.F
-    //    };
-    //}
-
-    public static ContactValue operator |(ContactState lhs, ContactState rhs)  // apply where different poles are connected
+    public static ContactState operator |(ContactState lhs, ContactState rhs)  // apply where different poles are connected
     {
         return (lhs.Value, rhs.Value) switch
         {
@@ -65,32 +62,19 @@ public class ContactState
             (ContactValue.T, ContactValue.F) => new ContactState(ContactValue.T),
             (ContactValue.T, ContactValue.T) => new ContactState(ContactValue.T),
 
-            _ => ContactValue.F
+            _ => (ContactState)ContactValue.F
         };
     }
 
 
-    //public static ContactValue operator |(ContactState lhs, ContactValue rhs)  // apply where different poles are connected
-    //{
-    //    return (lhs.Value, rhs) switch
-    //    {
-    //        (ContactValue.F, ContactValue.F) => new ContactState(ContactValue.F),
-    //        (ContactValue.F, ContactValue.T) => new ContactState(ContactValue.T),
-    //        (ContactValue.T, ContactValue.F) => new ContactState(ContactValue.T),
-    //        (ContactValue.T, ContactValue.T) => new ContactState(ContactValue.T),
-
-    //        _ => ContactValue.F
-    //    };
-    //}
-
-    public static ContactValue operator !(ContactState state)
+    public static ContactState operator !(ContactState state)
     {
         return state.Value switch
         {
             (ContactValue.F) => new ContactState(ContactValue.T),
             (ContactValue.T) => new ContactState(ContactValue.F),
 
-            _ => ContactValue.F
+            _ => new ContactState(ContactValue.F)
         };
     }
 

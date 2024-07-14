@@ -12,9 +12,17 @@ namespace Sim.Domain
     {
         Z, // zero
         P, // positive
-        U, // unknown (posisive or negative)
+        U, // unknown (posisive or negative) => rename to CONFLICT
         N, // negative
      }
+
+    //public enum ChainValue : byte
+    //{
+    //    Z = 0b_00, // zero
+    //    U = 0b_10, // unknown (posisive or negative) => rename to CONFLICT
+    //    P = 0b_01, // positive
+    //    N = 0b_11// negative
+    //}
 
     public class ChainState
     {
@@ -34,7 +42,7 @@ namespace Sim.Domain
             return chainResult.Value;
         }
 
-        public static explicit operator ChainState(ChainValue value)
+        public static implicit operator ChainState(ChainValue value)
         {
             return new ChainState(value);
         }
@@ -92,7 +100,7 @@ namespace Sim.Domain
             return (ChainState)firstInput & secondInput;
         }
 
-        public static ChainState operator &(ChainState firstInput, ContactValue secondInput) // Mix binary and quaternary
+        public static ChainState operator &(ChainState firstInput, ContactValue secondInput) // Mix BINARY and QUATERNARY
         {
             return (firstInput.Value, secondInput) switch
             {
@@ -108,20 +116,9 @@ namespace Sim.Domain
             };
         }
 
-        public static ChainState operator &(ContactValue firstInput, ChainState secondInput) // Mix binary and quaternary
+        public static ChainState operator &(ContactValue firstInput, ChainState secondInput) // Mix BINARY and QUATERNARY
         {
-            return (firstInput, secondInput.Value) switch
-            {
-                (ContactValue.F, ChainValue.P) => new ChainState(ChainValue.Z),
-                (ContactValue.F, ChainValue.N) => new ChainState(ChainValue.Z),
-                (ContactValue.F, ChainValue.Z) => new ChainState(ChainValue.Z),
-                (ContactValue.F, ChainValue.U) => new ChainState(ChainValue.Z),
-                (ContactValue.T, ChainValue.P) => new ChainState(ChainValue.P),
-                (ContactValue.T, ChainValue.N) => new ChainState(ChainValue.N),
-                (ContactValue.T, ChainValue.Z) => new ChainState(ChainValue.Z),
-                (ContactValue.T, ChainValue.U) => new ChainState(ChainValue.U),
-                _ => new ChainState(ChainValue.U) // Default case
-            };
+           return secondInput & firstInput;
         }
 
         public static ChainState operator ^(ChainState firstInput, ChainState secondInput) // Relay XOR operation
