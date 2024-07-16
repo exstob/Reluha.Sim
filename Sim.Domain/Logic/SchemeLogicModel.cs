@@ -9,19 +9,24 @@ namespace Sim.Domain.Logic
 {
     public class SchemeLogicModel
     {
-        static dynamic InputContactStates = new ExpandoObject();
-        public static void AddProperty(string propertyName, object propertyValue)
+        dynamic inputContactStates = new ExpandoObject();
+
+        public SchemeLogicModel()
         {
-            var expandoDict = InputContactStates as IDictionary<string, object>;
+            inputContactStates = new ExpandoObject();
+        }
+        public void AddProperty(string propertyName, object propertyValue)
+        {
+            var expandoDict = inputContactStates as IDictionary<string, object>;
             if (expandoDict.ContainsKey(propertyName))
                 expandoDict[propertyName] = propertyValue;
             else
                 expandoDict.Add(propertyName, propertyValue);
         }
 
-        public static object GetProperty(string propertyName)
+        public object GetProperty(string propertyName)
         {
-            var expandoDict = InputContactStates as IDictionary<string, object>;
+            var expandoDict = inputContactStates as IDictionary<string, object>;
             return expandoDict[propertyName];
         }
     }

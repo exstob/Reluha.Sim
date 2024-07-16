@@ -28,6 +28,10 @@ namespace Sim.Domain
     {
         public ChainValue Value { get; set; }
 
+        public static ChainState P() => new (ChainValue.P);
+        public static ChainState N() => new (ChainValue.N);
+        public static ChainState Z() => new (ChainValue.Z);
+        public static ChainState U() => new (ChainValue.U);
         private ChainState()
         {
             Value = ChainValue.Z;

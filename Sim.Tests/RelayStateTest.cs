@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
+using System.Dynamic;
 
 
 namespace Sim.Tests
@@ -14,21 +15,31 @@ namespace Sim.Tests
         [Fact]
         public async Task OrOperation_with_Chain_Values_Ok()
         {
-            var relay = new RelayState("PP + A & B", "A | B");
+            var relay = new RelayState("Relay_name" , "x.PP & x.A & x.B", "(x.C | x.D) & x.NN");
 
             var x1 = new ChainState(ChainValue.P);
             var x2 = new ChainState(ChainValue.N);
 
-            var result = await relay.Calc(x1, x2);
+            
+            dynamic contactList = new ExpandoObject();
 
-            result.Value.ShouldBe(ChainValue.Z);
+            //var contactList = new GlobalsExpando();
 
+            contactList.PP = new ChainState(ChainValue.P);
+            contactList.A = new ContactState(ContactValue.T);
+            contactList.B = new ContactState(ContactValue.T);
 
-            var x3 = new ChainState(ChainValue.P);
-            var x4 = new ChainState(ChainValue.P);
+            contactList.NN = new ChainState(ChainValue.N);
+            contactList.C = new ContactState(ContactValue.F);
+            contactList.D = new ContactState(ContactValue.T);
 
-            result = await relay.Calc(x3, x4);
+            var wrapContactList = new GlobalsExpando { x = contactList };
 
+            var result = await relay.Calc(wrapContactList);
+
+            result.Value.ShouldBe(ChainValue.P);
+
+            result = await relay.Calc(wrapContactList);
             result.Value.ShouldBe(ChainValue.P);
 
         }

@@ -15,17 +15,18 @@ namespace Sim.Tests
         [Fact]
         public void AddProperty_Ok()
         {
-            SchemeLogicModel.AddProperty("Rel123", new ChainState(ChainValue.P));
+            var model = new SchemeLogicModel();
+            model.AddProperty("Rel123", new ChainState(ChainValue.P));
 
-            var Rel123 = SchemeLogicModel.GetProperty("Rel123");
+            var Rel123 = model.GetProperty("Rel123");
 
             var result_rel = Rel123 as ChainState;
             result_rel?.Value.ShouldBe(ChainValue.P);
 
 
-            SchemeLogicModel.AddProperty("conact_666", new ContactState(ContactValue.T));
+            model.AddProperty("conact_666", new ContactState(ContactValue.T));
 
-            var result_cont = SchemeLogicModel.GetProperty("conact_666") as ContactState;
+            var result_cont = model.GetProperty("conact_666") as ContactState;
             result_cont.Value.ShouldBe(ContactValue.T);
 
         }
