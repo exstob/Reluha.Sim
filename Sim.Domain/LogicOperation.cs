@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sim.Domain.Logic;
 
 namespace Sim.Domain
 {
@@ -11,7 +12,7 @@ namespace Sim.Domain
         public LogicOperation() { }
         public ChainValue ChainAnd(params string[] ops) 
         {
-            return ChainValue.U;
+            return ChainValue.C;
         }  
     }
 }

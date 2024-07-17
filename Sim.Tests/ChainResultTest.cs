@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
-using Sim.Domain;
+using Sim.Domain.Logic;
 
 namespace Sim.Tests
 {
@@ -16,7 +16,7 @@ namespace Sim.Tests
             var x1 = new ChainState(ChainValue.P);
             var x2 = new ChainState(ChainValue.N);
             var result = x1 | x2;
-            result.Value.ShouldBe(ChainValue.U);
+            result.Value.ShouldBe(ChainValue.C);
 
             var x3 = new ChainState(ChainValue.N);
             var x4 = new ChainState(ChainValue.Z);
@@ -39,7 +39,7 @@ namespace Sim.Tests
             result.Value.ShouldBe(ChainValue.N);
 
             x1 = new ChainState(ChainValue.N);
-            x2 = new ChainState(ChainValue.U);
+            x2 = new ChainState(ChainValue.C);
             result = x1 & x2;
             result.Value.ShouldBe(ChainValue.Z);
         }

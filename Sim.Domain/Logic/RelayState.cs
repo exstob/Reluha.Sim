@@ -6,9 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Dynamic;
-using Sim.Domain;
 
-namespace Sim.Domain
+namespace Sim.Domain.Logic
 {
     public class RelayState(string name, string posInp, string negInp)
     {
@@ -26,7 +25,7 @@ namespace Sim.Domain
 
         private Script<ChainState>? _negativeInputScript;
 
-        public async Task<ChainState> Calc(GlobalsExpando contactState) 
+        public async Task<ChainState> Calc(InputContactStates contactState)
         {
             var scriptOptions = ScriptOptions.Default
                 .AddReferences(typeof(ChainState).Assembly)
@@ -35,9 +34,9 @@ namespace Sim.Domain
                 .AddImports("System");
 
 
-            if (_positiveInputScript is null) 
+            if (_positiveInputScript is null)
             {
-                _positiveInputScript = CSharpScript.Create<ChainState>(PositiveInputExpression, scriptOptions, typeof(GlobalsExpando));
+                _positiveInputScript = CSharpScript.Create<ChainState>(PositiveInputExpression, scriptOptions, typeof(InputContactStates));
                 _positiveInputScript.Compile();
             }
 
@@ -50,7 +49,7 @@ namespace Sim.Domain
 
             if (_negativeInputScript is null)
             {
-                _negativeInputScript = CSharpScript.Create<ChainState>(NegativeInputExpression, scriptOptions, typeof(GlobalsExpando));
+                _negativeInputScript = CSharpScript.Create<ChainState>(NegativeInputExpression, scriptOptions, typeof(InputContactStates));
                 _negativeInputScript.Compile();
             }
 
@@ -77,19 +76,10 @@ namespace Sim.Domain
 
 
 }
-//public class GlobalsExpando
-//{
-//    public ChainState PP { get; set; }
-//    public ContactState A { get; set; }
-//    public ContactState B { get; set; }
-//    public ChainState NN { get; set; }
-//    public ContactState C { get; set; }
-//    public ContactState D { get; set; }
-//}
 
-public class GlobalsExpando
-{
-    public dynamic x { get; set; }
-}
+//public class InputContactStates
+//{
+//    public dynamic x { get; set; }
+//}
 
 

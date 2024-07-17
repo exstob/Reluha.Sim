@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sim.Domain;
+namespace Sim.Domain.Logic;
 
 public enum ContactValue
 {
@@ -71,8 +71,8 @@ public class ContactState
     {
         return state.Value switch
         {
-            (ContactValue.F) => new ContactState(ContactValue.T),
-            (ContactValue.T) => new ContactState(ContactValue.F),
+            ContactValue.F => new ContactState(ContactValue.T),
+            ContactValue.T => new ContactState(ContactValue.F),
 
             _ => new ContactState(ContactValue.F)
         };

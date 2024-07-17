@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
-using Sim.Domain;
+using Sim.Domain.Logic;
 
 namespace Sim.Tests
 {

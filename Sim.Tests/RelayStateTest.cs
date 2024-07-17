@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
 using System.Dynamic;
+using Sim.Domain.Logic;
 
 
 namespace Sim.Tests
@@ -23,7 +24,7 @@ namespace Sim.Tests
             
             dynamic contactList = new ExpandoObject();
 
-            //var contactList = new GlobalsExpando();
+            //var contactList = new InputContactStates();
 
             contactList.PP = new ChainState(ChainValue.P);
             contactList.A = new ContactState(ContactValue.T);
@@ -33,7 +34,7 @@ namespace Sim.Tests
             contactList.C = new ContactState(ContactValue.F);
             contactList.D = new ContactState(ContactValue.T);
 
-            var wrapContactList = new GlobalsExpando { x = contactList };
+            var wrapContactList = new InputContactStates { x = contactList };
 
             var result = await relay.Calc(wrapContactList);
 
