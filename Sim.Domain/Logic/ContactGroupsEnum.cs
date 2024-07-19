@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Sim.Domain.Logic
 {
-    public class InputContactStates
+    public enum ContactGroupsEnum
     {
-        public dynamic x { get; set; }
+        Virtual,
+        Normal,
+        Polar
     }
 }

@@ -8,21 +8,21 @@ using System.Threading.Tasks;
 namespace Sim.Domain.Logic
 {
 
-    public enum ChainValue
-    {
-        Z, // zero
-        P, // positive
-        C, // conflict (posisive or negative) 
-        N, // negative
-    }
-
-    //public enum ChainValue : byte
+    //public enum ChainValue
     //{
-    //    Z = 0b_00, // zero
-    //    C = 0b_10, // unknown (posisive or negative)
-    //    P = 0b_01, // positive
-    //    N = 0b_11// negative
+    //    Z, // zero
+    //    P, // positive
+    //    C, // conflict (posisive or negative) 
+    //    N, // negative
     //}
+
+    public enum ChainValue : byte
+    {
+        Z = 0b_00, // zero
+        C = 0b_10, // conflict (posisive or negative)
+        P = 0b_01, // positive
+        N = 0b_11, // negative
+    }
 
     public class ChainState
     {
@@ -83,7 +83,7 @@ namespace Sim.Domain.Logic
             };
         }
 
-        public static ChainState operator &(ChainState firstInput, ChainState secondInput) // Relay AND operation; aplicable (P & x) & !(N & y) (implication)
+        public static ChainState operator &(ChainState firstInput, ChainState secondInput) // Relay AND operation; aplicable (P & v) & !(N & y) (implication)
         {
             return (firstInput.Value, secondInput.Value) switch
             {
@@ -94,12 +94,12 @@ namespace Sim.Domain.Logic
             };
         }
 
-        public static ChainState operator &(ChainState firstInput, ChainValue secondInput) // Relay AND operation; aplicable (P & x) & !(N & y) (implication)
+        public static ChainState operator &(ChainState firstInput, ChainValue secondInput) // Relay AND operation; aplicable (P & v) & !(N & y) (implication)
         {
             return firstInput & (ChainState)secondInput;
         }
 
-        public static ChainState operator &(ChainValue firstInput, ChainState secondInput) // Relay AND operation; aplicable (P & x) & !(N & y) (implication)
+        public static ChainState operator &(ChainValue firstInput, ChainState secondInput) // Relay AND operation; aplicable (P & v) & !(N & y) (implication)
         {
             return (ChainState)firstInput & secondInput;
         }

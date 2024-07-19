@@ -14,6 +14,9 @@ public class ContactState
 
     public ContactValue Value { get; set; }
 
+    public static ContactState T() => new(ContactValue.T);
+    public static ContactState F() => new(ContactValue.F);
+
     private ContactState()
     {
         Value = ContactValue.F;

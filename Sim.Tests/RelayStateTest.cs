@@ -16,7 +16,7 @@ namespace Sim.Tests
         [Fact]
         public async Task OrOperation_with_Chain_Values_Ok()
         {
-            var relay = new RelayState("Relay_name" , "x.PP & x.A & x.B", "(x.C | x.D) & x.NN");
+            var relay = new RelayState("Relay_name" , "v.PP & v.A & v.B", "(v.C | v.D) & v.NN");
 
             var x1 = new ChainState(ChainValue.P);
             var x2 = new ChainState(ChainValue.N);
@@ -24,7 +24,7 @@ namespace Sim.Tests
             
             dynamic contactList = new ExpandoObject();
 
-            //var contactList = new InputContactStates();
+            //var contactList = new InputContactGroupDto();
 
             contactList.PP = new ChainState(ChainValue.P);
             contactList.A = new ContactState(ContactValue.T);
@@ -34,14 +34,16 @@ namespace Sim.Tests
             contactList.C = new ContactState(ContactValue.F);
             contactList.D = new ContactState(ContactValue.T);
 
-            var wrapContactList = new InputContactStates { x = contactList };
+            var wrapContactList = new InputContactGroupDto { v = contactList };
 
             var result = await relay.Calc(wrapContactList);
 
-            result.Value.ShouldBe(ChainValue.P);
+            result.NormalContact.Value.ShouldBe(ContactValue.T);
+            result.PolarContact.Value.ShouldBe(ContactValue.F);
 
             result = await relay.Calc(wrapContactList);
-            result.Value.ShouldBe(ChainValue.P);
+            result.NormalContact.Value.ShouldBe(ContactValue.T);
+            result.PolarContact.Value.ShouldBe(ContactValue.F);
 
         }
 

@@ -7,27 +7,73 @@ using System.Threading.Tasks;
 
 namespace Sim.Domain.Logic
 {
-    public class SchemeLogicModel
+    public class SchemeLogicModel(Guid id)
     {
-        dynamic inputContactStates = new ExpandoObject();
+        public Guid Id { get; set; } = id;
+        private InputContactGroupDto contactGroups = new();
+        private List<RelayState> relayStates = [];
 
-        public SchemeLogicModel()
+  
+        public void UpdateContact(string contactName, ContactState value, ContactGroupsEnum groupName = ContactGroupsEnum.Virtual)
         {
-            inputContactStates = new ExpandoObject();
-        }
-        public void AddProperty(string propertyName, object propertyValue)
-        {
-            var expandoDict = inputContactStates as IDictionary<string, object>;
-            if (expandoDict.ContainsKey(propertyName))
-                expandoDict[propertyName] = propertyValue;
+            var expandoDict = groupName switch
+            {
+                ContactGroupsEnum.Virtual => contactGroups.v as IDictionary<string, object>,
+                ContactGroupsEnum.Polar => contactGroups.p as IDictionary<string, object>,
+                ContactGroupsEnum.Normal => contactGroups.n as IDictionary<string, object>,
+                _ => throw new ArgumentException("Unknown Group of contact", groupName.ToString())
+            }; 
+
+
+            if (expandoDict!.ContainsKey(contactName))
+                expandoDict[contactName] = value;
             else
-                expandoDict.Add(propertyName, propertyValue);
+                expandoDict.Add(contactName, value);
         }
 
-        public object GetProperty(string propertyName)
+        public ContactState GetContact(string contactName, ContactGroupsEnum groupName = ContactGroupsEnum.Virtual)
         {
-            var expandoDict = inputContactStates as IDictionary<string, object>;
-            return expandoDict[propertyName];
+            var expandoDict = groupName switch
+            {
+                ContactGroupsEnum.Virtual => contactGroups.v as IDictionary<string, object>,
+                ContactGroupsEnum.Polar => contactGroups.p as IDictionary<string, object>,
+                ContactGroupsEnum.Normal => contactGroups.n as IDictionary<string, object>,
+                _ => throw new ArgumentException("Unknown Group of contact", groupName.ToString())
+            };
+            return (ContactState)expandoDict[contactName];
+        }
+
+        public void AddRelay(RelayState relay)
+        {
+            relayStates.Add(relay);
+        }
+
+        public async Task<bool> Evaluate()
+        {
+            //foreach (var rel in relayStates) 
+            //{
+            //    rel.Calc(contactGroups);
+            //}
+
+            //Parallel.ForEach(relayStates, state => state.Calc(contactGroups));
+
+            var tasks = relayStates.Select(state => Task.Run(() => state.Calc(contactGroups))).ToList();
+            RelayState[] newChainState = await Task.WhenAll(tasks);
+
+            var isUpdated = false;
+            foreach (var relay in newChainState) 
+            {
+                if (relay.isUpdated)
+                {
+                    UpdateContact(relay.Name, relay.NormalContact, ContactGroupsEnum.Normal);
+                    UpdateContact(relay.Name, relay.PolarContact, ContactGroupsEnum.Polar);
+                }
+
+                isUpdated |= relay.isUpdated;
+            }
+
+            return isUpdated;
+
         }
     }
 }

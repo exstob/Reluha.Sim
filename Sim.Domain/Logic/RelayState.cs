@@ -12,9 +12,11 @@ namespace Sim.Domain.Logic
     public class RelayState(string name, string posInp, string negInp)
     {
         private ChainState _relayState = ChainValue.Z;
+        private bool _updated = false;
         public string Name { get; set; } = name;
-        public ContactState NormalContact { get; set; } = ContactValue.F;
-        public ContactState PolarContact { get; set; } = ContactValue.F;
+        public ContactState NormalContact { get => IsHigh() ? ContactValue.T : ContactValue.F; }
+        public ContactState PolarContact { get => IsNegative() ? ContactValue.T : ContactValue.F; }
+        public bool isUpdated { get => _updated; }
         public int StartDelay { get; set; } = 0;
         public int EndDelay { get; set; } = 0;
 
@@ -25,7 +27,9 @@ namespace Sim.Domain.Logic
 
         private Script<ChainState>? _negativeInputScript;
 
-        public async Task<ChainState> Calc(InputContactStates contactState)
+        public override string ToString() => $"{_relayState.Value}";
+
+        public async Task<RelayState> Calc(InputContactGroupDto contactState)
         {
             var scriptOptions = ScriptOptions.Default
                 .AddReferences(typeof(ChainState).Assembly)
@@ -36,36 +40,27 @@ namespace Sim.Domain.Logic
 
             if (_positiveInputScript is null)
             {
-                _positiveInputScript = CSharpScript.Create<ChainState>(PositiveInputExpression, scriptOptions, typeof(InputContactStates));
+                _positiveInputScript = CSharpScript.Create<ChainState>(PositiveInputExpression, scriptOptions, typeof(InputContactGroupDto));
                 _positiveInputScript.Compile();
             }
 
             var posResult = (await _positiveInputScript.RunAsync(contactState, new CancellationToken())).ReturnValue;
 
-            //var posResult = await CSharpScript.EvaluateAsync<ChainState>(
-            //    PositiveInputExpression,
-            //    scriptOptions,
-            //    globals);
-
             if (_negativeInputScript is null)
             {
-                _negativeInputScript = CSharpScript.Create<ChainState>(NegativeInputExpression, scriptOptions, typeof(InputContactStates));
+                _negativeInputScript = CSharpScript.Create<ChainState>(NegativeInputExpression, scriptOptions, typeof(InputContactGroupDto));
                 _negativeInputScript.Compile();
             }
 
             var negResult = (await _negativeInputScript.RunAsync(contactState, new CancellationToken())).ReturnValue;
 
-            //var negResult = await CSharpScript.EvaluateAsync<ChainState>(
-            //    PositiveInputExpression,
-            //    scriptOptions,
-            //    globals);
 
             ///_relayState = (ChainValue.P & posResult) ^ negResult;  /// if the relay with Diod (one way current)
-            _relayState = posResult ^ negResult;
+            var relayNewState = posResult ^ negResult;
+            _updated = relayNewState.Value != _relayState.Value;
+            _relayState = relayNewState;
 
-            NormalContact = IsHigh() ? ContactValue.T : ContactValue.F;
-            PolarContact = IsNegative() ? ContactValue.T : ContactValue.F;
-            return _relayState;
+            return this;
         }
 
         private bool IsHigh() => _relayState == ChainValue.P || _relayState == ChainValue.N;
@@ -77,9 +72,9 @@ namespace Sim.Domain.Logic
 
 }
 
-//public class InputContactStates
+//public class InputContactGroupDto
 //{
-//    public dynamic x { get; set; }
+//    public dynamic v { get; set; }
 //}
 
 

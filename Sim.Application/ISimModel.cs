@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Sim.Application
 {
-    internal interface ISimModel
+    public interface ISimModel
     {
-        internal void Create(SchemeElements elements);
+        //public async Task Create(SchemeElements elements);
     }
 }
