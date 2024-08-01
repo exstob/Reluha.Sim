@@ -1,5 +1,5 @@
-﻿using Sim.Domain;
-using Sim.Domain.Logic;
+﻿using Sim.Domain.Logic;
+using Sim.Domain.UiSchematic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ namespace Sim.Application.UseCases.CreateSchemeLogicModel;
 
 internal class CreateSchemeLogicModel
 {
-    static public SchemeLogicModel Generate(SchemeElements elements) 
+    static public SchemeLogicModel Generate(UiSchemeModel elements) 
     {
         var model = new SchemeLogicModel(Guid.NewGuid());
 

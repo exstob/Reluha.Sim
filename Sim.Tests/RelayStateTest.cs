@@ -16,7 +16,7 @@ namespace Sim.Tests
         [Fact]
         public async Task OrOperation_with_Chain_Values_Ok()
         {
-            var relay = new RelayState("Relay_name" , "v.PP & v.A & v.B", "(v.C | v.D) & v.NN");
+            var relay = new RelayState("v.PP & v.A & v.B", "(v.C | v.D) & v.NN");
 
             var x1 = new ChainState(ChainValue.P);
             var x2 = new ChainState(ChainValue.N);

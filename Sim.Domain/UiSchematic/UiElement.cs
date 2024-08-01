@@ -1,9 +1,9 @@
 ﻿using System.Xml.Linq;
 using System.Collections.Generic;
 
-namespace Sim.Domain;
+namespace Sim.Domain.UiSchematic;
 
-public record Element
+public record UiElement
 {
     public string Id { get; set; }
     public string Name { get; set; }
@@ -12,9 +12,10 @@ public record Element
     public double Y { get; set; }
     public bool Selected { get; set; } = false;
     public bool Mirror { get; set; } = false;
-    public List<Connector> Connectors { get; set; } = [];
+    public List<UiConnector> Connectors { get; set; } = [];
 
-    public object ExtraProps { get; set; } // Can be IRelayExtraProps or ISwitherExtraProps
+    public object ExtraProps { get; set; } // Can be IRelayExtraProps or ISwitcherExtraProps
+    public required object LogicState { get; set; } // Can be RelayLogicState or SwitcherLogicState
 
 }
 

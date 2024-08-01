@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sim.Domain;
+namespace Sim.Domain.UiSchematic;
 
-public class Binder
+public class UiBinder
 {
     public string Id { get; set; }
     public bool Connected { get; set; } = false;

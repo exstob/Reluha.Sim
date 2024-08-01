@@ -1,11 +1,11 @@
 ﻿using Sim.Application.UseCases.CreateSchemeLogicModel;
-using Sim.Domain;
+using Sim.Domain.UiSchematic;
 
 namespace Sim.Application;
 
 public class SimModelManager: ISimModel
 {
-    static public async Task Create(SchemeElements elements) 
+    static public async Task Create(UiSchemeModel elements) 
     {
         var model = CreateSchemeLogicModel.Generate(elements);
 

@@ -9,6 +9,6 @@ namespace Sim.Application
 {
     public interface ISimModel
     {
-        //public async Task Create(SchemeElements elements);
+        //public async Task Create(UiSchemeModel elements);
     }
 }

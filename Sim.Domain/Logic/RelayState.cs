@@ -9,11 +9,11 @@ using System.Dynamic;
 
 namespace Sim.Domain.Logic
 {
-    public class RelayState(string name, string posInp, string negInp)
+    public class RelayState(string posInp, string negInp)
     {
         private ChainState _relayState = ChainValue.Z;
         private bool _updated = false;
-        public string Name { get; set; } = name;
+        //public string Name { get; set; } = name;
         public ContactState NormalContact { get => IsHigh() ? ContactValue.T : ContactValue.F; }
         public ContactState PolarContact { get => IsNegative() ? ContactValue.T : ContactValue.F; }
         public bool isUpdated { get => _updated; }

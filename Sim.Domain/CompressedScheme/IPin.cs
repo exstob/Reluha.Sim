@@ -4,13 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sim.Domain;
+namespace Sim.Domain.CompressedScheme;
 
-public class Point
+internal interface IPin
 {
-    public decimal X { get; set; }
-    public decimal Y { get; set; }
 }
-
-
-

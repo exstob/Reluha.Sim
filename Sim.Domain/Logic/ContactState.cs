@@ -2,7 +2,7 @@
 
 namespace Sim.Domain.Logic;
 
-public enum ContactValue
+public enum ContactValue : byte
 {
     F, // false
     T, // true
@@ -29,6 +29,11 @@ public class ContactState
     public static implicit operator ContactValue(ContactState state)
     {
         return state.Value;
+    }
+
+    public static implicit operator bool(ContactState state)
+    {
+        return state.Value == ContactValue.T;
     }
 
     public static implicit operator ContactState(ContactValue value)

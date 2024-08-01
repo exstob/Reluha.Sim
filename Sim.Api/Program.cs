@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using System.Text.Json;
-using Sim.Domain;
+using Sim.Domain.UiSchematic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +33,7 @@ app.UseHttpsRedirection();
 // Use the CORS middleware
 app.UseCors("AllowSpecificOrigin");
 
-app.MapPost("/simulate", async (SchemeElements elements) =>
+app.MapPost("/simulate", async (UiSchemeModel elements) =>
 {
 
 
