@@ -9,8 +9,8 @@ namespace Sim.Domain.UiSchematic;
 
 public class UiSchemeModel
 {
-    public List<UiElement> Relays { get; set; } = [];
-    public List<UiElement> Switchers { get; set; } = [];
+    public List<UiRelay> Relays { get; set; } = [];
+    public List<UiSwitcher> Switchers { get; set; } = [];
     public List<UiElement> PosPoles { get; set; } = [];
     public List<UiElement> NegPoles { get; set; } = [];
     public List<UiBinder> Binders { get; set; } = new List<UiBinder>();

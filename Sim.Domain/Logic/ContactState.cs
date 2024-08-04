@@ -41,6 +41,11 @@ public class ContactState
         return new ContactState(value);
     }
 
+    public static implicit operator ContactState(bool value)
+    {
+        return value ? new ContactState(ContactValue.T) : new ContactState(ContactValue.F);
+    }
+
     //public static explicit operator ContactState(ContactValue value)
     //{
     //    return new ContactState(value);

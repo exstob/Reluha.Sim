@@ -6,11 +6,5 @@ using System.Threading.Tasks;
 
 namespace Sim.Domain.UiSchematic;
 
-public class Point
-{
-    public decimal X { get; set; }
-    public decimal Y { get; set; }
-}
-
-
+public record UiSwitcherExtraProps(string Style, bool Virtual);
 

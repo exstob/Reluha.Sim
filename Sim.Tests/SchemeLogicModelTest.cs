@@ -45,10 +45,10 @@ namespace Sim.Tests
             model.UpdateContact("R1", ContactState.F(), ContactGroupsEnum.Polar);
 
 
-            var relay1 = new RelayState("R1", "Plus & v.v1 & v.v2", "!v.v3 & v.v4 & Minus");
+            var relay1 = new RelayState("R1", "RelPlus & v.v1 & v.v2", "!v.v3 & v.v4 & RelMinus");
             model.AddRelay(relay1);
             
-            var relay2 = new RelayState("R2", "Plus & n.R1", "v.v4 & Minus");
+            var relay2 = new RelayState("R2", "RelPlus & n.R1", "v.v4 & RelMinus");
             model.AddRelay(relay2);
 
             var result = await model.Evaluate();

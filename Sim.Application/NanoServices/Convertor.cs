@@ -28,7 +28,7 @@ public static class Convertor
 
         foreach (var relay in elements.Relays)
         {
-            foreach (var connector in relay.Connectors)  // Plus and minus connector
+            foreach (var connector in relay.Connectors)  // RelPlus and minus connector
             {
                 if (connector.JointBindersId.Count == 0)
                 {
