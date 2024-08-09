@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Sim.Domain.CompressedScheme;
 
-public class Pin : IPin
+public class Pin : ILogicEdge
 { 
     public required object Parent { get; init; }
     public string Name { get; init; }
-    public Pin? СoupledPin { get; init; }
-    public Node? СoupledNode { get; init; }
+    public Pin?  CoupledPin { get; init; }
+    public Node? CoupledNode { get; init; }
 }

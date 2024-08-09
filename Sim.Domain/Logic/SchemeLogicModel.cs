@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sim.Domain.CompressedScheme;
+using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Sim.Domain.Logic
     {
         public Guid Id { get; set; } = id;
         private InputContactGroupDto contactGroups = new();
-        private List<RelayState> relayStates = [];
+        private List<Relay> relays = [];
 
   
         public void UpdateContact(string contactName, ContactState value, ContactGroupsEnum groupName = ContactGroupsEnum.Virtual)
@@ -43,33 +44,33 @@ namespace Sim.Domain.Logic
             return (ContactState)expandoDict[contactName];
         }
 
-        public void AddRelay(RelayState relay)
+        public void AddRelay(Relay relay)
         {
-            relayStates.Add(relay);
+            relays.Add(relay);
         }
 
         public async Task<bool> Evaluate()
         {
-            //foreach (var rel in relayStates) 
+            //foreach (var rel in relays) 
             //{
             //    rel.Calc(contactGroups);
             //}
 
-            //Parallel.ForEach(relayStates, state => state.Calc(contactGroups));
+            //Parallel.ForEach(relays, state => state.Calc(contactGroups));
 
-            var tasks = relayStates.Select(state => Task.Run(() => state.Calc(contactGroups))).ToList();
-            RelayState[] newChainState = await Task.WhenAll(tasks);
+            var tasks = relays.Select(r => Task.Run(() => r.State.Calc(contactGroups))).ToList();
+            await Task.WhenAll(tasks);
 
             var isUpdated = false;
-            foreach (var relay in newChainState) 
+            foreach (var relay in relays) 
             {
-                if (relay.isUpdated)
+                if (relay.State.isUpdated)
                 {
-                    UpdateContact(relay.Name, relay.NormalContact, ContactGroupsEnum.Normal);
-                    UpdateContact(relay.Name, relay.PolarContact, ContactGroupsEnum.Polar);
+                    UpdateContact(relay.Name, relay.State.NormalContact, ContactGroupsEnum.Normal);
+                    UpdateContact(relay.Name, relay.State.PolarContact, ContactGroupsEnum.Polar);
                 }
 
-                isUpdated |= relay.isUpdated;
+                isUpdated |= relay.State.isUpdated;
             }
 
             return isUpdated;

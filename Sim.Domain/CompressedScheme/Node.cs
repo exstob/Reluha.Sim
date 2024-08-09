@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Sim.Domain.CompressedScheme;
 
-public class Node(int id) : IPin
+public class Node(int id) : ILogicEdge
 {
     public int Id { get; init; } = id;
     //public List<Pin> Pins { get; init; }

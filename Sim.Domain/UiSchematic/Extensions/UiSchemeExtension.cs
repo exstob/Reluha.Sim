@@ -19,6 +19,14 @@ public static class UiSchemeExtension
         return allElements;
     }
 
+    public static List<UiElement> AllPoles(this UiSchemeModel elements)
+    {
+        List<UiElement> allElements = [];
+        allElements.AddRange(elements.NegPoles);
+        allElements.AddRange(elements.PosPoles);
+        return allElements;
+    }
+
     public static string FindNextConnectorId(this List<UiBinder> binders, string binderId, string connectorId)
     {
         var binder = binders.Single(b => b.Id == binderId);
@@ -28,16 +36,17 @@ public static class UiSchemeExtension
 
     }
 
-    public static UiConnector NextConnector(this UiConnector connector, UiSchemeModel elements)
+    public static (UiElement, UiConnector) NextElementAndConnector(this UiConnector connector, UiSchemeModel model)
     {
-        var binder = elements.Binders.Single(b => b.Id == connector.JointBindersId.Single());
+        var binder = model.Binders.Single(b => b.Id == connector.JointBindersId.Single());
         var nextConnectorId = binder.StartConnectorId == connector.Id
             ? binder.EndConnectorId
             : binder.StartConnectorId;
 
-        var element = elements.AllElements().Single(el => el.Connectors.Any(c => c.Id == nextConnectorId));
+        var nextElement = model.AllElements().Single(el => el.Connectors.Any(c => c.Id == nextConnectorId));
+        var nextConnector = nextElement.Connectors.Single(c => c.Id == nextConnectorId);
 
-        return element.Connectors.Single(c => c.Id == nextConnectorId);
+        return (nextElement, nextConnector);
 
     }
 
@@ -53,9 +62,9 @@ public static class UiSchemeExtension
     public static UiConnector Close(this UiSwitcher switcher) => switcher.Connectors.Single(c => c.Name == ConnectorName.Close);
     
     public static bool HasOpenContact(this UiSwitcher switcher) => switcher.Common()!.Connected && switcher.Open()!.Connected;
-    public static bool HasOlnyOpenContact(this UiSwitcher switcher) => switcher.Common()!.Connected && switcher.Open()!.Connected && !switcher.Close()!.Connected;
+    public static bool HasOnlyOpenContact(this UiSwitcher switcher) => switcher.Common()!.Connected && switcher.Open()!.Connected && !switcher.Close()!.Connected;
     public static bool HasCloseContact(this UiSwitcher switcher) => switcher.Common()!.Connected && switcher.Close()!.Connected;
     public static bool HasOnlyCloseContact(this UiSwitcher switcher) => switcher.Common()!.Connected && switcher.Close()!.Connected && !switcher.Open()!.Connected;
-    public static bool HasOlnyOneContact(this UiSwitcher switcher) => switcher.Common()!.Connected && (switcher.Open()!.Connected ^ switcher.Close()!.Connected);
+    public static bool HasOnlyOneContact(this UiSwitcher switcher) => switcher.Common()!.Connected && (switcher.Open()!.Connected ^ switcher.Close()!.Connected);
     public static bool HasBothContacts(this UiSwitcher switcher) => HasOpenContact(switcher) && HasCloseContact(switcher);
 }

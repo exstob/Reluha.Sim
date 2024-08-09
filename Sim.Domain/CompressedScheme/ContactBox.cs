@@ -9,7 +9,7 @@ namespace Sim.Domain.CompressedScheme;
 
 public enum ContactBoxSort
 {
-    Selial,
+    Serial,
     Parallel
 }
 
@@ -20,8 +20,8 @@ public class ContactBox(ContactBoxSort sort)
     //public Pin FirstPin { get; set; }
     //public Pin SecondPin { get; set; }
 
-    public UiConnector FirstPin { get; set; }
-    public UiConnector SecondPin { get; set; }
+    public ILogicEdge FirstPin { get; set; }
+    public ILogicEdge SecondPin { get; set; }
 
     public void Add(Contact contact) => Contacts.Add(contact);
 }

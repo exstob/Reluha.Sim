@@ -9,8 +9,8 @@ namespace Sim.Domain.CompressedScheme;
 
 public class Relay 
 {
-    string Name { get; set; }
-    RelayState State { get; set; }
+    public required string Name { get; set; }
+    public required RelayState State { get; set; }
 
 }
 
