@@ -7,21 +7,20 @@ using System.Threading.Tasks;
 
 namespace Sim.Domain.CompressedScheme;
 
-public enum ContactBoxSort
+public enum ContactBoxType
 {
     Serial,
     Parallel
 }
 
-public class ContactBox(ContactBoxSort sort) 
+public class ContactBox(ContactBoxType boxType) 
 {
-    public ContactBoxSort Sort { get; init; } = sort;
+    public ContactBoxType BoxType { get; init; } = boxType;
     public List<Contact> Contacts { get; set; } = [];
-    //public Pin FirstPin { get; set; }
-    //public Pin SecondPin { get; set; }
+    public List<ContactBox> Boxes { get; set; } = [];
 
-    public ILogicEdge FirstPin { get; set; }
-    public ILogicEdge SecondPin { get; set; }
+    public required ILogicEdge FirstPin { get; set; }
+    public required ILogicEdge SecondPin { get; set; }
 
     public void Add(Contact contact) => Contacts.Add(contact);
 }

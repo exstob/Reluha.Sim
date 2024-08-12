@@ -51,7 +51,7 @@ public class Contact
     //Contact(string name, ContactDefaultState type, Pin coupledPin1, Pin coupledPin2)
     //{
     //    Name = name;
-    //    Type = type;
+    //    BoxType = type;
     //    FirstPin = new Pin { Parent = this, Name = name + ".1", СoupledPin = coupledPin1};
     //    SecondPin = new Pin { Parent = this, Name = name + ".2", СoupledPin = coupledPin2 };
     //}
@@ -59,7 +59,7 @@ public class Contact
     //Contact(string name, ContactDefaultState type, Pin coupledPin1, Node coupledNode2)
     //{
     //    Name = name;
-    //    Type = type;
+    //    BoxType = type;
     //    FirstPin = new Pin { Parent = this, Name = name + ".1", СoupledPin = coupledPin1 };
     //    SecondPin = new Pin { Parent = this, Name = name + ".2", СoupledNode = coupledNode2 };
     //}
@@ -67,7 +67,7 @@ public class Contact
     //Contact(string name, ContactDefaultState type, Node coupledNode1, Pin coupledPin2)
     //{
     //    Name = name;
-    //    Type = type;
+    //    BoxType = type;
     //    FirstPin = new Pin {Parent = this, Name = name + ".1", СoupledNode = coupledNode1 };
     //    SecondPin = new Pin {Parent = this, Name = name + ".2", СoupledPin = coupledPin2 };
     //}
