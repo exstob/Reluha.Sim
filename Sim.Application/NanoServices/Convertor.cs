@@ -28,41 +28,7 @@ public static class Convertor
 
         foreach (var relay in elements.Relays)
         {
-            foreach (var connector in relay.Connectors)  // RelPlus and minus connector
-            {
-                if (connector.JointBindersId.Count == 0)
-                {
-                    Console.WriteLine($"Error: No connections for connector {connector.JointBindersId}");
-                    continue;
-                }
-
-                isRoot = connector.JointBindersId.Count >= 1; 
-
-                foreach (var binder in connector.JointBindersId)
-                {
-                    var nextElement = FindNextElement(binder, connector.Id, allElements, binders);
-                    if (nextElement.ClassName == ElementClassName.Switcher)
-                    {
-                        var state = nextElement.LogicState as ContactState;
-                        _andAccumulator.Add(nextElement.Name, state!);
-                    }
-                    else if (nextElement.ClassName == ElementClassName.Pole)
-                    {
-                        if (nextElement.Connectors.Single().Name == ConnectorName.Positive)
-                        {
-
-                        }
-                        else /// negative
-                        {
-
-                        }
-          
-                    }
-
-                }
-
-
-            }
+            
         }
 
 
@@ -70,26 +36,7 @@ public static class Convertor
     }
 
 
-    static UiElement FindNextElement(string binderId, string connectorId, List<UiElement> elements, List<UiBinder> binders)
-    {
-        var binder = binders.Single(b => b.Id == binderId);
-        var nextConnector = binder.StartConnectorId == connectorId
-            ? binder.EndConnectorId
-            : binder.StartConnectorId;
-
-        return elements.Single(el => el.Connectors.Any(c => c.Id == nextConnector));
-    }
-
-    //private static List<UiElement> AllElements(this UiSchemeModel elements)
-    //{
-    //    List<UiElement> allElements = [];
-    //    allElements.AddRange(elements.Relays);
-    //    allElements.AddRange(elements.Switchers);
-    //    allElements.AddRange(elements.NegPoles);
-    //    allElements.AddRange(elements.PosPoles);
-    //    return allElements;
-    //}
-
+    
     private static string ToLogicString(this Dictionary<string, bool> accumulator, string op = "&" )
     {
         var accum = accumulator.Select(a => a.Value ? a.Key : $"!{a.Key}");

@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sim.Domain.CompressedScheme;
+namespace Sim.Domain.ParsedScheme;
 public enum ContactType
 {
     Normal,
     Polar,
-    NormalAndOpenPolar, // serial connection of the Nornal and Polar plus contact         ___  --<
-    NormalAndClosePolar // serial connection of the Nornal and Polar minus contact           \
+    NormalAndOpenPolar, // serial connection of the Normal and Polar plus contact         ___  --<
+    NormalAndClosePolar // serial connection of the Normal and Polar minus contact           \
 }
 
 public enum ContactDefaultState
@@ -47,6 +47,11 @@ public class Contact
         State = (bool)switcher.LogicState;
     }
 
+    public override string ToString()
+    {
+        var prop = Options.Type == ContactType.Normal ? null : $".{Options.Type}";
+        return $"x.{Name}{prop}";
+    }
 
     //Contact(string name, ContactDefaultState type, Pin coupledPin1, Pin coupledPin2)
     //{

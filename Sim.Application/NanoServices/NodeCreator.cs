@@ -1,4 +1,4 @@
-﻿using Sim.Domain.CompressedScheme;
+﻿using Sim.Domain.ParsedScheme;
 using Sim.Domain.UiSchematic;
 using Sim.Domain.UiSchematic.Extensions;
 using System;

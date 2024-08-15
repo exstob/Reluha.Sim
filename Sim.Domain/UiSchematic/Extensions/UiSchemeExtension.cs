@@ -1,4 +1,4 @@
-﻿using Sim.Domain.CompressedScheme;
+﻿using Sim.Domain.ParsedScheme;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sim.Domain.CompressedScheme;
+namespace Sim.Domain.ParsedScheme;
 
 public class Relay 
 {

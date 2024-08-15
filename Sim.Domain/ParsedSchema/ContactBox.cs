@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sim.Domain.CompressedScheme;
+namespace Sim.Domain.ParsedScheme;
 
 public enum ContactBoxType
 {
@@ -23,6 +23,18 @@ public class ContactBox(ContactBoxType boxType)
     public required ILogicEdge SecondPin { get; set; }
 
     public void Add(Contact contact) => Contacts.Add(contact);
+
+    bool IsRoot() => Boxes.Count > 0;
+    
+    ///// GENERATE LOGIC LIKE: (a & b) | (c & d)
+    public override string ToString()
+    {
+        string operation = BoxType == ContactBoxType.Serial ? "&" : "|";
+
+        return IsRoot()
+            ? $"( {string.Join($" {operation} ", this.Boxes)} )"
+            : $"( {string.Join($" {operation} ", Contacts)} )";
+    }
 }
 
 

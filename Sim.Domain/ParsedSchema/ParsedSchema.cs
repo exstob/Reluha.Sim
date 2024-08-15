@@ -5,14 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sim.Domain.CompressedScheme;
+namespace Sim.Domain.ParsedScheme;
 
-public class CompressedScheme
+public class ParsedSchema
 {
     public List<Relay> Relays { get; set; } = [];
     public List<ContactBox> Contacts { get; set; } = [];
-    //public List<UiElement> PosPoles { get; set; } = [];
-    //public List<UiElement> NegPoles { get; set; } = [];
     public List<Node> Nodes { get; set; } = [];
 }
 
