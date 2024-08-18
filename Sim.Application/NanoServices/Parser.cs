@@ -16,6 +16,15 @@ namespace Sim.Application.NanoServices;
 
 public static class Parser
 {
+    public static (List<Relay>, List<Contact>) Parse(UiSchemeModel model)
+    {
+        var nodes = ParseBinders(model);
+        var (boxes, contacts) = ParseSwitchers(model, nodes);
+        var relays = ParseRelays(model, boxes);
+        return (relays, contacts);
+
+    }
+
     /// <summary>
     /// Create the Nodes
     /// </summary>
@@ -25,32 +34,29 @@ public static class Parser
         return NodeCreator.CreateNodeFromJointBinders(model);
     }
 
-    public static List<ContactBox> ParseSwitchers(UiSchemeModel model, List<Node> nodes)
+    public static (List<ContactBox>, List<Contact>) ParseSwitchers(UiSchemeModel model, List<Node> nodes)
     {
         var boxes = ContactBoxCreator.Create(model, nodes);
-        if (ContactBoxReducer.TryPackParallelContactBoxes(boxes, out var parBoxes))
+        var contacts = boxes.Where(b => b.Contacts is not null).SelectMany(b => b!.Contacts).ToList();
+        if (ContactBoxReducer.TryPackParallelContactBoxesWithSameNodes(boxes, out var parBoxes))
         {
             if (ContactBoxReducer.TryPackSerialContactBoxes(parBoxes, out var serialBoxes))
             {
-                return serialBoxes;
+                if (ContactBoxReducer.TryPackParallelContactBoxesWithPoleAndNode(serialBoxes, out var poleBoxes))
+                {
+                    return (poleBoxes, contacts);
+                }
+                return (serialBoxes, contacts);
             }
-            return parBoxes;
+            return (parBoxes, contacts);
         }
 
-        return boxes;
+        return (boxes, contacts);
     }
 
     public static List<Relay> ParseRelays(UiSchemeModel model, List<ContactBox> boxes)
     {
         return RelayCreator.Create(model, boxes);
     }
-
-
-
-
-
-
-
-
 
 }

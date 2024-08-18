@@ -10,6 +10,10 @@ public interface ILogicEdge
 {
 }
 
+public interface IPole 
+{
+}
+
 public class RelayPlusPin(string name) : ILogicEdge
 {
     public string RelayName { get; } =  name;
@@ -20,10 +24,10 @@ public class RelayMinusPin(string name) : ILogicEdge
     public string RelayName { get; } = name;
 }
 
-public class PolePositive : ILogicEdge
+public class PolePositive : ILogicEdge, IPole
 {
 }
 
-public class PoleNegative : ILogicEdge
+public class PoleNegative : ILogicEdge, IPole
 {
 }

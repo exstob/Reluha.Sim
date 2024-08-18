@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Sim.Domain.Logic;
 using Sim.Domain.ParsedScheme;
 using Sim.Domain.UiSchematic;
 
@@ -14,9 +15,20 @@ public class RelayCreator
     public static List<Relay> Create(UiSchemeModel elements, List<ContactBox> boxes)
     {
         List<Relay> relays = [];
-        foreach (var relay in elements.Relays)
+        foreach (var iuRelay in elements.Relays)
         {
+            var plusPin = boxes.Find(pin => pin.SecondPin is RelayPlusPin plusPin && plusPin.RelayName == iuRelay.Name);
+            var minusPin = boxes.Find(pin => pin.SecondPin is RelayMinusPin minusPin && minusPin.RelayName == iuRelay.Name);
 
+            if (plusPin != null && minusPin != null)
+            {
+                var relay = new Relay { Name = iuRelay.Name, State = new RelayState(plusPin.ToString(), minusPin.ToString()) };
+                relays.Add(relay);
+            }
+            else
+            { 
+                /////TODO: add logs
+            }
         }
 
         return relays;

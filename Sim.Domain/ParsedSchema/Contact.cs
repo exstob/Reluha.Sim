@@ -30,9 +30,6 @@ public class Contact
 
     public ContactState State { get; init; }
 
-    //public Pin FirstPin { get; init; }
-    //public Pin SecondPin { get; init; }
-
     public Contact(UiSwitcher switcher, ContactDefaultState defaultState)
     {
         Name = switcher.Name;
@@ -47,42 +44,16 @@ public class Contact
         State = (bool)switcher.LogicState;
     }
 
-    public override string ToString()
+    public string FullName() 
     {
         var prop = Options.Type == ContactType.Normal ? null : $".{Options.Type}";
-        return $"x.{Name}{prop}";
+        return $"{Name}{prop}";
     }
 
-    //Contact(string name, ContactDefaultState type, Pin coupledPin1, Pin coupledPin2)
-    //{
-    //    Name = name;
-    //    BoxType = type;
-    //    FirstPin = new Pin { Parent = this, Name = name + ".1", СoupledPin = coupledPin1};
-    //    SecondPin = new Pin { Parent = this, Name = name + ".2", СoupledPin = coupledPin2 };
-    //}
-
-    //Contact(string name, ContactDefaultState type, Pin coupledPin1, Node coupledNode2)
-    //{
-    //    Name = name;
-    //    BoxType = type;
-    //    FirstPin = new Pin { Parent = this, Name = name + ".1", СoupledPin = coupledPin1 };
-    //    SecondPin = new Pin { Parent = this, Name = name + ".2", СoupledNode = coupledNode2 };
-    //}
-
-    //Contact(string name, ContactDefaultState type, Node coupledNode1, Pin coupledPin2)
-    //{
-    //    Name = name;
-    //    BoxType = type;
-    //    FirstPin = new Pin {Parent = this, Name = name + ".1", СoupledNode = coupledNode1 };
-    //    SecondPin = new Pin {Parent = this, Name = name + ".2", СoupledPin = coupledPin2 };
-    //}
-
-    //public Contact? NextSerialContact() 
-    //{
-    //    /// Read the contact chain from left to right (1 -> 2)
-    //    if (SecondPin.Parent is Contact contact)
-    //        return contact;
-    //    else
-    //        return null;
-    //}
+    public override string ToString()
+    { 
+        var inverse = Options.DefaultState == ContactDefaultState.Open ? null : "!";
+        var prop = Options.Type == ContactType.Normal ? null : $".{Options.Type}";
+        return $"{inverse}x.{Name}{prop}";
+    }
 }

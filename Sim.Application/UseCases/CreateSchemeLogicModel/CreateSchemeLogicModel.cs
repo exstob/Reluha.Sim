@@ -1,4 +1,5 @@
-﻿using Sim.Domain.Logic;
+﻿using Sim.Application.NanoServices;
+using Sim.Domain.Logic;
 using Sim.Domain.UiSchematic;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,11 @@ namespace Sim.Application.UseCases.CreateSchemeLogicModel;
 
 internal class CreateSchemeLogicModel
 {
-    static public SchemeLogicModel Generate(UiSchemeModel elements) 
+    static public SchemeLogicModel Generate(UiSchemeModel uiModel) 
     {
-        var model = new SchemeLogicModel(Guid.NewGuid());
+        var (relays, contacts) = Parser.Parse(uiModel);
+
+        var model = new SchemeLogicModel(relays, contacts);
 
         return model;
     }

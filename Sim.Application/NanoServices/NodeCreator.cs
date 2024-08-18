@@ -74,30 +74,30 @@ static public class NodeCreator
     /// </summary>                                                                                                                           \
     /// <param name="model"></param>                                                                                                          \ 
     /// <returns></returns>
-    private static List<Node> CreateNodeFromCommonContact(UiSchemeModel model)
-    {
-        //var openCloseConnectedContacts = model.Switchers.Where(sw => sw.Connectors.All(c => c.Connected));
-        //var simpleCommonConnectors = openCloseConnectedContacts.Where(c => !c.CommonConnector()?.IsMiniNode() ?? false)
-        //    .Select(c => c.CommonConnector());
+    //private static List<Node> CreateNodeFromCommonContact(UiSchemeModel model)
+    //{
+    //    //var openCloseConnectedContacts = model.Switchers.Where(sw => sw.Connectors.All(c => c.Connected));
+    //    //var simpleCommonConnectors = openCloseConnectedContacts.Where(c => !c.CommonConnector()?.IsMiniNode() ?? false)
+    //    //    .Select(c => c.CommonConnector());
 
-        //// The Common connector also should be presented as Node 
-        var simpleCommonConnectors = model.Switchers.Where(sw => sw.HasBothContacts() && !sw.CommonConnector().IsMiniNode())
-            .Select(sw => sw.CommonConnector()).ToList();
+    //    //// The Common connector also should be presented as Node 
+    //    var simpleCommonConnectors = model.Switchers.Where(sw => sw.HasBothContacts() && !sw.CommonConnector().IsMiniNode())
+    //        .Select(sw => sw.CommonConnector()).ToList();
 
-        return simpleCommonConnectors.Select((commonConnector, i) =>
-        {
-            var node = new Node(commonConnector.Id);
-            node.Connectors.Add(commonConnector);
+    //    return simpleCommonConnectors.Select((commonConnector, i) =>
+    //    {
+    //        var node = new Node(commonConnector.Id);
+    //        node.Connectors.Add(commonConnector);
 
-            var relatedConnectorId = model.Binders.FindNextConnectorId(commonConnector.JointBindersId.Single(), commonConnector.Id);
-            var allConnectors = model.AllElements().SelectMany(el => el.Connectors).ToList();
-            /// Get a new connector if exist
-            var relatedConnector = allConnectors.Find(c => c.Id == relatedConnectorId);
-            if (relatedConnector != null)
-                node.Connectors.Add(relatedConnector);
+    //        var relatedConnectorId = model.Binders.FindNextConnectorId(commonConnector.JointBindersId.Single(), commonConnector.Id);
+    //        var allConnectors = model.AllElements().SelectMany(el => el.Connectors).ToList();
+    //        /// Get a new connector if exist
+    //        var relatedConnector = allConnectors.Find(c => c.Id == relatedConnectorId);
+    //        if (relatedConnector != null)
+    //            node.Connectors.Add(relatedConnector);
 
-            return node;
-        }).ToList();
+    //        return node;
+    //    }).ToList();
 
-    }
+    //}
 }

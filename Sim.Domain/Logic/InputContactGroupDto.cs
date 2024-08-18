@@ -13,10 +13,10 @@ namespace Sim.Domain.Logic
     /// </summary>
     public class InputContactGroupDto
     {
-
+        /// <summary>
+        /// Variables
+        /// </summary>
         public dynamic x { get; set; } = new ExpandoObject();
-
-
         /// <summary>
         ///  Virtual type of contacts
         /// </summary>

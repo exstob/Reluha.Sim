@@ -15,26 +15,28 @@ public static class ContactBoxCreator
     {
         var connectedSwitchers = model.Switchers.Where(sw => sw.HasCloseContact() || sw.HasOpenContact()).ToList();
         List<ContactBox> boxes = [];
+        
+        /// Analyze routes from  Pole => Node path
+        var (childBoxes, usedSwitchers) = ContactBoxCreator.CreateBoxesStartedFromPole(connectedSwitchers, model, nodes);
+        boxes.AddRange(childBoxes);
+        connectedSwitchers.RemoveAll(csw => usedSwitchers.Contains(csw));
 
         /// Analyze routes from CommonConnector contact
-        var (childBoxes, usedSwitchers) = ContactBoxCreator.CreateBoxesStartedFromCommonContacts(connectedSwitchers, model, nodes);
+         (childBoxes, usedSwitchers) = ContactBoxCreator.CreateBoxesStartedFromCommonContacts(connectedSwitchers, model, nodes);
         boxes.AddRange(childBoxes);
         connectedSwitchers.RemoveAll(csw => usedSwitchers.Contains(csw));
 
-        /// Analyze routes from  Pole => Node path
-        (boxes, usedSwitchers) = ContactBoxCreator.CreateBoxesStartedFromPole(connectedSwitchers, model, nodes);
+        /// Analyze routes from Node to Node
+        (childBoxes, usedSwitchers) = ContactBoxCreator.CreateBoxesStartedFromNode(connectedSwitchers, model, nodes);
         boxes.AddRange(childBoxes);
         connectedSwitchers.RemoveAll(csw => usedSwitchers.Contains(csw));
 
+        /// TODO: It need to find out when it should be necessary to get routes from Relay to another Relay  
         /// Analyze routes from Relay path 
         //(boxes, usedSwitchers) = ContactBoxCreator.CreateBoxesStartedFromRelay(connectedSwitchers, model, nodes);
         //boxes.AddRange(childBoxes);
         //connectedSwitchers.RemoveAll(csw => usedSwitchers.Contains(csw));
 
-        /// Analyze routes from Node to Node
-        (boxes, usedSwitchers) = ContactBoxCreator.CreateBoxesStartedFromNode(connectedSwitchers, model, nodes);
-        boxes.AddRange(childBoxes);
-        connectedSwitchers.RemoveAll(csw => usedSwitchers.Contains(csw));
 
         return boxes;
     }
@@ -100,7 +102,6 @@ public static class ContactBoxCreator
         ////From positive pole
         foreach (var pole in model.PosPoles.FindAll(p => p.Connectors.FirstOrDefault()?.Connected ?? false))
         {
-
             var startConnector = pole.Connectors.Single();
             var serialSwitchers = TryFindSerialSwitchers(startConnector, connectedSwitchers, model.Binders, nodes).ToList();
             List<Contact> contacts = [];

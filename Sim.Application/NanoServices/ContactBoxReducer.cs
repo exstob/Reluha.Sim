@@ -9,12 +9,13 @@ namespace Sim.Application.NanoServices;
 
 public static class ContactBoxReducer
 {
-    public static bool TryPackParallelContactBoxes(in List<ContactBox> inputBoxes, out List<ContactBox> outputBoxes)
+    public static bool TryPackParallelContactBoxesWithSameNodes(in List<ContactBox> inputBoxes, out List<ContactBox> outputBoxes)
     {
         List<ContactBox> boxes = inputBoxes;
 
         var parallelBoxes = boxes
-            .GroupBy(p => new { p.FirstPin, p.SecondPin }) /// group boxes with same Node
+            .Where(b => b.FirstPin is Node && b.SecondPin is Node)
+            .GroupBy(b => new { b.FirstPin, b.SecondPin }) /// group boxes with same Node
             .Select(g => new ContactBox(ContactBoxType.Parallel) { FirstPin = g.Key.FirstPin, SecondPin = g.Key.SecondPin, Boxes = g.ToList() })
             .ToList();
         foreach (var parBox in parallelBoxes)
@@ -34,6 +35,36 @@ public static class ContactBoxReducer
                 pb.FirstPin = new Pin(node1.Id);
             }
 
+            var pin2Intersections = allBoxNodes.Count(b => b.Equals(pb.SecondPin));
+            if (pin2Intersections < 3 && pb.SecondPin is Node node2) /// it means we can simplified the node
+            {
+                pb.SecondPin = new Pin(node2.Id);
+            }
+        }
+
+        outputBoxes = boxes;
+        return parallelBoxes.Count > 0;
+    }
+
+    public static bool TryPackParallelContactBoxesWithPoleAndNode(in List<ContactBox> inputBoxes, out List<ContactBox> outputBoxes)
+    {
+        List<ContactBox> boxes = inputBoxes;
+
+        var parallelBoxes = boxes
+            .Where(b => b.FirstPin is IPole && b.SecondPin is Node)
+            .GroupBy(p => new { p.FirstPin, p.SecondPin }) /// group boxes with same Node
+            .Select(g => new ContactBox(ContactBoxType.Parallel) { FirstPin = g.Key.FirstPin, SecondPin = g.Key.SecondPin, Boxes = g.ToList() })
+            .ToList();
+        foreach (var parBox in parallelBoxes)
+        {
+            boxes.Add(parBox);
+            boxes = boxes.Except(parBox.Boxes).ToList();
+        }
+
+        var allBoxNodes = parallelBoxes.Select(box => box.FirstPin).ToList();
+
+        foreach (var pb in parallelBoxes)
+        {
             var pin2Intersections = allBoxNodes.Count(b => b.Equals(pb.SecondPin));
             if (pin2Intersections < 3 && pb.SecondPin is Node node2) /// it means we can simplified the node
             {

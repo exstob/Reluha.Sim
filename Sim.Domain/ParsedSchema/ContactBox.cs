@@ -30,10 +30,13 @@ public class ContactBox(ContactBoxType boxType)
     public override string ToString()
     {
         string operation = BoxType == ContactBoxType.Serial ? "&" : "|";
+        string? pole = FirstPin is PolePositive ? "Plus & " 
+                     : FirstPin is PoleNegative ? "Minus & "
+                     : null;
 
         return IsRoot()
-            ? $"( {string.Join($" {operation} ", this.Boxes)} )"
-            : $"( {string.Join($" {operation} ", Contacts)} )";
+            ? $"({string.Join($" {operation} ", this.Boxes)} )"
+            : $"({pole}{string.Join($" {operation} ", Contacts)} )";
     }
 }
 

@@ -16,7 +16,7 @@ namespace Sim.Domain.Logic
         //public string Name { get; set; } = name;
         public ContactState NormalContact { get => IsHigh() ? ContactValue.T : ContactValue.F; }
         public ContactState PolarContact { get => IsNegative() ? ContactValue.T : ContactValue.F; }
-        public bool isUpdated { get => _updated; }
+        public bool IsUpdated { get => _updated; }
         public int StartDelay { get; set; } = 0;
         public int EndDelay { get; set; } = 0;
 
