@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sim.Domain", "Sim.Domain\Si
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sim.Application", "Sim.Application\Sim.Application.csproj", "{12826E56-0BB7-4B69-8B8E-F2FA7603D5F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sim.Tests", "Sim.Tests\Sim.Tests.csproj", "{BA12A8DB-7F2F-42E2-92F2-04CAA44F7D60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sim.Tests", "Sim.Tests\Sim.Tests.csproj", "{BA12A8DB-7F2F-42E2-92F2-04CAA44F7D60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sim.Infrastructure", "Sim.Infrastructure\Sim.Infrastructure.csproj", "{7E652AF6-6071-4563-9151-824AC2CD80CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{BA12A8DB-7F2F-42E2-92F2-04CAA44F7D60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA12A8DB-7F2F-42E2-92F2-04CAA44F7D60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BA12A8DB-7F2F-42E2-92F2-04CAA44F7D60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E652AF6-6071-4563-9151-824AC2CD80CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E652AF6-6071-4563-9151-824AC2CD80CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E652AF6-6071-4563-9151-824AC2CD80CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E652AF6-6071-4563-9151-824AC2CD80CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

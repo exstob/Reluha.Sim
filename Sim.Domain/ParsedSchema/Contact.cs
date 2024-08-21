@@ -1,10 +1,13 @@
-﻿using Sim.Domain.Logic;
+﻿using Microsoft.CodeAnalysis;
+using Sim.Domain.Logic;
 using Sim.Domain.UiSchematic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Sim.Domain.ParsedScheme;
 public enum ContactType
@@ -27,21 +30,32 @@ public class Contact
 {
     public string Name { get; init; }
     public ContactOptions Options { get; init; }
-
     public ContactState State { get; init; }
-
+    public Contact(string name , ContactOptions options, ContactState state)
+    {
+        Name = name;
+        Options = options;
+        State = state;
+    }
+    
     public Contact(UiSwitcher switcher, ContactDefaultState defaultState)
     {
         Name = switcher.Name;
 
+        //var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        //var jsonString = JsonSerializer.Serialize(switcher.ExtraProps);
+        //var props = JsonSerializer.Deserialize<UiSwitcherExtraProps>(jsonString, options);
+
+        var props = switcher.ExtraProps;
+
         Options  = new ContactOptions
         (
             DefaultState : defaultState,
-            Type : Enum.Parse<ContactType>((switcher.ExtraProps as UiSwitcherExtraProps)!.Style),
-            IsVirtual : (switcher.ExtraProps as UiSwitcherExtraProps)!.Virtual
+            Type : props?.Style is not null ?  Enum.Parse<ContactType>(props.Style, true) : ContactType.Normal,
+            IsVirtual : props?.Virtual ?? true
         );
 
-        State = (bool)switcher.LogicState;
+        State = switcher.LogicState is bool state ? state : false;
     }
 
     public string FullName() 

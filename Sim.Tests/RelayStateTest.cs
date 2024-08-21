@@ -16,7 +16,7 @@ namespace Sim.Tests
         [Fact]
         public async Task OrOperation_with_Chain_Values_Ok()
         {
-            var relay = new RelayState("v.PP & v.A & v.B", "(v.C | v.D) & v.NN");
+            var relay = new RelayState("x.PP & x.A & x.B", "(x.C | x.D) & x.NN");
 
             var x1 = new ChainState(ChainValue.P);
             var x2 = new ChainState(ChainValue.N);
@@ -34,7 +34,7 @@ namespace Sim.Tests
             contactList.C = new ContactState(ContactValue.F);
             contactList.D = new ContactState(ContactValue.T);
 
-            var wrapContactList = new InputContactGroupDto { v = contactList };
+            var wrapContactList = new InputContactGroupDto { x = contactList };
 
             var result = await relay.Calc(wrapContactList);
 

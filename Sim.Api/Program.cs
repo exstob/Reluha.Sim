@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using System.Text.Json;
 using Sim.Domain.UiSchematic;
+using Sim.Application.UseCases.CreateLogicModel;
+using Sim.Application.UseCases;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,8 +21,10 @@ builder.Services
        .AddEndpointsApiExplorer()
        .AddSwaggerGen();
 
+builder.Services.AddScoped<ICreateLogicModel, CreateLogicModel>();
 
-var app = builder.Build();
+
+var app = builder.Build(); 
 
 if (app.Environment.IsDevelopment())
 {
@@ -33,11 +37,11 @@ app.UseHttpsRedirection();
 // Use the CORS middleware
 app.UseCors("AllowSpecificOrigin");
 
-app.MapPost("/simulate", async (UiSchemeModel elements) =>
+app.MapPost("/simulate", (ICreateLogicModel creator, UiSchemeModel elements) =>
 {
+    var model = creator.Generate(elements);
 
-
-    return Results.Ok("Hello");
+    return Results.Ok(model.Id);
 });
 
 

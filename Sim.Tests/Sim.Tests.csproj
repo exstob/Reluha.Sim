@@ -20,6 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Sim.Application\Sim.Application.csproj" />
     <ProjectReference Include="..\Sim.Domain\Sim.Domain.csproj" />
+    <ProjectReference Include="..\Sim.Infrastructure\Sim.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

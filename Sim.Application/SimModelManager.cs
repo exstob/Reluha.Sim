@@ -1,13 +1,14 @@
-﻿using Sim.Application.UseCases.CreateSchemeLogicModel;
+﻿using Sim.Application.UseCases.CreateLogicModel;
 using Sim.Domain.UiSchematic;
 
 namespace Sim.Application;
 
-public class SimModelManager: ISimModel
+public class SimModelManager(ICreateLogicModel creatorUseCase) : ISimModel
 {
-    static public async Task Create(UiSchemeModel elements) 
+    readonly ICreateLogicModel creator = creatorUseCase;
+    public async Task Create(UiSchemeModel elements) 
     {
-        var model = CreateSchemeLogicModel.Generate(elements);
+        var model = creator.Generate(elements);
 
         await model.Evaluate();
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Sim.Domain.Logic
 {
-    public class SchemeLogicModel(List<Relay> relays, List<Contact> contacts)
+    public class LogicModel(List<Relay> relays, List<Contact> contacts)
     {
         public Guid Id { get; } = Guid.NewGuid();
         private InputContactGroupDto _contactGroups = InitContacts(contacts);
@@ -21,7 +21,7 @@ namespace Sim.Domain.Logic
             foreach (var contact in contacts)
             {
                 var expandDict = contactGroups.x as IDictionary<string, object>;
-                expandDict.Add(contact.FullName(), contact.State);
+                expandDict!.Add(contact.FullName(), contact.State);
             }
             return contactGroups;
         }
@@ -35,7 +35,7 @@ namespace Sim.Domain.Logic
                 expandDict.Add(contactName, value);
         }
 
-        public ContactState GetContact(string contactName, ContactGroupsEnum groupName = ContactGroupsEnum.Virtual)
+        public ContactState GetContact(string contactName, ContactType type = ContactType.Normal)
         {
             //var expandDict = groupName switch
             //{
@@ -45,7 +45,7 @@ namespace Sim.Domain.Logic
             //    _ => throw new ArgumentException("Unknown Group of contact", groupName.ToString())
             //};
             var expandDict = _contactGroups.x as IDictionary<string, object>;
-            return (ContactState)expandDict[contactName];
+            return (ContactState)expandDict![contactName];
         }
 
         public void AddRelay(Relay relay)

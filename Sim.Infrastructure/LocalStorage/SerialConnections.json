@@ -1,0 +1,268 @@
+{
+  "relays": [
+    {
+      "id": "id_relay_cdcc0042-a902-ca61-91ac-e2fad951b62b",
+      "name": "b62b",
+      "className": 2,
+      "x": 281,
+      "y": 118,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "335453fc-3455-3730-a614-541f364ef58c",
+          "name": "plus",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [
+          ],
+          "jointBindersId": [
+            "id_binder_8b046e10-3a31-6e52-858d-327a5b2128a1"
+          ]
+        },
+        {
+          "id": "005513ff-79dc-47a4-8eea-d155844df58a",
+          "name": "minus",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [
+          ],
+          "jointBindersId": [
+            "id_binder_e705b0de-3f86-aa3e-2d17-cbb637ab88c6"
+          ]
+        }
+      ],
+      "logicState": false
+    }
+  ],
+  "switchers": [
+    {
+      "id": "id_switcher_81363bd1-18b9-81d0-e5ce-267ce3e38b19",
+      "name": "8b19",
+      "className": 3,
+      "x": 110,
+      "y": 101,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "c032cea5-ac7b-a901-2650-629286945fa1",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [
+          ],
+          "jointBindersId": [
+            "id_binder_4581ace5-368f-2715-4610-f8239a23f32c"
+          ]
+        },
+        {
+          "id": "0d75e4f3-c4ed-836a-9a42-66b66258cb90",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [
+          ],
+          "jointBindersId": [
+            "id_binder_c82355e6-a9c7-b570-d6db-4504f3b786b7"
+          ]
+        },
+        {
+          "id": "9e4c74ce-7d15-6740-af13-e7819c433397",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": false,
+          "jointConnectorsId": [
+          ],
+          "jointBindersId": [
+          ]
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "virtual": true
+      },
+      "logicState": true
+    },
+    {
+      "id": "id_switcher_0a6764be-7e45-a577-e044-ba16352a4f1f",
+      "name": "4f1f",
+      "className": 3,
+      "x": 196,
+      "y": 103,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "e1571d35-6a9c-114e-eaef-c520f83ae4f6",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [
+          ],
+          "jointBindersId": [
+            "id_binder_c82355e6-a9c7-b570-d6db-4504f3b786b7"
+          ]
+        },
+        {
+          "id": "0c157cf7-d231-7c25-8bcb-cb32dd2e84ca",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": false,
+          "jointConnectorsId": [
+          ],
+          "jointBindersId": [
+          ]
+        },
+        {
+          "id": "1e63764a-7c5d-b5c7-7bf6-60741cd022e8",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [
+          ],
+          "jointBindersId": [
+            "id_binder_8b046e10-3a31-6e52-858d-327a5b2128a1"
+          ]
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "virtual": true
+      },
+      "logicState": false
+    }
+  ],
+  "posPoles": [
+    {
+      "id": "id_pos_1346f09b-42f3-d662-19fb-fcaeeb24f214",
+      "name": "+",
+      "className": 4,
+      "x": 84,
+      "y": 86,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "32a8dbc7-9f47-7d13-640d-874b21b68e06",
+          "name": "positive",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [
+          ],
+          "jointBindersId": [
+            "id_binder_4581ace5-368f-2715-4610-f8239a23f32c"
+          ]
+        }
+      ],
+      "logicState": false
+    }
+  ],
+  "negPoles": [
+    {
+      "id": "id_neg_d99f7e0b-e919-6c8f-6e93-705167626000",
+      "name": "-",
+      "className": 4,
+      "x": 354,
+      "y": 132,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "ede10679-1fce-fc87-9f11-10eaf24e3cb9",
+          "name": "negative",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [
+          ],
+          "jointBindersId": [
+            "id_binder_e705b0de-3f86-aa3e-2d17-cbb637ab88c6"
+          ]
+        }
+      ],
+      "logicState": false
+    }
+  ],
+  "binders": [
+    {
+      "id": "id_binder_c82355e6-a9c7-b570-d6db-4504f3b786b7",
+      "connected": true,
+      "startPoint": {
+        "x": 167,
+        "y": 111
+      },
+      "startConnectorId": "0d75e4f3-c4ed-836a-9a42-66b66258cb90",
+      "endPoint": {
+        "x": 193,
+        "y": 113
+      },
+      "endConnectorId": "e1571d35-6a9c-114e-eaef-c520f83ae4f6",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_8b046e10-3a31-6e52-858d-327a5b2128a1",
+      "connected": true,
+      "startPoint": {
+        "x": 253,
+        "y": 133
+      },
+      "startConnectorId": "1e63764a-7c5d-b5c7-7bf6-60741cd022e8",
+      "endPoint": {
+        "x": 278,
+        "y": 133
+      },
+      "endConnectorId": "335453fc-3455-3730-a614-541f364ef58c",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_4581ace5-368f-2715-4610-f8239a23f32c",
+      "connected": true,
+      "startPoint": {
+        "x": 107,
+        "y": 111
+      },
+      "startConnectorId": "c032cea5-ac7b-a901-2650-629286945fa1",
+      "endPoint": {
+        "x": 87,
+        "y": 106
+      },
+      "endConnectorId": "32a8dbc7-9f47-7d13-640d-874b21b68e06",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_e705b0de-3f86-aa3e-2d17-cbb637ab88c6",
+      "connected": true,
+      "startPoint": {
+        "x": 338,
+        "y": 133
+      },
+      "startConnectorId": "005513ff-79dc-47a4-8eea-d155844df58a",
+      "endPoint": {
+        "x": 357,
+        "y": 132
+      },
+      "endConnectorId": "ede10679-1fce-fc87-9f11-10eaf24e3cb9",
+      "friendBinderId": null
+    }
+  ],
+  "lastPoint": {
+    "x": 337,
+    "y": 218
+  },
+  "drawMode": 1,
+  "selectedElementIds": {
+  },
+  "selectedNodes": [
+    "{\"attrs\":{\"x\":110,\"y\":101,\"draggable\":true,\"id\":\"id_switcher_81363bd1-18b9-81d0-e5ce-267ce3e38b19\"},\"className\":\"Group\",\"children\":[{\"attrs\":{\"x\":20,\"y\":-20,\"text\":\"8b19\",\"fill\":\"black\"},\"className\":\"Text\"},{\"attrs\":{},\"className\":\"Group\",\"children\":[{\"attrs\":{\"width\":40,\"height\":30,\"stroke\":\"white\"},\"className\":\"Rect\"},{\"attrs\":{\"x\":-3,\"y\":7,\"width\":6,\"height\":6,\"id\":\"c032cea5-ac7b-a901-2650-629286945fa1\",\"fill\":\"black\",\"className\":\"Connector\",\"name\":\"Connector\"},\"className\":\"Rect\"},{\"attrs\":{\"points\":[0,10,20,10],\"stroke\":\"black\",\"strokeWidth\":3},\"className\":\"Line\"},{\"attrs\":{\"x\":20,\"y\":10,\"radius\":3,\"fill\":\"black\"},\"className\":\"Circle\"},{\"attrs\":{\"x\":57,\"y\":7,\"width\":6,\"height\":6,\"id\":\"0d75e4f3-c4ed-836a-9a42-66b66258cb90\",\"fill\":\"black\",\"className\":\"Connector\",\"name\":\"Connector\"},\"className\":\"Rect\"},{\"attrs\":{\"points\":[40,10,60,10],\"stroke\":\"black\",\"strokeWidth\":3},\"className\":\"Line\"},{\"attrs\":{\"x\":57,\"y\":27,\"width\":6,\"height\":6,\"id\":\"9e4c74ce-7d15-6740-af13-e7819c433397\",\"fill\":\"red\",\"className\":\"Connector\",\"name\":\"Connector\"},\"className\":\"Rect\"},{\"attrs\":{\"points\":[40,30,60,30],\"stroke\":\"black\",\"strokeWidth\":3},\"className\":\"Line\"},{\"attrs\":{\"points\":[20,10,40,10],\"stroke\":\"green\",\"strokeWidth\":3},\"className\":\"Line\"}]}]}"
+  ]
+}

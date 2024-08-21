@@ -15,7 +15,7 @@ public record UiElement
     public List<UiConnector> Connectors { get; set; } = [];
 
     public object ExtraProps { get; set; } // Can be IRelayExtraProps or ISwitcherExtraProps
-    public required object LogicState { get; set; } // Can be RelayLogicState or SwitcherLogicState
+    public object LogicState { get; set; } // Can be RelayLogicState or SwitcherLogicState
 
 }
 

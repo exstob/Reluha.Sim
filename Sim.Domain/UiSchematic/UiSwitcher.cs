@@ -8,5 +8,6 @@ namespace Sim.Domain.UiSchematic;
 
 public record UiSwitcher : UiElement
 {
-
+    public new UiSwitcherExtraProps ExtraProps { get; set; }
+    public required new bool LogicState { get; set; }
 }

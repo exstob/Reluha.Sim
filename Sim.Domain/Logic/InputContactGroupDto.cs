@@ -17,18 +17,6 @@ namespace Sim.Domain.Logic
         /// Variables
         /// </summary>
         public dynamic x { get; set; } = new ExpandoObject();
-        /// <summary>
-        ///  Virtual type of contacts
-        /// </summary>
-        public dynamic v { get; set; } = new ExpandoObject();
-        /// <summary>
-        /// Normal contact
-        /// </summary>
-        public dynamic n { get; set; } = new ExpandoObject();
-        /// <summary>
-        /// Polar contact
-        /// </summary>
-        public dynamic p { get; set; } = new ExpandoObject();
         public ChainState Plus { get; set; } = ChainState.P();
         public ChainState Minus { get; set; } = ChainState.N();
     }

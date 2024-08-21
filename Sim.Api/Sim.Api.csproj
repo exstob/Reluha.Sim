@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Sim.Application\Sim.Application.csproj" />
     <ProjectReference Include="..\Sim.Domain\Sim.Domain.csproj" />
   </ItemGroup>
 
