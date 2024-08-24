@@ -3,6 +3,8 @@ using System.Text.Json;
 using Sim.Domain.UiSchematic;
 using Sim.Application.UseCases.CreateLogicModel;
 using Sim.Application.UseCases;
+using Sim.Application.UseCases.SimulateLogicModel;
+using Sim.Application.Dtos.Simulate;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,9 +21,11 @@ builder.Services.AddCors(options =>
 
 builder.Services
        .AddEndpointsApiExplorer()
-       .AddSwaggerGen();
+       .AddSwaggerGen()
+       .AddMemoryCache();
 
-builder.Services.AddScoped<ICreateLogicModel, CreateLogicModel>();
+builder.Services.AddTransient<ICreateLogicModel, CreateLogicModel>();
+builder.Services.AddTransient<ISimulateLogicModel, SimulateLogicModel>();
 
 
 var app = builder.Build(); 
@@ -37,18 +41,18 @@ app.UseHttpsRedirection();
 // Use the CORS middleware
 app.UseCors("AllowSpecificOrigin");
 
-app.MapPost("/simulate", (ICreateLogicModel creator, UiSchemeModel elements) =>
+app.MapPost("/compile", async (ICreateLogicModel creator, UiSchemeModel elements) =>
 {
-    var model = creator.Generate(elements);
-
+    var model = await creator.Generate(elements);
+    Console.WriteLine(model.Id);
     return Results.Ok(model.Id);
+});
+
+app.MapPost("/simulate", async (ISimulateLogicModel simulator, SimulateData simData) =>
+{
+    var result = await simulator.Simulate(simData);
+    return Results.Ok(result);
 });
 
 
 app.Run();
-
-string Hello() 
-{
-    Console.WriteLine("Received");
-    return "Hello World!";
-}

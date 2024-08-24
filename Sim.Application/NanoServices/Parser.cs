@@ -34,15 +34,15 @@ public static class Parser
         return NodeCreator.CreateNodeFromJointBinders(model);
     }
 
-    public static (List<ContactBox>, List<Contact>) ParseSwitchers(UiSchemeModel model, List<Node> nodes)
+    public static (List<LogicBox>, List<Contact>) ParseSwitchers(UiSchemeModel model, List<Node> nodes)
     {
-        var boxes = ContactBoxCreator.Create(model, nodes);
+        var boxes = LogicBoxCreator.Create(model, nodes);
         var contacts = boxes.Where(b => b.Contacts is not null).SelectMany(b => b!.Contacts).ToList();
-        if (ContactBoxReducer.TryPackParallelContactBoxesWithSameNodes(boxes, out var parBoxes))
+        if (LogicBoxReducer.TryPackParallelContactBoxesWithSameNodes(boxes, out var parBoxes))
         {
-            if (ContactBoxReducer.TryPackSerialContactBoxes(parBoxes, out var serialBoxes))
+            if (LogicBoxReducer.TryPackSerialContactBoxes(parBoxes, out var serialBoxes))
             {
-                if (ContactBoxReducer.TryPackParallelContactBoxesWithPoleAndNode(serialBoxes, out var poleBoxes))
+                if (LogicBoxReducer.TryPackParallelContactBoxesWithPoleAndNode(serialBoxes, out var poleBoxes))
                 {
                     return (poleBoxes, contacts);
                 }
@@ -54,7 +54,7 @@ public static class Parser
         return (boxes, contacts);
     }
 
-    public static List<Relay> ParseRelays(UiSchemeModel model, List<ContactBox> boxes)
+    public static List<Relay> ParseRelays(UiSchemeModel model, List<LogicBox> boxes)
     {
         return RelayCreator.Create(model, boxes);
     }

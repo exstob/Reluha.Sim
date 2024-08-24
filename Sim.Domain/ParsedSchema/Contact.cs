@@ -42,10 +42,6 @@ public class Contact
     {
         Name = switcher.Name;
 
-        //var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        //var jsonString = JsonSerializer.Serialize(switcher.ExtraProps);
-        //var props = JsonSerializer.Deserialize<UiSwitcherExtraProps>(jsonString, options);
-
         var props = switcher.ExtraProps;
 
         Options  = new ContactOptions
@@ -62,6 +58,13 @@ public class Contact
     {
         var prop = Options.Type == ContactType.Normal ? null : $".{Options.Type}";
         return $"{Name}{prop}";
+    }
+
+    public static string FullName(UiSwitcher switcher)
+    {
+        var contactType = switcher.ExtraProps?.Style is not null ? Enum.Parse<ContactType>(switcher.ExtraProps.Style, true) : ContactType.Normal;
+        var prop = contactType == ContactType.Normal ? null : $".{contactType}";
+        return $"{switcher.Name}{prop}";
     }
 
     public override string ToString()

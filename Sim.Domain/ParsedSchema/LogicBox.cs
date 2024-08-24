@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 
 namespace Sim.Domain.ParsedScheme;
 
-public enum ContactBoxType
+public enum LogicBoxType
 {
     Serial,
     Parallel
 }
 
-public class ContactBox(ContactBoxType boxType) 
+public class LogicBox(LogicBoxType boxType) 
 {
-    public ContactBoxType BoxType { get; init; } = boxType;
+    public LogicBoxType BoxType { get; init; } = boxType;
     public List<Contact> Contacts { get; set; } = [];
-    public List<ContactBox> Boxes { get; set; } = [];
+    public List<LogicBox> Boxes { get; set; } = [];
 
     public required ILogicEdge FirstPin { get; set; }
     public required ILogicEdge SecondPin { get; set; }
@@ -29,14 +29,15 @@ public class ContactBox(ContactBoxType boxType)
     ///// GENERATE LOGIC LIKE: (a & b) | (c & d)
     public override string ToString()
     {
-        string operation = BoxType == ContactBoxType.Serial ? "&" : "|";
-        string? pole = FirstPin is PolePositive ? "Plus & " 
-                     : FirstPin is PoleNegative ? "Minus & "
+        string operation = BoxType == LogicBoxType.Serial ? "&" : "|";
+        string? pole = FirstPin is PolePositive ? "Plus" 
+                     : FirstPin is PoleNegative ? "Minus"
                      : null;
+        string? poleSing = Contacts.Count > 0 ? " & " : null;
 
         return IsRoot()
             ? $"({string.Join($" {operation} ", this.Boxes)} )"
-            : $"({pole}{string.Join($" {operation} ", Contacts)} )";
+            : $"({pole}{poleSing}{string.Join($" {operation} ", Contacts)} )";
     }
 }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Sim.Domain.UiSchematic;
 
-public record UiElement
+public record UiElement: ILogicElement
 {
     public string Id { get; set; }
     public string Name { get; set; }

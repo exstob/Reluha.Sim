@@ -54,17 +54,17 @@ namespace Sim.Tests
 
             var model = new LogicModel(relays, contacts);
 
-            var result = await model.Evaluate();
+            var (result, _) = await model.Evaluate();
             var r1 = model.GetContact("R1");
             r1.Value.ShouldBe(ContactValue.T);
             result.ShouldBe(true);  ///because R1 is updated
 
-            result = await model.Evaluate();
+            (result, _) = await model.Evaluate();
             var r2 = model.GetContact("R2");
             r2.Value.ShouldBe(ContactValue.T);
             result.ShouldBe(true); ///because R2 is updated
 
-            result = await model.Evaluate();
+            (result, _) = await model.Evaluate();
             result.ShouldBe(false);
 
             r1 = model.GetContact("R1");

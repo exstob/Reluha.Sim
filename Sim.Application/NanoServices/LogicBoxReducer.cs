@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace Sim.Application.NanoServices;
 
-public static class ContactBoxReducer
+public static class LogicBoxReducer
 {
-    public static bool TryPackParallelContactBoxesWithSameNodes(in List<ContactBox> inputBoxes, out List<ContactBox> outputBoxes)
+    public static bool TryPackParallelContactBoxesWithSameNodes(in List<LogicBox> inputBoxes, out List<LogicBox> outputBoxes)
     {
-        List<ContactBox> boxes = inputBoxes;
+        List<LogicBox> boxes = inputBoxes;
 
         var parallelBoxes = boxes
             .Where(b => b.FirstPin is Node && b.SecondPin is Node)
             .GroupBy(b => new { b.FirstPin, b.SecondPin }) /// group boxes with same Node
-            .Select(g => new ContactBox(ContactBoxType.Parallel) { FirstPin = g.Key.FirstPin, SecondPin = g.Key.SecondPin, Boxes = g.ToList() })
+            .Select(g => new LogicBox(LogicBoxType.Parallel) { FirstPin = g.Key.FirstPin, SecondPin = g.Key.SecondPin, Boxes = g.ToList() })
             .ToList();
         foreach (var parBox in parallelBoxes)
         {
@@ -46,14 +46,14 @@ public static class ContactBoxReducer
         return parallelBoxes.Count > 0;
     }
 
-    public static bool TryPackParallelContactBoxesWithPoleAndNode(in List<ContactBox> inputBoxes, out List<ContactBox> outputBoxes)
+    public static bool TryPackParallelContactBoxesWithPoleAndNode(in List<LogicBox> inputBoxes, out List<LogicBox> outputBoxes)
     {
-        List<ContactBox> boxes = inputBoxes;
+        List<LogicBox> boxes = inputBoxes;
 
         var parallelBoxes = boxes
             .Where(b => b.FirstPin is IPole && b.SecondPin is Node)
             .GroupBy(p => new { p.FirstPin, p.SecondPin }) /// group boxes with same Node
-            .Select(g => new ContactBox(ContactBoxType.Parallel) { FirstPin = g.Key.FirstPin, SecondPin = g.Key.SecondPin, Boxes = g.ToList() })
+            .Select(g => new LogicBox(LogicBoxType.Parallel) { FirstPin = g.Key.FirstPin, SecondPin = g.Key.SecondPin, Boxes = g.ToList() })
             .ToList();
         foreach (var parBox in parallelBoxes)
         {
@@ -76,10 +76,10 @@ public static class ContactBoxReducer
         return parallelBoxes.Count > 0;
     }
 
-    public static bool TryPackSerialContactBoxes(in List<ContactBox> inputBoxes, out List<ContactBox> outputBoxes)
+    public static bool TryPackSerialContactBoxes(in List<LogicBox> inputBoxes, out List<LogicBox> outputBoxes)
     {
         bool found = false;
-        List<ContactBox> boxes = inputBoxes;
+        List<LogicBox> boxes = inputBoxes;
 
         var edgePins = inputBoxes
             .SelectMany(ib => new[] { ib.FirstPin, ib.SecondPin })
@@ -93,7 +93,7 @@ public static class ContactBoxReducer
             if (serialBoxes?.Count > 0)
             {
                 found = true;
-                var box = new ContactBox(ContactBoxType.Serial)
+                var box = new LogicBox(LogicBoxType.Serial)
                 {
                     FirstPin = startPin!,
                     SecondPin = lastPin,
@@ -109,13 +109,13 @@ public static class ContactBoxReducer
         return found;
     }
 
-    static (List<ContactBox> serialBoxes, ILogicEdge lastPin) TryFindSerialBoxes(ILogicEdge startPin, List<ContactBox> inputBoxes)
+    static (List<LogicBox> serialBoxes, ILogicEdge lastPin) TryFindSerialBoxes(ILogicEdge startPin, List<LogicBox> inputBoxes)
     {
         ILogicEdge pin = startPin;
         var startBox = inputBoxes.Single(ib => ib.FirstPin.Equals(startPin));
         var box = startBox;
 
-        List<ContactBox> boxes = [];
+        List<LogicBox> boxes = [];
 
         while (true)
         {

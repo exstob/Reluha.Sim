@@ -18,12 +18,12 @@ public class CreateLogicModelTest
     }
 
     [Fact]
-    public void CreateModel_OK()
+    public async void CreateModel_OK()
     {
         var scheme = repo.GetUiScheme();
         var model = new CreateLogicModel();
 
-        var result = model.Generate(scheme);
+        var result = await model.Generate(scheme);
 
         result.ShouldNotBeNull();
     }

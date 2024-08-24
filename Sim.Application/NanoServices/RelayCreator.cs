@@ -12,7 +12,7 @@ namespace Sim.Application.NanoServices;
 
 public class RelayCreator
 {
-    public static List<Relay> Create(UiSchemeModel elements, List<ContactBox> boxes)
+    public static List<Relay> Create(UiSchemeModel elements, List<LogicBox> boxes)
     {
         List<Relay> relays = [];
         foreach (var iuRelay in elements.Relays)
