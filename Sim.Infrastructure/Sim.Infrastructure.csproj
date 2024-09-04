@@ -7,10 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="LocalStorage\ParallelConnections.json" />
     <None Remove="LocalStorage\SerialConnections.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="LocalStorage\ParallelConnections.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="LocalStorage\SerialConnections.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>

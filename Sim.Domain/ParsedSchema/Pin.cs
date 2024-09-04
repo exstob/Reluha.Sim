@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sim.Domain.ParsedScheme;
 
-public class Pin(string id) : ILogicEdge
+public class Pin(string id) : ILogicEdge, IRelayEdge
 {
     public string Id { get; init; } = id;
 }

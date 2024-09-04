@@ -12,5 +12,7 @@ public class Node(string id) : ILogicEdge
     public string Id { get; init; } = id;
     public List<UiConnector> Connectors { get; init; } = [];
     //public List<UiBinder> Binders { get; init; }
+    public IRelayEdge? RelayPin { get; set; }
+
 
 }

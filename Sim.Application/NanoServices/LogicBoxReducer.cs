@@ -20,25 +20,29 @@ public static class LogicBoxReducer
             .ToList();
         foreach (var parBox in parallelBoxes)
         {
-            boxes.Add(parBox);
             boxes = boxes.Except(parBox.Boxes).ToList();
+            boxes.Add(parBox);
         }
-
-        //var parallelBoxNodes = parallelBoxes.Select(box => box.FirstPin as Node).Concat(parallelBoxes.Select(box => box.SecondPin as Node)).ToList();
-        var allBoxNodes = parallelBoxes.Select(box => box.FirstPin).Concat(parallelBoxes.Select(box => box.SecondPin)).ToList();
 
         foreach (var pb in parallelBoxes)
         {
-            var pin1Intersections = allBoxNodes.Count(b => b.Equals(pb.FirstPin));
-            if (pin1Intersections < 3 && pb.FirstPin is Node node1) /// it means we can simplified the node
+            var pin1IntersectedWith1 = boxes.Where(b => b.FirstPin.Equals(pb.FirstPin)).ToList();
+            var pin1IntersectedWith2 = boxes.Where(b => b.SecondPin.Equals(pb.FirstPin)).ToList();
+            if ((pin1IntersectedWith1.Count + pin1IntersectedWith2.Count) < 3 && pb.FirstPin is Node node1) /// it means we can simplified the node
             {
-                pb.FirstPin = new Pin(node1.Id);
+                var pin = node1.RelayPin ?? new Pin(node1.Id);
+                pin1IntersectedWith1.ForEach(box => box.FirstPin = pin);
+                pin1IntersectedWith2.ForEach(box => box.SecondPin = pin);
             }
 
-            var pin2Intersections = allBoxNodes.Count(b => b.Equals(pb.SecondPin));
-            if (pin2Intersections < 3 && pb.SecondPin is Node node2) /// it means we can simplified the node
+
+            var pin2IntersectedWith1 = boxes.Where(b => b.FirstPin.Equals(pb.SecondPin)).ToList();
+            var pin2IntersectedWith2 = boxes.Where(b => b.SecondPin.Equals(pb.SecondPin)).ToList();
+            if ((pin2IntersectedWith1.Count + pin2IntersectedWith2.Count) < 3 && pb.SecondPin is Node node2) /// it means we can simplified the node
             {
-                pb.SecondPin = new Pin(node2.Id);
+                var pin = node2.RelayPin ?? new Pin(node2.Id);
+                pin2IntersectedWith1.ForEach(box => box.FirstPin = pin);
+                pin2IntersectedWith2.ForEach(box => box.SecondPin = pin);
             }
         }
 
@@ -51,24 +55,26 @@ public static class LogicBoxReducer
         List<LogicBox> boxes = inputBoxes;
 
         var parallelBoxes = boxes
-            .Where(b => b.FirstPin is IPole && b.SecondPin is Node)
+            .Where(b => b.FirstPin is IPoleEdge && b.SecondPin is Node)
             .GroupBy(p => new { p.FirstPin, p.SecondPin }) /// group boxes with same Node
             .Select(g => new LogicBox(LogicBoxType.Parallel) { FirstPin = g.Key.FirstPin, SecondPin = g.Key.SecondPin, Boxes = g.ToList() })
             .ToList();
+
         foreach (var parBox in parallelBoxes)
         {
-            boxes.Add(parBox);
             boxes = boxes.Except(parBox.Boxes).ToList();
+            boxes.Add(parBox);
         }
-
-        var allBoxNodes = parallelBoxes.Select(box => box.FirstPin).ToList();
 
         foreach (var pb in parallelBoxes)
         {
-            var pin2Intersections = allBoxNodes.Count(b => b.Equals(pb.SecondPin));
-            if (pin2Intersections < 3 && pb.SecondPin is Node node2) /// it means we can simplified the node
+            var pin2IntersectedWith1 = boxes.Where(b => b.FirstPin.Equals(pb.SecondPin)).ToList();
+            var pin2IntersectedWith2 = boxes.Where(b => b.SecondPin.Equals(pb.SecondPin)).ToList();
+            if ((pin2IntersectedWith1.Count + pin2IntersectedWith2.Count) < 3 && pb.SecondPin is Node node2) /// it means we can simplified the node
             {
-                pb.SecondPin = new Pin(node2.Id);
+                var pin = node2.RelayPin ?? new Pin(node2.Id);
+                pin2IntersectedWith1.ForEach(box => box.FirstPin = pin);
+                pin2IntersectedWith2.ForEach(box => box.SecondPin = pin);
             }
         }
 
@@ -76,14 +82,14 @@ public static class LogicBoxReducer
         return parallelBoxes.Count > 0;
     }
 
-    public static bool TryPackSerialContactBoxes(in List<LogicBox> inputBoxes, out List<LogicBox> outputBoxes)
+    public static bool TryPackSerialContactBoxes(List<LogicBox> inputBoxes, out List<LogicBox> outputBoxes)
     {
         bool found = false;
         List<LogicBox> boxes = inputBoxes;
 
         var edgePins = inputBoxes
             .SelectMany(ib => new[] { ib.FirstPin, ib.SecondPin })
-            .Where(pin => pin is PolePositive || pin is PoleNegative || pin is RelayPlusPin || pin is RelayMinusPin || pin is Node)
+            .Where(pin => pin is PolePositive || pin is PoleNegative || pin is Node)
             .ToList();
 
         foreach (var startPin in edgePins)
@@ -99,9 +105,9 @@ public static class LogicBoxReducer
                     SecondPin = lastPin,
                     Boxes = serialBoxes,
                 };
-
-                boxes.Add(box);
+                
                 boxes = boxes.Except(box.Boxes).ToList();
+                boxes.Add(box);
             }
         }
 

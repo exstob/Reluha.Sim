@@ -14,7 +14,7 @@ namespace Sim.Domain.Logic
     {
         public Ulid Id { get; } = Ulid.NewUlid();
         private readonly InputContactGroupDto _contactGroups = InitContacts(contacts);
-        private readonly List<Relay> _relays = relays;
+        public readonly List<Relay> Relays = relays;
         //private List<Contact> _contacts = contacts;
 
         private static InputContactGroupDto InitContacts(List<Contact> contacts)
@@ -45,12 +45,12 @@ namespace Sim.Domain.Logic
 
         public async Task<(bool, List<Relay>)> Evaluate()
         {
-            var tasks = _relays.Select(r => Task.Run(() => r.State.Calc(_contactGroups))).ToList();
+            var tasks = Relays.Select(r => Task.Run(() => r.State.Calc(_contactGroups))).ToList();
             await Task.WhenAll(tasks);
 
             var isUpdated = false;
             List<Relay> updatedRelays = [];
-            foreach (var relay in _relays) 
+            foreach (var relay in Relays) 
             {
                 if (relay.State.IsUpdated)
                 {

@@ -14,8 +14,9 @@ static public class NodeCreator
     public static List<Node> CreateNodeFromJointBinders(UiSchemeModel model)
     {
         var nodeConnectors = model.AllElements()
-            .Where(el => el.Connectors.Any(c => c.IsMiniNode()))
-            .SelectMany(el => el.Connectors).ToList();
+            //.Where(el => el.Connectors.Any(c => c.IsMiniNode()))
+            .SelectMany(el => el.Connectors)
+            .Where(con =>  con.IsMiniNode()).ToList();
 
         ////// The Common connector also should be presented as Node 
         var simpleCommonConnectors = model.Switchers.Where(sw => sw.HasBothContacts() && !sw.CommonConnector().IsMiniNode())
@@ -23,18 +24,20 @@ static public class NodeCreator
         if (simpleCommonConnectors.Count > 0)
             nodeConnectors.AddRange(simpleCommonConnectors);
 
-        var allConnectors = model.AllElements().SelectMany(el => el.Connectors).ToList();
+        var allConnectors = model.AllElements().SelectMany(el => el.Connectors).Where(con => con.Connected).ToList();
 
         var nodes = new List<Node>();
+        var nodeConnectorStack = new Stack<UiConnector>(nodeConnectors);
 
-        for (int i = 0; i < nodeConnectors.Count; i++)
+        while (nodeConnectorStack.Count > 0)
         {
-            var nodeConnector = nodeConnectors.Last();
+            //var nodeConnector = nodeConnectors.Last();
+            var nodeConnector = nodeConnectorStack.Pop();
             var node = new Node(nodeConnector.Id);
             node.Connectors.Add(nodeConnector);
-
+            node.RelayPin = TryGetRelayPin(nodeConnector, model);
             //// if the connector was removed it means, it was processed
-            nodeConnectors.Remove(nodeConnector);
+            //nodeConnectors.Remove(nodeConnector);
             allConnectors.Remove(nodeConnector);
 
 
@@ -42,7 +45,7 @@ static public class NodeCreator
             //////                                 | |
             //////
             var binderStack = new Stack<string>(nodeConnector.JointBindersId);
-
+  
             while (binderStack.Count > 0)
             {
                 var binderId = binderStack.Pop();
@@ -53,20 +56,49 @@ static public class NodeCreator
 
                 if (relatedConnector?.IsMiniNode() ?? false)
                 {
-                    /// push new binders for further calculation, exclude the currect binder
+                    /// push new binders for further calculation, exclude the current binder
                     relatedConnector.JointBindersId.FindAll(id => id != binderId).ForEach(id => binderStack.Push(id));
-                    node.Connectors.Add(relatedConnector);
-                    nodeConnectors.Remove(relatedConnector);
                 }
 
-                if (relatedConnector != null)
+                if (relatedConnector != null) 
+                {
+                    node.Connectors.Add(relatedConnector);
+                    node.RelayPin ??= TryGetRelayPin(relatedConnector, model);
+                    //nodeConnectors.Remove(relatedConnector);
                     allConnectors.Remove(relatedConnector);
+                }
             }
 
             nodes.Add(node);
         }
 
         return nodes;
+    }
+
+
+    static private IRelayEdge? TryGetRelayPin(UiConnector connector, UiSchemeModel model)
+    {
+        if (connector.Name == ConnectorName.RelPlus) 
+        {
+            var elem = model.AllElements().Find(el => el.Connectors.Any(c => c.Id == connector.Id));
+            if (elem is UiRelay relay)
+            {
+                return new RelayPlusPin(relay.Name);
+            }
+            throw new Exception($"Wrong connector name in element {elem?.Id}");
+        }
+
+        if (connector.Name == ConnectorName.RelMinus)
+        {
+            var elem = model.AllElements().Find(el => el.Connectors.Any(c => c.Id == connector.Id));
+            if (elem is UiRelay relay)
+            {
+                return new RelayMinusPin(relay.Name);
+            }
+            throw new Exception($"Wrong connector name in element {elem?.Id}");
+        }
+
+        return null;
     }
 
     /// <summary>

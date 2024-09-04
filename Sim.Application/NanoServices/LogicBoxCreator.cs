@@ -3,6 +3,7 @@ using Sim.Domain.UiSchematic;
 using Sim.Domain.UiSchematic.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,6 +32,7 @@ public static class LogicBoxCreator
         boxes.AddRange(childBoxes);
         connectedSwitchers.RemoveAll(csw => usedSwitchers.Contains(csw));
 
+        childBoxes.First().ToString();
         /// TODO: It need to find out when it should be necessary to get routes from Relay to another Relay  
         /// Analyze routes from Relay path 
         //(boxes, usedSwitchers) = LogicBoxCreator.CreateBoxesStartedFromRelay(connectedSwitchers, model, nodes);
@@ -57,6 +59,7 @@ public static class LogicBoxCreator
             {
                 var defaultState = viaOpenContact ? ContactDefaultState.Open : ContactDefaultState.Close;
                 contacts.Add(new Contact(sw, defaultState));
+                usedSwitchers.Add(sw);
             }
 
 
@@ -77,6 +80,7 @@ public static class LogicBoxCreator
             {
                 var defState = viaOpenContact ? ContactDefaultState.Open : ContactDefaultState.Close;
                 contacts.Add(new Contact(sw, defState));
+                usedSwitchers.Add(sw);
             }
 
             var box2 = new LogicBox(LogicBoxType.Serial)
@@ -133,8 +137,6 @@ public static class LogicBoxCreator
 
                 boxes.Add(box);
             }
-
-
         }
 
         ////From negative pole
@@ -181,8 +183,7 @@ public static class LogicBoxCreator
     {
         List<LogicBox> boxes = [];
         List<UiSwitcher> usedSwitchers = [];
-        var connectedRelays = model.Relays.FindAll(p => p.Connectors.All(c => c.Connected));
-        ////From positive pole
+        var connectedRelays = model.Relays.FindAll(p => p.Connectors.All(c => c.Connected)).ToList();
         foreach (var relay in connectedRelays)
         {
             /// Calc route via First (Plus) contact  of Relay
@@ -235,29 +236,66 @@ public static class LogicBoxCreator
     {
         List<LogicBox> boxes = [];
         List<UiSwitcher> usedSwitchers = [];
-        ////From positive pole
-        foreach (var node in nodes)
+        var nodeSwitchers = connectedSwitchers.Where(sw => sw.HasOnlyOneContact() && sw.Connectors.Any(c => c.IsNode(nodes))).ToList();
+        while (nodeSwitchers.Count > 0)
         {
-            foreach (var startConnector in node.Connectors)
+            var switcher = nodeSwitchers.First();
+            var startConnector = switcher.Connectors.First(c => c.IsNode(nodes));
+            List<Contact> contacts = switcher.HasOnlyOpenContact() 
+                ? [new Contact(switcher, ContactDefaultState.Open)] 
+                : [new Contact(switcher, ContactDefaultState.Close)];
+
+            usedSwitchers.Add(switcher);
+            ///Remove it in order to do not use it twice 
+            nodeSwitchers.Remove(switcher);
+
+            var nextConnector = 
+                startConnector.IsOpen() || startConnector.IsClose() ? switcher.CommonConnector()
+                : startConnector.IsCommon() && switcher.HasOnlyOpenContact() ? switcher.OpenConnector()
+                : switcher.CloseConnector();
+
+            var serialSwitchers = TryFindSerialSwitchers(nextConnector, connectedSwitchers, model.Binders, nodes).ToList();
+            foreach ((UiSwitcher sw, bool viaOpenContact, _) in serialSwitchers)
             {
-                List<Contact> contacts = [];
-                var serialSwitchers = TryFindSerialSwitchers(startConnector, connectedSwitchers, model.Binders, nodes).ToList();
-                foreach ((UiSwitcher sw, bool viaOpenContact, _) in serialSwitchers)
-                {
-                    var defState = viaOpenContact ? ContactDefaultState.Open : ContactDefaultState.Close;
-                    contacts.Add(new Contact(sw, defState));
-                    usedSwitchers.Add(sw);
-                }
-
-                var box = new LogicBox(LogicBoxType.Serial)
-                {
-                    FirstPin = node,
-                    SecondPin = GetLogicEdge(serialSwitchers.Last().connector, model, nodes),
-                    Contacts = contacts,
-                };
-
-                boxes.Add(box);
+                var defaultState = viaOpenContact ? ContactDefaultState.Open : ContactDefaultState.Close;
+                contacts.Add(new Contact(sw, defaultState));
+                usedSwitchers.Add(sw);
+                nodeSwitchers.Remove(sw);
             }
+
+            var lastConnector = serialSwitchers.Count > 0
+                ? serialSwitchers.Last().connector
+                : nextConnector;
+
+            var box1 = new LogicBox(LogicBoxType.Serial)
+            {
+                FirstPin = nodes.GetNodeFor(startConnector),
+                SecondPin = GetLogicEdge(lastConnector, model, nodes),
+                Contacts = contacts,
+
+            };
+            boxes.Add(box1);
+
+
+            /// Calc route via CloseConnector contact
+            //contacts = [new Contact(switcher, ContactDefaultState.Close)];
+            //serialSwitchers = TryFindSerialSwitchers(switcher.CloseConnector(), connectedSwitchers, model.Binders, nodes).ToList();
+            //foreach ((UiSwitcher sw, bool viaOpenContact, _) in serialSwitchers)
+            //{
+            //    var defState = viaOpenContact ? ContactDefaultState.Open : ContactDefaultState.Close;
+            //    contacts.Add(new Contact(sw, defState));
+            //}
+
+            //var box2 = new LogicBox(LogicBoxType.Serial)
+            //{
+            //    FirstPin = nodes.GetNodeFor(startConnector),
+            //    SecondPin = GetLogicEdge(serialSwitchers.Last().connector, model, nodes),
+            //    Contacts = contacts,
+
+            //};
+            //boxes.Add(box2);
+
+            //usedSwitchers.Add(switcher);
         }
 
         return (boxes, usedSwitchers);
@@ -350,4 +388,5 @@ public static class LogicBoxCreator
     }
 
     private static Node GetNodeFor(this List<Node> nodes, UiConnector connector) => nodes.Find(n => n.Connectors.Contains(connector)) ?? throw new Exception($"No node for {connector.Id}");
+    private static bool IsNode(this UiConnector connector, List<Node> nodes) => nodes.Exists(n => n.Connectors.Contains(connector)) ;
 }

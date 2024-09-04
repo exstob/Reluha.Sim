@@ -29,15 +29,22 @@ public class LogicBox(LogicBoxType boxType)
     ///// GENERATE LOGIC LIKE: (a & b) | (c & d)
     public override string ToString()
     {
+        //string operation = BoxType == LogicBoxType.Serial ? "&" : "|";
+
+
         string operation = BoxType == LogicBoxType.Serial ? "&" : "|";
+
         string? pole = FirstPin is PolePositive ? "Plus" 
                      : FirstPin is PoleNegative ? "Minus"
                      : null;
-        string? poleSing = Contacts.Count > 0 ? " & " : null;
+        string? poleSing = Contacts.Count > 0 && pole is not null ? " & " : null;
+        bool hasBoxBrackets = (Contacts.Count == 1 && pole is not null) || Contacts.Count > 1;
+        string? leftBracket = hasBoxBrackets ? "(" : null;
+        string? rightBracket = hasBoxBrackets ? ")" : null;
 
         return IsRoot()
-            ? $"({string.Join($" {operation} ", this.Boxes)} )"
-            : $"({pole}{poleSing}{string.Join($" {operation} ", Contacts)} )";
+            ? $"({string.Join($" {operation} ", this.Boxes)})"
+            : $"{leftBracket}{pole}{poleSing}{string.Join($" {operation} ", Contacts)}{rightBracket}";
     }
 }
 

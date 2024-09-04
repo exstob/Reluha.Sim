@@ -29,6 +29,8 @@ namespace Sim.Domain.Logic
 
         public override string ToString() => $"{_relayState.Value}";
 
+        public string ToLogic() => $"{PositiveInputExpression} ^ {NegativeInputExpression}";
+
         public async Task<RelayState> Calc(InputContactGroupDto contactState)
         {
             var scriptOptions = ScriptOptions.Default
@@ -54,8 +56,6 @@ namespace Sim.Domain.Logic
 
             var negResult = (await _negativeInputScript.RunAsync(contactState, new CancellationToken())).ReturnValue;
 
-
-            ///_relayState = (ChainValue.P & posResult) ^ negResult;  /// if the relay with Diod (one way current)
             var relayNewState = posResult ^ negResult;
             _updated = relayNewState.Value != _relayState.Value;
             _relayState = relayNewState;

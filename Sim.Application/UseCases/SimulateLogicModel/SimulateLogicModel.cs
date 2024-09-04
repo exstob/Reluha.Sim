@@ -39,7 +39,7 @@ public class SimulateLogicModel(IMemoryCache cache) : ISimulateLogicModel
             Steps = [new SimulateStepResult
                 {
                     StepName = simReq.Steps.Single().StepName,
-                    Relays = relays.Select(r => new RelayResult { NormalContact = r.State.NormalContact, PolarContact = r.State.PolarContact }).ToList(),
+                    Relays = relays.Select(r => new RelayResult { Name = r.Name, NormalContact = r.State.NormalContact, PolarContact = r.State.PolarContact }).ToList(),
                 }]
         };
     }
