@@ -32,7 +32,6 @@ public static class LogicBoxCreator
         boxes.AddRange(childBoxes);
         connectedSwitchers.RemoveAll(csw => usedSwitchers.Contains(csw));
 
-        childBoxes.First().ToString();
         /// TODO: It need to find out when it should be necessary to get routes from Relay to another Relay  
         /// Analyze routes from Relay path 
         //(boxes, usedSwitchers) = LogicBoxCreator.CreateBoxesStartedFromRelay(connectedSwitchers, model, nodes);

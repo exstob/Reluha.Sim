@@ -9,7 +9,15 @@ namespace Sim.Application.NanoServices;
 
 public static class LogicBoxReducer
 {
-    public static bool TryPackParallelContactBoxesWithSameNodes(in List<LogicBox> inputBoxes, out List<LogicBox> outputBoxes)
+    public static bool TryPackParallelContactBoxes(in List<LogicBox> inputBoxes, out List<LogicBox> outputBoxes)
+    {
+        var packed = TryPackParallelContactBoxesWithSameNodes(inputBoxes, out var parBoxes);
+        packed |= TryPackParallelContactBoxesWithPoleAndNode(parBoxes, out outputBoxes);
+
+        return packed;
+    }
+
+        public static bool TryPackParallelContactBoxesWithSameNodes(in List<LogicBox> inputBoxes, out List<LogicBox> outputBoxes)
     {
         List<LogicBox> boxes = inputBoxes;
 

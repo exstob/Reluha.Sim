@@ -27,17 +27,17 @@ static public class NodeCreator
         var allConnectors = model.AllElements().SelectMany(el => el.Connectors).Where(con => con.Connected).ToList();
 
         var nodes = new List<Node>();
-        var nodeConnectorStack = new Stack<UiConnector>(nodeConnectors);
+        //var nodeConnectorStack = new Stack<UiConnector>(nodeConnectors);
 
-        while (nodeConnectorStack.Count > 0)
+        while (nodeConnectors.Count > 0)
         {
-            //var nodeConnector = nodeConnectors.Last();
-            var nodeConnector = nodeConnectorStack.Pop();
+            var nodeConnector = nodeConnectors.First();
+            //var nodeConnector = nodeConnectorStack.Pop();
             var node = new Node(nodeConnector.Id);
             node.Connectors.Add(nodeConnector);
             node.RelayPin = TryGetRelayPin(nodeConnector, model);
             //// if the connector was removed it means, it was processed
-            //nodeConnectors.Remove(nodeConnector);
+            nodeConnectors.Remove(nodeConnector);
             allConnectors.Remove(nodeConnector);
 
 
@@ -58,13 +58,14 @@ static public class NodeCreator
                 {
                     /// push new binders for further calculation, exclude the current binder
                     relatedConnector.JointBindersId.FindAll(id => id != binderId).ForEach(id => binderStack.Push(id));
+                    nodeConnector = relatedConnector;
                 }
 
                 if (relatedConnector != null) 
                 {
                     node.Connectors.Add(relatedConnector);
                     node.RelayPin ??= TryGetRelayPin(relatedConnector, model);
-                    //nodeConnectors.Remove(relatedConnector);
+                    nodeConnectors.Remove(relatedConnector);
                     allConnectors.Remove(relatedConnector);
                 }
             }

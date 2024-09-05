@@ -24,9 +24,10 @@ public class CreateLogicModelTest
     }
 
     [Theory]
-    //[InlineData("SerialConnections.json")]
-    [InlineData("ParallelConnections.json")]
-    public async Task CreateModel_OK(string fileName)
+    [InlineData("SerialConnections.json", "(Plus & !x.R1 & x.R2) ^ Minus")]
+    [InlineData("ParallelConnections.json", "(Plus & (x.R1 | x.R2)) ^ Minus")]
+    [InlineData("SerialAndParallelConnections.json", "(Plus & (x.R1 | x.R2) & ((x.R3 & x.R4) | (x.R5 & x.R6 & x.R7)) & !x.R8) ^ Minus")]
+    public async Task CreateModel_OK(string fileName, string logicResult)
     {
         var scheme = repo.GetUiScheme(fileName);
         var useCase = new CreateLogicModel(cache);
@@ -36,6 +37,6 @@ public class CreateLogicModelTest
         result.ShouldNotBeNull();
         cache.TryGetValue<LogicModel>(result.Id.ToString(), out var model);
 
-        model.Relays[0].State.ToLogic().ShouldBe("(Plus & (x.R1 | x.R2)) ^ Minus");
+        model.Relays[0].State.ToLogic().ShouldBe(logicResult);
     }
 }

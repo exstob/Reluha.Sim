@@ -38,20 +38,20 @@ public static class Parser
     {
         var boxes = LogicBoxCreator.Create(model, nodes);
         var contacts = boxes.Where(b => b.Contacts is not null).SelectMany(b => b!.Contacts).ToList();
-        if (LogicBoxReducer.TryPackParallelContactBoxesWithSameNodes(boxes, out var parBoxes))
+        do
         {
-            if (LogicBoxReducer.TryPackSerialContactBoxes(parBoxes, out var serialBoxes))
+            if (!LogicBoxReducer.TryPackParallelContactBoxes(boxes, out var parBoxes))
             {
-                if (LogicBoxReducer.TryPackParallelContactBoxesWithPoleAndNode(serialBoxes, out var poleBoxes))
-                {
-                    return (poleBoxes, contacts);
-                }
-                return (serialBoxes, contacts);
+                return (boxes, contacts);
             }
-            return (parBoxes, contacts);
-        }
 
-        return (boxes, contacts);
+            if (!LogicBoxReducer.TryPackSerialContactBoxes(parBoxes, out var serialBoxes))
+            {
+                return (parBoxes, contacts);
+            }
+            boxes = serialBoxes;
+
+        } while (true);
     }
 
     public static List<Relay> ParseRelays(UiSchemeModel model, List<LogicBox> boxes)
