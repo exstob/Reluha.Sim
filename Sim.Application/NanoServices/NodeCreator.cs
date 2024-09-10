@@ -35,21 +35,22 @@ static public class NodeCreator
             //var nodeConnector = nodeConnectorStack.Pop();
             var node = new Node(nodeConnector.Id);
             node.Connectors.Add(nodeConnector);
+            node.ElementNames.Add(nodeConnector.ElementName(model));
             node.RelayPin = TryGetRelayPin(nodeConnector, model);
             //// if the connector was removed it means, it was processed
             nodeConnectors.Remove(nodeConnector);
-            allConnectors.Remove(nodeConnector);
+            //allConnectors.Remove(nodeConnector);
 
 
             ////// Find all related connectors    _ _ _ 
             //////                                 | |
             //////
-            var binderStack = new Stack<string>(nodeConnector.JointBindersId);
+            var binderStack = new Stack<(string, string)>(nodeConnector.JointBindersId.Select(binderId => (binderId, nodeConnector.Id)));
   
             while (binderStack.Count > 0)
             {
-                var binderId = binderStack.Pop();
-                var relatedConnectorId = model.Binders.FindNextConnectorId(binderId, nodeConnector.Id);
+                var (binderId, nodeConnectorId) = binderStack.Pop();
+                var relatedConnectorId = model.Binders.FindNextConnectorId(binderId, nodeConnectorId);
 
                 /// Get a new connector if exist
                 var relatedConnector = allConnectors.Find(c => c.Id == relatedConnectorId);
@@ -57,16 +58,17 @@ static public class NodeCreator
                 if (relatedConnector?.IsMiniNode() ?? false)
                 {
                     /// push new binders for further calculation, exclude the current binder
-                    relatedConnector.JointBindersId.FindAll(id => id != binderId).ForEach(id => binderStack.Push(id));
-                    nodeConnector = relatedConnector;
+                    relatedConnector.JointBindersId.FindAll(id => id != binderId).ForEach(id => binderStack.Push((id, relatedConnector.Id)));
+                    //nodeConnector = relatedConnector;
                 }
 
                 if (relatedConnector != null) 
                 {
                     node.Connectors.Add(relatedConnector);
+                    node.ElementNames.Add(relatedConnector.ElementName(model));
                     node.RelayPin ??= TryGetRelayPin(relatedConnector, model);
                     nodeConnectors.Remove(relatedConnector);
-                    allConnectors.Remove(relatedConnector);
+                    //allConnectors.Remove(relatedConnector);
                 }
             }
 

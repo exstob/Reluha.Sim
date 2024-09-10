@@ -11,8 +11,14 @@ public class Node(string id) : ILogicEdge
 {
     public string Id { get; init; } = id;
     public List<UiConnector> Connectors { get; init; } = [];
-    //public List<UiBinder> Binders { get; init; }
+    public List<string> ElementNames { get; init; } = [];
     public IRelayEdge? RelayPin { get; set; }
 
+    public bool Used { get; set; } = false;
+
+    public override string ToString()
+    {
+        return string.Join("-", ElementNames);
+    }
 
 }

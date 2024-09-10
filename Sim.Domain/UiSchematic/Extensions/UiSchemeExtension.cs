@@ -50,6 +50,13 @@ public static class UiSchemeExtension
 
     }
 
+    public static string ElementName(this UiConnector connector, UiSchemeModel model)
+    {
+        var element = model.AllElements().Single(el => el.Connectors.Any(c => c.Id == connector.Id));
+        return element.Name;
+
+    }
+
 
     public static bool IsMiniNode(this UiConnector connector) => connector.JointBindersId.Count > 1;
 

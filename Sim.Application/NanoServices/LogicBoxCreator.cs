@@ -2,6 +2,7 @@
 using Sim.Domain.UiSchematic;
 using Sim.Domain.UiSchematic.Extensions;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -23,9 +24,9 @@ public static class LogicBoxCreator
         connectedSwitchers.RemoveAll(csw => usedSwitchers.Contains(csw));
 
         /// Analyze routes from CommonConnector contact
-         (childBoxes, usedSwitchers) = LogicBoxCreator.CreateBoxesStartedFromCommonContacts(connectedSwitchers, model, nodes);
-        boxes.AddRange(childBoxes);
-        connectedSwitchers.RemoveAll(csw => usedSwitchers.Contains(csw));
+        // (childBoxes, usedSwitchers) = LogicBoxCreator.CreateBoxesStartedFromCommonContacts(connectedSwitchers, model, nodes);
+        //boxes.AddRange(childBoxes);
+        //connectedSwitchers.RemoveAll(csw => usedSwitchers.Contains(csw));
 
         /// Analyze routes from Node to Node
         (childBoxes, usedSwitchers) = LogicBoxCreator.CreateBoxesStartedFromNode(connectedSwitchers, model, nodes);
@@ -61,11 +62,14 @@ public static class LogicBoxCreator
                 usedSwitchers.Add(sw);
             }
 
+            var lastConnector = serialSwitchers.Count > 0
+                ? serialSwitchers.Last().connector
+                : switcher.OpenConnector();
 
             var box1 = new LogicBox(LogicBoxType.Serial)
             {
                 FirstPin = nodes.GetNodeFor(startConnector),
-                SecondPin = GetLogicEdge(serialSwitchers.Last().connector, model, nodes),
+                SecondPin = GetLogicEdge(lastConnector, model, nodes),
                 Contacts = contacts,
 
             };
@@ -82,10 +86,14 @@ public static class LogicBoxCreator
                 usedSwitchers.Add(sw);
             }
 
+            lastConnector = serialSwitchers.Count > 0
+                ? serialSwitchers.Last().connector
+                : switcher.CloseConnector();
+
             var box2 = new LogicBox(LogicBoxType.Serial)
             {
                 FirstPin = nodes.GetNodeFor(startConnector),
-                SecondPin = GetLogicEdge(serialSwitchers.Last().connector, model, nodes),
+                SecondPin = GetLogicEdge(lastConnector, model, nodes),
                 Contacts = contacts,
 
             };
@@ -114,28 +122,31 @@ public static class LogicBoxCreator
                 contacts.Add(new Contact(sw, defState));
                 usedSwitchers.Add(sw);
             }
+
+            LogicBox box;
             if (contacts.Count > 0)
             {
-                var box = new LogicBox(LogicBoxType.Serial)
+                box = new LogicBox(LogicBoxType.Serial)
                 {
                     FirstPin = new PolePositive(),
                     SecondPin = GetLogicEdge(serialSwitchers.Last().connector, model, nodes),
                     Contacts = contacts
                 };
-
-                boxes.Add(box);
             }
             /// Add Logic Box without contacts (it har direct connection with Relay or Node)
             else
             {
-                var box = new LogicBox(LogicBoxType.Serial)
+                box = new LogicBox(LogicBoxType.Serial)
                 {
                     FirstPin = new PolePositive(),
                     SecondPin = GetLogicEdge(startConnector, model, nodes),
                 };
-
-                boxes.Add(box);
             }
+
+            if (box.SecondPin is Node node)
+                node.Used = true;
+
+            boxes.Add(box);
         }
 
         ////From negative pole
@@ -151,27 +162,32 @@ public static class LogicBoxCreator
                 contacts.Add(new Contact(sw, defState));
                 usedSwitchers.Add(sw);
             }
+
+            LogicBox box;
             if (contacts.Count > 0)
             {
-                var box = new LogicBox(LogicBoxType.Serial)
+                box = new LogicBox(LogicBoxType.Serial)
                 {
                     FirstPin = new PoleNegative(),
                     SecondPin = GetLogicEdge(serialSwitchers.Last().connector, model, nodes),
                     Contacts = contacts
                 };
-                boxes.Add(box);
+
+
             }
             /// Add Logic Box without contacts (it har direct connection with Relay or Node)
             else
             {
-                var box = new LogicBox(LogicBoxType.Serial)
+                box = new LogicBox(LogicBoxType.Serial)
                 {
                     FirstPin = new PoleNegative(),
                     SecondPin = GetLogicEdge(startConnector, model, nodes),
                 };
-
-                boxes.Add(box);
             }
+            if (box.SecondPin is Node node)
+                node.Used = true;
+
+            boxes.Add(box);
 
         }
 
@@ -235,66 +251,121 @@ public static class LogicBoxCreator
     {
         List<LogicBox> boxes = [];
         List<UiSwitcher> usedSwitchers = [];
-        var nodeSwitchers = connectedSwitchers.Where(sw => sw.HasOnlyOneContact() && sw.Connectors.Any(c => c.IsNode(nodes))).ToList();
-        while (nodeSwitchers.Count > 0)
+        var allNodeSwitchers = connectedSwitchers.Where(sw => sw.HasBothContacts() || sw.HasOnlyOneContact() && sw.Connectors.Any(c => c.IsNode(nodes))).ToList();
+        var bothContactSwitchersRemovalFlag = connectedSwitchers.Where(sw => sw.HasBothContacts()).ToDictionary(sw => sw.Id, sw => false);
+        var sortedNodes = nodes.OrderByDescending(node => node.Used).ToList();
+
+        while (sortedNodes.Count > 0) 
         {
-            var switcher = nodeSwitchers.First();
-            var startConnector = switcher.Connectors.First(c => c.IsNode(nodes));
-            List<Contact> contacts = switcher.HasOnlyOpenContact() 
-                ? [new Contact(switcher, ContactDefaultState.Open)] 
-                : [new Contact(switcher, ContactDefaultState.Close)];
+            var sortedNode = sortedNodes.First();
+            var nodeSwitchers = allNodeSwitchers.Where(sw => sw.Connectors.Any(c => c.IsNode(nodes) && nodes.GetNodeFor(c).Id == sortedNode.Id)).ToList();
 
-            usedSwitchers.Add(switcher);
-            ///Remove it in order to do not use it twice 
-            nodeSwitchers.Remove(switcher);
-
-            var nextConnector = 
-                startConnector.IsOpen() || startConnector.IsClose() ? switcher.CommonConnector()
-                : startConnector.IsCommon() && switcher.HasOnlyOpenContact() ? switcher.OpenConnector()
-                : switcher.CloseConnector();
-
-            var serialSwitchers = TryFindSerialSwitchers(nextConnector, connectedSwitchers, model.Binders, nodes).ToList();
-            foreach ((UiSwitcher sw, bool viaOpenContact, _) in serialSwitchers)
+            foreach (var switcher  in nodeSwitchers)
             {
-                var defaultState = viaOpenContact ? ContactDefaultState.Open : ContactDefaultState.Close;
-                contacts.Add(new Contact(sw, defaultState));
-                usedSwitchers.Add(sw);
-                nodeSwitchers.Remove(sw);
+                //nodeSwitchers = nodeSwitchers
+                //    .OrderByDescending(sw => sw.Connectors.Any(c => c.IsNode(nodes) && nodes.GetNodeFor(c).Used))
+                //    //.ThenByDescending(sw => sw.HasBothContacts())
+                //    .ThenByDescending(sw => nodes.GetNodeFor(sw.Connectors.First(c => c.IsNode(nodes))).Id)
+                //.ToList();
+
+                //var switcher = nodeSwitchers.First();
+                var startConnector = switcher.Connectors.First(c => c.IsNode(nodes) && nodes.GetNodeFor(c).Id == sortedNode.Id);
+
+                if (switcher.HasOpenContact())
+                {
+                    List<Contact> contacts = [new Contact(switcher, ContactDefaultState.Open)];
+
+                    usedSwitchers.Add(switcher);
+
+                    ///Remove it in order to do not use it twice 
+                    allNodeSwitchers.Remove(switcher);
+
+                    var nextConnector = startConnector.IsOpen() ? switcher.CommonConnector() : switcher.OpenConnector();
+
+                    var serialSwitchers = TryFindSerialSwitchers(nextConnector, connectedSwitchers, model.Binders, nodes).ToList();
+                    foreach ((UiSwitcher sw, bool viaOpenContact, _) in serialSwitchers)
+                    {
+                        var defaultState = viaOpenContact ? ContactDefaultState.Open : ContactDefaultState.Close;
+                        contacts.Add(new Contact(sw, defaultState));
+                        usedSwitchers.Add(sw);
+
+                        if (!sw.HasBothContacts() || (sw.HasBothContacts() && bothContactSwitchersRemovalFlag[sw.Id]))
+                        {
+                            ///Remove it in order to do not use it twice 
+                            allNodeSwitchers.Remove(sw);
+                        }
+                        else if (sw.HasBothContacts())
+                        {
+                            bothContactSwitchersRemovalFlag[sw.Id] = true;
+                        }
+                    }
+
+                    var lastConnector = serialSwitchers.Count > 0
+                        ? serialSwitchers.Last().connector
+                        : nextConnector;
+
+                    var box = new LogicBox(LogicBoxType.Serial)
+                    {
+                        FirstPin = nodes.GetNodeFor(startConnector),
+                        SecondPin = GetLogicEdge(lastConnector, model, nodes),
+                        Contacts = contacts,
+
+                    };
+
+                    if (box.SecondPin is Node node)
+                        node.Used = true;
+
+                    boxes.Add(box);
+                }
+
+                if (switcher.HasCloseContact())
+                {
+                    List<Contact> contacts = [new Contact(switcher, ContactDefaultState.Close)];
+
+                    usedSwitchers.Add(switcher);
+                    ///Remove it in order to do not use it twice 
+                    allNodeSwitchers.Remove(switcher);
+
+                    var nextConnector = startConnector.IsClose() ? switcher.CommonConnector() : switcher.CloseConnector();
+
+                    var serialSwitchers = TryFindSerialSwitchers(nextConnector, connectedSwitchers, model.Binders, nodes).ToList();
+                    foreach ((UiSwitcher sw, bool viaOpenContact, _) in serialSwitchers)
+                    {
+                        var defaultState = viaOpenContact ? ContactDefaultState.Open : ContactDefaultState.Close;
+                        contacts.Add(new Contact(sw, defaultState));
+                        usedSwitchers.Add(sw);
+                        if (!sw.HasBothContacts() || (sw.HasBothContacts() && bothContactSwitchersRemovalFlag[sw.Id]))
+                        {
+                            ///Remove it in order to do not use it twice 
+                            allNodeSwitchers.Remove(sw);
+                        }
+                        else if (sw.HasBothContacts())
+                        {
+                            bothContactSwitchersRemovalFlag[sw.Id] = true;
+                        }
+                    }
+
+                    var lastConnector = serialSwitchers.Count > 0
+                        ? serialSwitchers.Last().connector
+                        : nextConnector;
+
+                    var box = new LogicBox(LogicBoxType.Serial)
+                    {
+                        FirstPin = nodes.GetNodeFor(startConnector),
+                        SecondPin = GetLogicEdge(lastConnector, model, nodes),
+                        Contacts = contacts,
+
+                    };
+
+                    if (box.SecondPin is Node node)
+                        node.Used = true;
+
+                    boxes.Add(box);
+                }
+
             }
-
-            var lastConnector = serialSwitchers.Count > 0
-                ? serialSwitchers.Last().connector
-                : nextConnector;
-
-            var box1 = new LogicBox(LogicBoxType.Serial)
-            {
-                FirstPin = nodes.GetNodeFor(startConnector),
-                SecondPin = GetLogicEdge(lastConnector, model, nodes),
-                Contacts = contacts,
-
-            };
-            boxes.Add(box1);
-
-
-            /// Calc route via CloseConnector contact
-            //contacts = [new Contact(switcher, ContactDefaultState.Close)];
-            //serialSwitchers = TryFindSerialSwitchers(switcher.CloseConnector(), connectedSwitchers, model.Binders, nodes).ToList();
-            //foreach ((UiSwitcher sw, bool viaOpenContact, _) in serialSwitchers)
-            //{
-            //    var defState = viaOpenContact ? ContactDefaultState.Open : ContactDefaultState.Close;
-            //    contacts.Add(new Contact(sw, defState));
-            //}
-
-            //var box2 = new LogicBox(LogicBoxType.Serial)
-            //{
-            //    FirstPin = nodes.GetNodeFor(startConnector),
-            //    SecondPin = GetLogicEdge(serialSwitchers.Last().connector, model, nodes),
-            //    Contacts = contacts,
-
-            //};
-            //boxes.Add(box2);
-
-            //usedSwitchers.Add(switcher);
+            sortedNodes.Remove(sortedNode);
+            sortedNodes = sortedNodes.OrderByDescending(node => node.Used).ToList();
         }
 
         return (boxes, usedSwitchers);
@@ -341,7 +412,6 @@ public static class LogicBoxCreator
             if (nextConnector is not null && switcher.HasBothContacts() && switcherConnector.IsCommon()) /// CommonConnector pin is like Node, thus, we should cut the chain
                 yield break;
 
-
         }
 
     }
@@ -349,7 +419,14 @@ public static class LogicBoxCreator
     static ILogicEdge GetLogicEdge(UiConnector connector, UiSchemeModel model, List<Node> nodes)
     {
         var node = nodes.Find(n => n.Connectors.Contains(connector));
-        if (node is not null) return node;
+        if (node is not null)
+        {
+            /// To provide the consistency we should used sort nodes
+            //nodes.Remove(node);
+            //nodes.Insert(0, node);
+            return node;
+        }
+            
 
         var (el, con) = connector.NextElementAndConnector(model);
 

@@ -102,20 +102,24 @@ public static class LogicBoxReducer
 
         foreach (var startPin in edgePins)
         {
-            var (serialBoxes, lastPin) = TryFindSerialBoxes(startPin!, boxes);
-
-            if (serialBoxes?.Count > 0)
+            var startBoxes = inputBoxes.FindAll(ib => ib.FirstPin.Equals(startPin));
+            foreach (var startBox in startBoxes) 
             {
-                found = true;
-                var box = new LogicBox(LogicBoxType.Serial)
+                var (serialBoxes, lastPin) = TryFindSerialBoxes(startBox, boxes);
+
+                if (serialBoxes?.Count > 0)
                 {
-                    FirstPin = startPin!,
-                    SecondPin = lastPin,
-                    Boxes = serialBoxes,
-                };
-                
-                boxes = boxes.Except(box.Boxes).ToList();
-                boxes.Add(box);
+                    found = true;
+                    var box = new LogicBox(LogicBoxType.Serial)
+                    {
+                        FirstPin = startPin!,
+                        SecondPin = lastPin,
+                        Boxes = serialBoxes,
+                    };
+
+                    boxes = boxes.Except(box.Boxes).ToList();
+                    boxes.Add(box);
+                }
             }
         }
 
@@ -123,10 +127,33 @@ public static class LogicBoxReducer
         return found;
     }
 
-    static (List<LogicBox> serialBoxes, ILogicEdge lastPin) TryFindSerialBoxes(ILogicEdge startPin, List<LogicBox> inputBoxes)
+    //static (List<LogicBox> serialBoxes, ILogicEdge lastPin) TryFindSerialBoxes(ILogicEdge startPin, List<LogicBox> inputBoxes)
+    //{
+    //    ILogicEdge pin = startPin;
+    //    var startBox = inputBoxes.Single(ib => ib.FirstPin.Equals(startPin));
+    //    var box = startBox;
+
+    //    List<LogicBox> boxes = [];
+
+    //    while (true)
+    //    {
+    //        var nextBox = inputBoxes.Find(ib => ib.FirstPin is Pin && ib.FirstPin.Equals(box.SecondPin));
+
+    //        if (nextBox is null) goto FINISH; //// detect the end of serial chain.
+
+    //        boxes.Add(nextBox);
+    //        box = nextBox;
+    //        pin = box.SecondPin;
+    //    }
+
+    //    FINISH:
+    //    return boxes.Count > 0 ? ([startBox, .. boxes], pin) : ([], pin);
+
+    //}
+
+    static (List<LogicBox> serialBoxes, ILogicEdge lastPin) TryFindSerialBoxes(LogicBox startBox, List<LogicBox> inputBoxes)
     {
-        ILogicEdge pin = startPin;
-        var startBox = inputBoxes.Single(ib => ib.FirstPin.Equals(startPin));
+        ILogicEdge pin = startBox.SecondPin;
         var box = startBox;
 
         List<LogicBox> boxes = [];

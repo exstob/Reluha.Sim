@@ -7,13 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="LocalStorage\DualContactGroup.json" />
     <None Remove="LocalStorage\ParallelConnections.json" />
+    <None Remove="LocalStorage\ParallelOfParallelConnection.json" />
+    <None Remove="LocalStorage\SerialAndParallelAndDualConnections.json" />
     <None Remove="LocalStorage\SerialAndParallelConnections.json" />
     <None Remove="LocalStorage\SerialConnections.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="LocalStorage\DualContactGroup.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="LocalStorage\ParallelConnections.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LocalStorage\ParallelOfParallelConnection.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LocalStorage\SerialAndParallelAndDualConnections.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="LocalStorage\SerialAndParallelConnections.json">

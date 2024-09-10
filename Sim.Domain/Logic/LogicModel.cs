@@ -23,7 +23,9 @@ namespace Sim.Domain.Logic
             foreach (var contact in contacts)
             {
                 var expandDict = contactGroups.x as IDictionary<string, object>;
-                expandDict!.Add(contact.FullName(), contact.State);
+                var contactName = contact.FullName();
+                if (!expandDict!.ContainsKey(contactName))
+                    expandDict.Add(contactName, contact.State);
             }
             return contactGroups;
         }
