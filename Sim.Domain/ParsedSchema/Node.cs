@@ -18,7 +18,7 @@ public class Node(string id) : ILogicEdge
 
     public override string ToString()
     {
-        return string.Join("-", ElementNames);
+        return string.Join(";", ElementNames);
     }
 
 }

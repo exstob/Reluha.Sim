@@ -24,6 +24,7 @@ public static class LogicBoxReducer
         var parallelBoxes = boxes
             .Where(b => b.FirstPin is Node && b.SecondPin is Node)
             .GroupBy(b => new { b.FirstPin, b.SecondPin }) /// group boxes with same Node
+            .Where(b => b.Count() > 1)
             .Select(g => new LogicBox(LogicBoxType.Parallel) { FirstPin = g.Key.FirstPin, SecondPin = g.Key.SecondPin, Boxes = g.ToList() })
             .ToList();
         foreach (var parBox in parallelBoxes)
@@ -64,8 +65,9 @@ public static class LogicBoxReducer
 
         var parallelBoxes = boxes
             .Where(b => b.FirstPin is IPoleEdge && b.SecondPin is Node)
-            .GroupBy(p => new { p.FirstPin, p.SecondPin }) /// group boxes with same Node
-            .Select(g => new LogicBox(LogicBoxType.Parallel) { FirstPin = g.Key.FirstPin, SecondPin = g.Key.SecondPin, Boxes = g.ToList() })
+            .GroupBy(p => new { p.SecondPin }) /// group boxes with same Node
+            .Where(b => b.Count() > 1)
+            .Select(g => new LogicBox(LogicBoxType.Parallel) { FirstPin = new Poles(), SecondPin = g.Key.SecondPin, Boxes = g.ToList() })
             .ToList();
 
         foreach (var parBox in parallelBoxes)
@@ -96,8 +98,8 @@ public static class LogicBoxReducer
         List<LogicBox> boxes = inputBoxes;
 
         var edgePins = inputBoxes
-            .SelectMany(ib => new[] { ib.FirstPin, ib.SecondPin })
-            .Where(pin => pin is PolePositive || pin is PoleNegative || pin is Node)
+            .Select(ib => ib.FirstPin)
+            .Where(pin => pin is IPoleEdge || pin is Node)
             .ToList();
 
         foreach (var startPin in edgePins)
@@ -127,30 +129,6 @@ public static class LogicBoxReducer
         return found;
     }
 
-    //static (List<LogicBox> serialBoxes, ILogicEdge lastPin) TryFindSerialBoxes(ILogicEdge startPin, List<LogicBox> inputBoxes)
-    //{
-    //    ILogicEdge pin = startPin;
-    //    var startBox = inputBoxes.Single(ib => ib.FirstPin.Equals(startPin));
-    //    var box = startBox;
-
-    //    List<LogicBox> boxes = [];
-
-    //    while (true)
-    //    {
-    //        var nextBox = inputBoxes.Find(ib => ib.FirstPin is Pin && ib.FirstPin.Equals(box.SecondPin));
-
-    //        if (nextBox is null) goto FINISH; //// detect the end of serial chain.
-
-    //        boxes.Add(nextBox);
-    //        box = nextBox;
-    //        pin = box.SecondPin;
-    //    }
-
-    //    FINISH:
-    //    return boxes.Count > 0 ? ([startBox, .. boxes], pin) : ([], pin);
-
-    //}
-
     static (List<LogicBox> serialBoxes, ILogicEdge lastPin) TryFindSerialBoxes(LogicBox startBox, List<LogicBox> inputBoxes)
     {
         ILogicEdge pin = startBox.SecondPin;
@@ -160,13 +138,21 @@ public static class LogicBoxReducer
 
         while (true)
         {
-            var nextBox = inputBoxes.Find(ib => ib.FirstPin is Pin && ib.FirstPin.Equals(box.SecondPin));
+            //var rightNextBox = inputBoxes.Find(ib => ib.FirstPin is Pin && ib.FirstPin.Equals(box.SecondPin));
+            //var rotatedNextBox = inputBoxes.Find(ib => ib.SecondPin is Pin && !ib.Equals(box) && ib.SecondPin.Equals(box.SecondPin));
+
+            var rightNextBox = inputBoxes.Find(ib => pin is Pin currentPin && ib.FirstPin is Pin pin1 && currentPin.Id.Equals(pin1.Id));
+
+            ///Unfortunately, we can not detect the right direction for nested parallel connection, so we need to "rotate" the logic box 
+            var rotatedNextBox = inputBoxes.Find(ib => pin is Pin currentPin && ib.SecondPin is Pin pin2 && currentPin.Id.Equals(pin2.Id) && !ib.Equals(box));
+
+            var nextBox = rightNextBox ?? rotatedNextBox;
 
             if (nextBox is null) goto FINISH; //// detect the end of serial chain.
 
             boxes.Add(nextBox);
             box = nextBox;
-            pin = box.SecondPin;
+            pin = rightNextBox is not null ? box.SecondPin : box.FirstPin;
         }
 
     FINISH:

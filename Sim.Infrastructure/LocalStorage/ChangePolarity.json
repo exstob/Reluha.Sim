@@ -1,0 +1,1503 @@
+{
+  "version": "1.0",
+  "relays": [
+    {
+      "id": "id_relay_9c5330bf-88a5-0866-e77c-ec7b79751e6a",
+      "name": "Rout",
+      "className": 2,
+      "x": 413,
+      "y": 135,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "6aa08d67-f55e-f102-acb9-fa79f6556b9b",
+          "name": "plus",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_4571043c-70fd-7206-1d17-d195ddffee04" ]
+        },
+        {
+          "id": "7ea1f9f6-3cf4-03fd-ca70-8ba1cbc294d4",
+          "name": "minus",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_1c920037-73b2-60ec-a3a5-ec65915e9497" ]
+        }
+      ],
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    },
+    {
+      "id": "id_relay_136fc2a3-4a23-9dc7-a616-c1dabce7d5a4",
+      "name": "R1",
+      "className": 2,
+      "x": 446,
+      "y": 325,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "2a8a7e74-b8c6-9d16-b1b3-6ce18a3dae7b",
+          "name": "plus",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_477b6d2e-ff7b-e3e3-c6a6-7a5e8c11da70" ]
+        },
+        {
+          "id": "e8981c83-1d88-9a03-6888-c4d020873cea",
+          "name": "minus",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_dd7170f6-623a-ad2f-edf5-bc8c763680e6" ]
+        }
+      ],
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    }
+  ],
+  "switchers": [
+    {
+      "id": "id_switcher_603b0572-90f2-d386-d565-4a475c78167a",
+      "name": "R25",
+      "className": 3,
+      "x": 257,
+      "y": 141,
+      "selected": false,
+      "mirror": true,
+      "connectors": [
+        {
+          "id": "ea32999c-e96c-331c-8b92-5437333589b6",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_87e736e1-2b6c-6b1d-e4b7-991d24238ae6" ]
+        },
+        {
+          "id": "08becb0e-49c2-2553-b980-04046322652d",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_456077dd-c70d-9031-668e-ff17435a06e3" ]
+        },
+        {
+          "id": "556944e7-6018-4bf9-545d-6dafbfe6fc11",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_99835f33-2f4a-a789-57b8-3104724f4c72" ]
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "contacts": "both",
+        "virtual": true
+      },
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    },
+    {
+      "id": "id_switcher_ffc31779-76aa-b5ca-6eeb-5da875d9848d",
+      "name": "R26",
+      "className": 3,
+      "x": 331,
+      "y": 140,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "d24b9708-e00e-8f23-51fa-03ef4e386018",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_87e736e1-2b6c-6b1d-e4b7-991d24238ae6" ]
+        },
+        {
+          "id": "b55a0542-2fca-34e8-71c5-31a3f5dcc187",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_4571043c-70fd-7206-1d17-d195ddffee04" ]
+        },
+        {
+          "id": "53bf9d18-5939-986f-64aa-ac394cb8cb3f",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": false,
+          "jointConnectorsId": [],
+          "jointBindersId": []
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "contacts": "NO",
+        "virtual": true
+      },
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    },
+    {
+      "id": "id_switcher_76167328-9366-26f2-ba45-a1ce354ff69c",
+      "name": "R1",
+      "className": 3,
+      "x": 128,
+      "y": 50,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "3344f1b5-ffc7-31d0-7e74-0261a9f53fbf",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_1ff6c303-e083-9f20-b11c-3f03aec7d0c2", "id_binder_5796e390-8f86-b549-6818-620333e1aeb7" ]
+        },
+        {
+          "id": "1da3df57-4abc-0cc8-2247-64c99da2317c",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_9786d405-8fc2-8836-118d-e2027c7bda30" ]
+        },
+        {
+          "id": "eac1ab21-24ec-4b22-36f3-bc1d020a7e8d",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": false,
+          "jointConnectorsId": [],
+          "jointBindersId": []
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "contacts": "NO",
+        "virtual": true
+      },
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    },
+    {
+      "id": "id_switcher_0e581e73-5f76-9d22-fa3f-5f290ecc50d1",
+      "name": "R21",
+      "className": 3,
+      "x": 128,
+      "y": 115,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "01bb1e2e-c755-7778-f63c-413fb5ae9fe9",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_1ff6c303-e083-9f20-b11c-3f03aec7d0c2" ]
+        },
+        {
+          "id": "a8a06e21-f92a-e645-5e39-b3aff69b1079",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_9786d405-8fc2-8836-118d-e2027c7bda30", "id_binder_456077dd-c70d-9031-668e-ff17435a06e3" ]
+        },
+        {
+          "id": "478dbdee-fc07-5f62-c6fe-522d15201167",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": false,
+          "jointConnectorsId": [],
+          "jointBindersId": []
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "contacts": "NO",
+        "virtual": true
+      },
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    },
+    {
+      "id": "id_switcher_9e2580ac-838f-d13a-3f37-bad18674512c",
+      "name": "R22",
+      "className": 3,
+      "x": 125,
+      "y": 253,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "0c1f3277-432b-c2d4-7a78-8c95c62df49e",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_9f123b64-5b59-f1c2-9d03-9e6e8a4822fe" ]
+        },
+        {
+          "id": "eeb57f22-a5f6-06fc-ee51-86ab3405ce62",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_b51ecd88-804f-a18d-1704-b920cf8840bc", "id_binder_99835f33-2f4a-a789-57b8-3104724f4c72" ]
+        },
+        {
+          "id": "0d3f6074-b12a-f161-499a-51e9ce630113",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": false,
+          "jointConnectorsId": [],
+          "jointBindersId": []
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "contacts": "NO",
+        "virtual": true
+      },
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    },
+    {
+      "id": "id_switcher_25a098f9-5a86-2178-03d5-31637d94e847",
+      "name": "R23",
+      "className": 3,
+      "x": 128,
+      "y": 316,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "76bfc13f-3018-8633-5adf-53fe996852c2",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_9f123b64-5b59-f1c2-9d03-9e6e8a4822fe", "id_binder_98c92287-d2c3-f3b6-453d-ae936cafeec3" ]
+        },
+        {
+          "id": "a76457f4-d0c5-ebdb-4295-6664d5bbf4e1",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_b51ecd88-804f-a18d-1704-b920cf8840bc", "id_binder_fce09ad3-919a-0cf1-d4e5-021132592b54" ]
+        },
+        {
+          "id": "22db6453-3883-40bd-4e15-dc44470e48d7",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": false,
+          "jointConnectorsId": [],
+          "jointBindersId": []
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "contacts": "NO",
+        "virtual": true
+      },
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    },
+    {
+      "id": "id_switcher_81670105-226d-ffc8-177e-0cf91488247f",
+      "name": "R24",
+      "className": 3,
+      "x": 122,
+      "y": 366,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "71fe15b7-6ee0-38f9-7491-3266a835cdee",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_98c92287-d2c3-f3b6-453d-ae936cafeec3", "id_binder_95853940-e3e5-ca9b-4258-b5016ab774b2" ]
+        },
+        {
+          "id": "744bdf57-1657-59b0-cb94-ef8648e863ab",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": false,
+          "jointConnectorsId": [],
+          "jointBindersId": []
+        },
+        {
+          "id": "8d2009bd-5419-5a50-a1b1-cb31ccae5bec",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_fce09ad3-919a-0cf1-d4e5-021132592b54", "id_binder_507a241d-5745-13ab-4d09-b1f810800f37" ]
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "contacts": "NC",
+        "virtual": true
+      },
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    },
+    {
+      "id": "id_switcher_c5b8b084-25d5-cb67-151c-351ca39985a0",
+      "name": "R1",
+      "className": 3,
+      "x": 121,
+      "y": 424,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "4d9daf11-5612-4ef5-2008-cbca64128585",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_95853940-e3e5-ca9b-4258-b5016ab774b2", "id_binder_ca30bc74-4f28-551a-a046-9db391279bdf" ]
+        },
+        {
+          "id": "079766ca-78a3-2d65-2926-58a3de8f8cd9",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": false,
+          "jointConnectorsId": [],
+          "jointBindersId": []
+        },
+        {
+          "id": "daf7cd15-dca7-b0a0-c74e-aa41b1189c7d",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_507a241d-5745-13ab-4d09-b1f810800f37" ]
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "contacts": "NC",
+        "virtual": true
+      },
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    },
+    {
+      "id": "id_switcher_775f74bf-6d66-2c73-1446-36e8fbd13bb3",
+      "name": "R27",
+      "className": 3,
+      "x": 497,
+      "y": 139,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "f2584406-c267-9dff-750b-f810705845ff",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_1c920037-73b2-60ec-a3a5-ec65915e9497" ]
+        },
+        {
+          "id": "2568ef0c-c7e9-ae8b-bf3d-518eb137a462",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_be012c46-d0c0-ab2d-4e7b-62f786133c9b" ]
+        },
+        {
+          "id": "fa2bc6bb-cd26-4ec1-9cda-d6e71c140acd",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": false,
+          "jointConnectorsId": [],
+          "jointBindersId": []
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "contacts": "NO",
+        "virtual": true
+      },
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    },
+    {
+      "id": "id_switcher_f7507599-d091-afce-7058-022cc42d0210",
+      "name": "R28",
+      "className": 3,
+      "x": 596,
+      "y": 139,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "443b14c1-7122-b7f3-74df-fd791fd1cef3",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_be012c46-d0c0-ab2d-4e7b-62f786133c9b" ]
+        },
+        {
+          "id": "0e736b01-ea09-1a90-620b-0cb53151ce63",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_19d04a49-049e-8a92-2e14-c08248de96e9" ]
+        },
+        {
+          "id": "50f680e1-1e58-4f84-ba6d-0184e8df1198",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_33946808-b22c-6ba7-6102-8bfa62f8fcef" ]
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "contacts": "both",
+        "virtual": true
+      },
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    },
+    {
+      "id": "id_switcher_bce30bd1-68cb-f75a-5071-ea172d9984a7",
+      "name": "R29",
+      "className": 3,
+      "x": 674,
+      "y": 54,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "afe2bb8b-0a09-ba27-0f69-cd7f86b843d2",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_738df6cc-94eb-2771-e210-95b80b19dce3" ]
+        },
+        {
+          "id": "65af89a3-27eb-c94d-0733-e50556e4925c",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_da704522-9190-c72f-74cb-cc8b643d7981" ]
+        },
+        {
+          "id": "a9797c70-cd35-52d7-122d-c499a2b6b419",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": false,
+          "jointConnectorsId": [],
+          "jointBindersId": []
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "contacts": "NO",
+        "virtual": true
+      },
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    },
+    {
+      "id": "id_switcher_462418a1-492d-9396-5816-0afedda3e7a5",
+      "name": "R30",
+      "className": 3,
+      "x": 673,
+      "y": 103,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "117e9937-be9d-fe41-b060-94e5a9a92ad3",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_738df6cc-94eb-2771-e210-95b80b19dce3", "id_binder_19d04a49-049e-8a92-2e14-c08248de96e9" ]
+        },
+        {
+          "id": "50d71528-3c08-3bc9-7cf1-3cb8ad3cb88a",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_da704522-9190-c72f-74cb-cc8b643d7981", "id_binder_583b2bf8-d3a7-bcc1-c7d5-4e81d5d97aa8" ]
+        },
+        {
+          "id": "8fe7d8fa-9064-1221-90ba-234ac7272e7f",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": false,
+          "jointConnectorsId": [],
+          "jointBindersId": []
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "contacts": "NO",
+        "virtual": true
+      },
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    },
+    {
+      "id": "id_switcher_5aff1148-b4b8-49aa-2e61-744f4188ccf5",
+      "name": "R32",
+      "className": 3,
+      "x": 767,
+      "y": 103,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "b71328ed-fdca-ba9f-5149-2b08adc67559",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_583b2bf8-d3a7-bcc1-c7d5-4e81d5d97aa8", "id_binder_82b347db-e570-2dda-4e6c-c938168a3d95" ]
+        },
+        {
+          "id": "a4a858e4-c7fc-833b-b0cc-7ea5ccc772c1",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_0d2ccecf-c1c8-ba32-bc37-4d12cb85f672", "id_binder_1f8299d3-aab3-878c-b2af-e4ccd09a5eda" ]
+        },
+        {
+          "id": "8fed1181-1f47-00e1-5493-c172d43dc85a",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": false,
+          "jointConnectorsId": [],
+          "jointBindersId": []
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "contacts": "NO",
+        "virtual": true
+      },
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    },
+    {
+      "id": "id_switcher_315164fc-6a16-6f05-bb74-1034b9a45a8a",
+      "name": "R31",
+      "className": 3,
+      "x": 673,
+      "y": 160,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "1e93e8ca-2708-a0ea-03fb-bc610418927a",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_33946808-b22c-6ba7-6102-8bfa62f8fcef" ]
+        },
+        {
+          "id": "fcb5ea19-c70c-114c-a5a8-16b7e797266e",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": false,
+          "jointConnectorsId": [],
+          "jointBindersId": []
+        },
+        {
+          "id": "e35bca87-3d46-a171-9f9f-bf98b6fe283a",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_f66229ab-3dfd-e795-72f0-5b7aa11a27c9" ]
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "contacts": "NC",
+        "virtual": true
+      },
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    },
+    {
+      "id": "id_switcher_e3bf9ada-ca83-4f9d-3ebe-98521e45def8",
+      "name": "R33",
+      "className": 3,
+      "x": 752,
+      "y": 180,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "37587968-95ce-36a7-dae1-a443cec94bfa",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_f66229ab-3dfd-e795-72f0-5b7aa11a27c9", "id_binder_42020108-b8d4-e496-729b-5855aca397b5" ]
+        },
+        {
+          "id": "d9c00265-95a1-e148-696b-66d9490617d1",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": false,
+          "jointConnectorsId": [],
+          "jointBindersId": []
+        },
+        {
+          "id": "5aaa207c-8f56-b5ae-b62b-e2b9b0e0b32f",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_f362b255-13df-65b7-f32e-db1c45189924", "id_binder_ceb5e987-b342-85a1-97df-72fc2765dde0" ]
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "contacts": "NC",
+        "virtual": true
+      },
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    },
+    {
+      "id": "id_switcher_f072d99e-df22-bbde-6a24-2b68855b3002",
+      "name": "R1",
+      "className": 3,
+      "x": 752,
+      "y": 247,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "04ea82ea-9381-6f30-dbe6-72811b86e003",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_42020108-b8d4-e496-729b-5855aca397b5" ]
+        },
+        {
+          "id": "af9dcce7-ccf7-53e9-8aef-b033db8db837",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_ceb5e987-b342-85a1-97df-72fc2765dde0" ]
+        },
+        {
+          "id": "8e04221d-563d-5a26-8040-e1758284c1cb",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": false,
+          "jointConnectorsId": [],
+          "jointBindersId": []
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "contacts": "NO",
+        "virtual": true
+      },
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    },
+    {
+      "id": "id_switcher_287aebfd-576e-0c73-fb2c-44e5e4806418",
+      "name": "R1",
+      "className": 3,
+      "x": 766,
+      "y": 41,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "d0d9fdc3-3145-e71c-8c7c-dc151707ae25",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_82b347db-e570-2dda-4e6c-c938168a3d95" ]
+        },
+        {
+          "id": "a1acbec8-872a-f00d-d4ce-93f51ceb63ef",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": false,
+          "jointConnectorsId": [],
+          "jointBindersId": []
+        },
+        {
+          "id": "d6f9578d-5783-aff9-3959-230809664c82",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_1f8299d3-aab3-878c-b2af-e4ccd09a5eda" ]
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "contacts": "NC",
+        "virtual": true
+      },
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    },
+    {
+      "id": "id_switcher_2a4fd08e-8626-75a7-6be4-84470cb2fc1e",
+      "name": "Rin",
+      "className": 3,
+      "x": 370,
+      "y": 330,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "930e5958-91fb-eb7f-8f5b-9cc4d25db3b8",
+          "name": "common",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_92d9e5a6-7e1a-4206-95d9-d667297ad4f5" ]
+        },
+        {
+          "id": "904c4922-dcb5-49e1-5cdc-130036c98ccc",
+          "name": "open",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_477b6d2e-ff7b-e3e3-c6a6-7a5e8c11da70" ]
+        },
+        {
+          "id": "972945e3-f1f0-7a0c-f37f-f4265400e77c",
+          "name": "close",
+          "x": 0,
+          "y": 0,
+          "connected": false,
+          "jointConnectorsId": [],
+          "jointBindersId": []
+        }
+      ],
+      "extraProps": {
+        "style": "normal",
+        "contacts": "NO",
+        "virtual": true
+      },
+      "logicState": false,
+      "textX": 20,
+      "textY": -20
+    }
+  ],
+  "posPoles": [
+    {
+      "id": "id_pos_0b74f9a2-4014-e3f2-3680-28cc8a5fff94",
+      "name": "+",
+      "className": 4,
+      "x": 107,
+      "y": 39,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "a04613a8-ded7-4863-2e69-75a4acda1aee",
+          "name": "positive",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_5796e390-8f86-b549-6818-620333e1aeb7" ]
+        }
+      ],
+      "logicState": false
+    },
+    {
+      "id": "id_pos_5f255658-d056-4952-55a7-085919924446",
+      "name": "+",
+      "className": 4,
+      "x": 942,
+      "y": 58,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "6aaaa1c6-33f3-9b4e-9848-3f043377abf5",
+          "name": "positive",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_0d2ccecf-c1c8-ba32-bc37-4d12cb85f672" ]
+        }
+      ],
+      "logicState": false
+    },
+    {
+      "id": "id_pos_6489a12c-768c-c994-78de-c5118db74baf",
+      "name": "+",
+      "className": 4,
+      "x": 342,
+      "y": 321,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "fa4e25d6-4180-ce7c-cc6c-688b1ebff1f1",
+          "name": "positive",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_92d9e5a6-7e1a-4206-95d9-d667297ad4f5" ]
+        }
+      ],
+      "logicState": false
+    }
+  ],
+  "negPoles": [
+    {
+      "id": "id_neg_1cc57c77-9e10-ccc9-4653-b6db41499564",
+      "name": "-",
+      "className": 4,
+      "x": 95,
+      "y": 433,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "5efd8227-b1c3-f670-a1f8-cedd55751952",
+          "name": "negative",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_ca30bc74-4f28-551a-a046-9db391279bdf" ]
+        }
+      ],
+      "logicState": false
+    },
+    {
+      "id": "id_neg_a51b7bbf-b2c8-d9a1-f52d-cbe7f343ac93",
+      "name": "-",
+      "className": 4,
+      "x": 854,
+      "y": 210,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "863d8a3b-4de1-1606-edc6-c557a5406b2a",
+          "name": "negative",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_f362b255-13df-65b7-f32e-db1c45189924" ]
+        }
+      ],
+      "logicState": false
+    },
+    {
+      "id": "id_neg_30087fe1-2835-c376-112f-209aa3bfc413",
+      "name": "-",
+      "className": 4,
+      "x": 518,
+      "y": 341,
+      "selected": false,
+      "mirror": false,
+      "connectors": [
+        {
+          "id": "b7bc3f31-96c0-57a9-c163-618ee13d3a21",
+          "name": "negative",
+          "x": 0,
+          "y": 0,
+          "connected": true,
+          "jointConnectorsId": [],
+          "jointBindersId": [ "id_binder_dd7170f6-623a-ad2f-edf5-bc8c763680e6" ]
+        }
+      ],
+      "logicState": false
+    }
+  ],
+  "binders": [
+    {
+      "id": "id_binder_87e736e1-2b6c-6b1d-e4b7-991d24238ae6",
+      "connected": true,
+      "startPoint": {
+        "x": 328,
+        "y": 150
+      },
+      "startConnectorId": "d24b9708-e00e-8f23-51fa-03ef4e386018",
+      "endPoint": {
+        "x": 314,
+        "y": 151
+      },
+      "endConnectorId": "ea32999c-e96c-331c-8b92-5437333589b6",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_1ff6c303-e083-9f20-b11c-3f03aec7d0c2",
+      "connected": true,
+      "startPoint": {
+        "x": 128,
+        "y": 60
+      },
+      "startConnectorId": "3344f1b5-ffc7-31d0-7e74-0261a9f53fbf",
+      "endPoint": {
+        "x": 125,
+        "y": 125
+      },
+      "endConnectorId": "01bb1e2e-c755-7778-f63c-413fb5ae9fe9",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_9786d405-8fc2-8836-118d-e2027c7bda30",
+      "connected": true,
+      "startPoint": {
+        "x": 188,
+        "y": 60
+      },
+      "startConnectorId": "1da3df57-4abc-0cc8-2247-64c99da2317c",
+      "endPoint": {
+        "x": 186,
+        "y": 125
+      },
+      "endConnectorId": "a8a06e21-f92a-e645-5e39-b3aff69b1079",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_9f123b64-5b59-f1c2-9d03-9e6e8a4822fe",
+      "connected": true,
+      "startPoint": {
+        "x": 122,
+        "y": 263
+      },
+      "startConnectorId": "0c1f3277-432b-c2d4-7a78-8c95c62df49e",
+      "endPoint": {
+        "x": 128,
+        "y": 325
+      },
+      "endConnectorId": "76bfc13f-3018-8633-5adf-53fe996852c2",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_b51ecd88-804f-a18d-1704-b920cf8840bc",
+      "connected": true,
+      "startPoint": {
+        "x": 182,
+        "y": 263
+      },
+      "startConnectorId": "eeb57f22-a5f6-06fc-ee51-86ab3405ce62",
+      "endPoint": {
+        "x": 190,
+        "y": 325
+      },
+      "endConnectorId": "a76457f4-d0c5-ebdb-4295-6664d5bbf4e1",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_98c92287-d2c3-f3b6-453d-ae936cafeec3",
+      "connected": true,
+      "startPoint": {
+        "x": 122,
+        "y": 376
+      },
+      "startConnectorId": "71fe15b7-6ee0-38f9-7491-3266a835cdee",
+      "endPoint": {
+        "x": 127,
+        "y": 328
+      },
+      "endConnectorId": "76bfc13f-3018-8633-5adf-53fe996852c2",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_95853940-e3e5-ca9b-4258-b5016ab774b2",
+      "connected": true,
+      "startPoint": {
+        "x": 121,
+        "y": 434
+      },
+      "startConnectorId": "4d9daf11-5612-4ef5-2008-cbca64128585",
+      "endPoint": {
+        "x": 122,
+        "y": 376
+      },
+      "endConnectorId": "71fe15b7-6ee0-38f9-7491-3266a835cdee",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_fce09ad3-919a-0cf1-d4e5-021132592b54",
+      "connected": true,
+      "startPoint": {
+        "x": 182,
+        "y": 396
+      },
+      "startConnectorId": "8d2009bd-5419-5a50-a1b1-cb31ccae5bec",
+      "endPoint": {
+        "x": 190,
+        "y": 325
+      },
+      "endConnectorId": "a76457f4-d0c5-ebdb-4295-6664d5bbf4e1",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_507a241d-5745-13ab-4d09-b1f810800f37",
+      "connected": true,
+      "startPoint": {
+        "x": 181,
+        "y": 454
+      },
+      "startConnectorId": "daf7cd15-dca7-b0a0-c74e-aa41b1189c7d",
+      "endPoint": {
+        "x": 184,
+        "y": 398
+      },
+      "endConnectorId": "8d2009bd-5419-5a50-a1b1-cb31ccae5bec",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_ca30bc74-4f28-551a-a046-9db391279bdf",
+      "connected": true,
+      "startPoint": {
+        "x": 118,
+        "y": 434
+      },
+      "startConnectorId": "4d9daf11-5612-4ef5-2008-cbca64128585",
+      "endPoint": {
+        "x": 98,
+        "y": 433
+      },
+      "endConnectorId": "5efd8227-b1c3-f670-a1f8-cedd55751952",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_5796e390-8f86-b549-6818-620333e1aeb7",
+      "connected": true,
+      "startPoint": {
+        "x": 125,
+        "y": 60
+      },
+      "startConnectorId": "3344f1b5-ffc7-31d0-7e74-0261a9f53fbf",
+      "endPoint": {
+        "x": 110,
+        "y": 59
+      },
+      "endConnectorId": "a04613a8-ded7-4863-2e69-75a4acda1aee",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_456077dd-c70d-9031-668e-ff17435a06e3",
+      "connected": true,
+      "startPoint": {
+        "x": 263,
+        "y": 151
+      },
+      "startConnectorId": "08becb0e-49c2-2553-b980-04046322652d",
+      "endPoint": {
+        "x": 188,
+        "y": 126
+      },
+      "endConnectorId": "a8a06e21-f92a-e645-5e39-b3aff69b1079",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_99835f33-2f4a-a789-57b8-3104724f4c72",
+      "connected": true,
+      "startPoint": {
+        "x": 263,
+        "y": 171
+      },
+      "startConnectorId": "556944e7-6018-4bf9-545d-6dafbfe6fc11",
+      "endPoint": {
+        "x": 185,
+        "y": 264
+      },
+      "endConnectorId": "eeb57f22-a5f6-06fc-ee51-86ab3405ce62",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_4571043c-70fd-7206-1d17-d195ddffee04",
+      "connected": true,
+      "startPoint": {
+        "x": 388,
+        "y": 150
+      },
+      "startConnectorId": "b55a0542-2fca-34e8-71c5-31a3f5dcc187",
+      "endPoint": {
+        "x": 410,
+        "y": 150
+      },
+      "endConnectorId": "6aa08d67-f55e-f102-acb9-fa79f6556b9b",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_1c920037-73b2-60ec-a3a5-ec65915e9497",
+      "connected": true,
+      "startPoint": {
+        "x": 470,
+        "y": 150
+      },
+      "startConnectorId": "7ea1f9f6-3cf4-03fd-ca70-8ba1cbc294d4",
+      "endPoint": {
+        "x": 494,
+        "y": 149
+      },
+      "endConnectorId": "f2584406-c267-9dff-750b-f810705845ff",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_be012c46-d0c0-ab2d-4e7b-62f786133c9b",
+      "connected": true,
+      "startPoint": {
+        "x": 554,
+        "y": 149
+      },
+      "startConnectorId": "2568ef0c-c7e9-ae8b-bf3d-518eb137a462",
+      "endPoint": {
+        "x": 593,
+        "y": 149
+      },
+      "endConnectorId": "443b14c1-7122-b7f3-74df-fd791fd1cef3",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_738df6cc-94eb-2771-e210-95b80b19dce3",
+      "connected": true,
+      "startPoint": {
+        "x": 674,
+        "y": 64
+      },
+      "startConnectorId": "afe2bb8b-0a09-ba27-0f69-cd7f86b843d2",
+      "endPoint": {
+        "x": 673,
+        "y": 110
+      },
+      "endConnectorId": "117e9937-be9d-fe41-b060-94e5a9a92ad3",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_19d04a49-049e-8a92-2e14-c08248de96e9",
+      "connected": true,
+      "startPoint": {
+        "x": 656,
+        "y": 149
+      },
+      "startConnectorId": "0e736b01-ea09-1a90-620b-0cb53151ce63",
+      "endPoint": {
+        "x": 674,
+        "y": 113
+      },
+      "endConnectorId": "117e9937-be9d-fe41-b060-94e5a9a92ad3",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_da704522-9190-c72f-74cb-cc8b643d7981",
+      "connected": true,
+      "startPoint": {
+        "x": 734,
+        "y": 64
+      },
+      "startConnectorId": "65af89a3-27eb-c94d-0733-e50556e4925c",
+      "endPoint": {
+        "x": 733,
+        "y": 111
+      },
+      "endConnectorId": "50d71528-3c08-3bc9-7cf1-3cb8ad3cb88a",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_583b2bf8-d3a7-bcc1-c7d5-4e81d5d97aa8",
+      "connected": true,
+      "startPoint": {
+        "x": 730,
+        "y": 113
+      },
+      "startConnectorId": "50d71528-3c08-3bc9-7cf1-3cb8ad3cb88a",
+      "endPoint": {
+        "x": 764,
+        "y": 113
+      },
+      "endConnectorId": "b71328ed-fdca-ba9f-5149-2b08adc67559",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_0d2ccecf-c1c8-ba32-bc37-4d12cb85f672",
+      "connected": true,
+      "startPoint": {
+        "x": 824,
+        "y": 113
+      },
+      "startConnectorId": "a4a858e4-c7fc-833b-b0cc-7ea5ccc772c1",
+      "endPoint": {
+        "x": 945,
+        "y": 78
+      },
+      "endConnectorId": "6aaaa1c6-33f3-9b4e-9848-3f043377abf5",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_33946808-b22c-6ba7-6102-8bfa62f8fcef",
+      "connected": true,
+      "startPoint": {
+        "x": 653,
+        "y": 169
+      },
+      "startConnectorId": "50f680e1-1e58-4f84-ba6d-0184e8df1198",
+      "endPoint": {
+        "x": 670,
+        "y": 170
+      },
+      "endConnectorId": "1e93e8ca-2708-a0ea-03fb-bc610418927a",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_f66229ab-3dfd-e795-72f0-5b7aa11a27c9",
+      "connected": true,
+      "startPoint": {
+        "x": 730,
+        "y": 190
+      },
+      "startConnectorId": "e35bca87-3d46-a171-9f9f-bf98b6fe283a",
+      "endPoint": {
+        "x": 749,
+        "y": 190
+      },
+      "endConnectorId": "37587968-95ce-36a7-dae1-a443cec94bfa",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_f362b255-13df-65b7-f32e-db1c45189924",
+      "connected": true,
+      "startPoint": {
+        "x": 809,
+        "y": 210
+      },
+      "startConnectorId": "5aaa207c-8f56-b5ae-b62b-e2b9b0e0b32f",
+      "endPoint": {
+        "x": 857,
+        "y": 210
+      },
+      "endConnectorId": "863d8a3b-4de1-1606-edc6-c557a5406b2a",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_42020108-b8d4-e496-729b-5855aca397b5",
+      "connected": true,
+      "startPoint": {
+        "x": 752,
+        "y": 190
+      },
+      "startConnectorId": "37587968-95ce-36a7-dae1-a443cec94bfa",
+      "endPoint": {
+        "x": 750,
+        "y": 257
+      },
+      "endConnectorId": "04ea82ea-9381-6f30-dbe6-72811b86e003",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_ceb5e987-b342-85a1-97df-72fc2765dde0",
+      "connected": true,
+      "startPoint": {
+        "x": 812,
+        "y": 257
+      },
+      "startConnectorId": "af9dcce7-ccf7-53e9-8aef-b033db8db837",
+      "endPoint": {
+        "x": 812,
+        "y": 212
+      },
+      "endConnectorId": "5aaa207c-8f56-b5ae-b62b-e2b9b0e0b32f",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_82b347db-e570-2dda-4e6c-c938168a3d95",
+      "connected": true,
+      "startPoint": {
+        "x": 766,
+        "y": 51
+      },
+      "startConnectorId": "d0d9fdc3-3145-e71c-8c7c-dc151707ae25",
+      "endPoint": {
+        "x": 768,
+        "y": 112
+      },
+      "endConnectorId": "b71328ed-fdca-ba9f-5149-2b08adc67559",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_1f8299d3-aab3-878c-b2af-e4ccd09a5eda",
+      "connected": true,
+      "startPoint": {
+        "x": 826,
+        "y": 71
+      },
+      "startConnectorId": "d6f9578d-5783-aff9-3959-230809664c82",
+      "endPoint": {
+        "x": 829,
+        "y": 112
+      },
+      "endConnectorId": "a4a858e4-c7fc-833b-b0cc-7ea5ccc772c1",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_92d9e5a6-7e1a-4206-95d9-d667297ad4f5",
+      "connected": true,
+      "startPoint": {
+        "x": 367,
+        "y": 340
+      },
+      "startConnectorId": "930e5958-91fb-eb7f-8f5b-9cc4d25db3b8",
+      "endPoint": {
+        "x": 345,
+        "y": 341
+      },
+      "endConnectorId": "fa4e25d6-4180-ce7c-cc6c-688b1ebff1f1",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_477b6d2e-ff7b-e3e3-c6a6-7a5e8c11da70",
+      "connected": true,
+      "startPoint": {
+        "x": 443,
+        "y": 340
+      },
+      "startConnectorId": "2a8a7e74-b8c6-9d16-b1b3-6ce18a3dae7b",
+      "endPoint": {
+        "x": 427,
+        "y": 340
+      },
+      "endConnectorId": "904c4922-dcb5-49e1-5cdc-130036c98ccc",
+      "friendBinderId": null
+    },
+    {
+      "id": "id_binder_dd7170f6-623a-ad2f-edf5-bc8c763680e6",
+      "connected": true,
+      "startPoint": {
+        "x": 503,
+        "y": 340
+      },
+      "startConnectorId": "e8981c83-1d88-9a03-6888-c4d020873cea",
+      "endPoint": {
+        "x": 521,
+        "y": 341
+      },
+      "endConnectorId": "b7bc3f31-96c0-57a9-c163-618ee13d3a21",
+      "friendBinderId": null
+    }
+  ],
+  "lastPoint": {
+    "x": 1025,
+    "y": 414
+  },
+  "drawMode": 1,
+  "selectedElementIds": {},
+  "selectedNodes": [ "{\"attrs\":{\"x\":446,\"y\":325,\"draggable\":true,\"id\":\"id_relay_136fc2a3-4a23-9dc7-a616-c1dabce7d5a4\"},\"className\":\"Group\",\"children\":[{\"attrs\":{\"x\":20,\"y\":-20,\"text\":\"R1\",\"fill\":\"black\"},\"className\":\"Text\"},{\"attrs\":{},\"className\":\"Group\",\"children\":[{\"attrs\":{\"x\":20,\"width\":20,\"height\":30,\"stroke\":\"black\"},\"className\":\"Rect\"},{\"attrs\":{\"x\":-3,\"y\":12,\"width\":6,\"height\":6,\"id\":\"2a8a7e74-b8c6-9d16-b1b3-6ce18a3dae7b\",\"fill\":\"black\",\"className\":\"Connector\",\"name\":\"Connector\"},\"className\":\"Rect\"},{\"attrs\":{\"points\":[0,15,20,15],\"stroke\":\"black\"},\"className\":\"Line\"},{\"attrs\":{\"x\":57,\"y\":12,\"width\":6,\"height\":6,\"id\":\"e8981c83-1d88-9a03-6888-c4d020873cea\",\"fill\":\"black\",\"className\":\"Connector\",\"name\":\"Connector\"},\"className\":\"Rect\"},{\"attrs\":{\"points\":[40,15,60,15],\"stroke\":\"black\"},\"className\":\"Line\"}]}]}" ]
+}

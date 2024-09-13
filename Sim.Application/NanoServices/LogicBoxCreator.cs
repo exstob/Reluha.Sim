@@ -252,7 +252,8 @@ public static class LogicBoxCreator
         List<LogicBox> boxes = [];
         List<UiSwitcher> usedSwitchers = [];
         var allNodeSwitchers = connectedSwitchers.Where(sw => sw.HasBothContacts() || sw.HasOnlyOneContact() && sw.Connectors.Any(c => c.IsNode(nodes))).ToList();
-        var bothContactSwitchersRemovalFlag = connectedSwitchers.Where(sw => sw.HasBothContacts()).ToDictionary(sw => sw.Id, sw => false);
+        var bothContactSwitchersRemovalFlag = connectedSwitchers.Where(sw => sw.HasBothContacts())
+            .ToDictionary(sw => sw.Id, sw => new { OpenContactRemoved = false, CloseContactRemoved = false });
         var sortedNodes = nodes.OrderByDescending(node => node.Used).ToList();
 
         while (sortedNodes.Count > 0) 
@@ -271,7 +272,7 @@ public static class LogicBoxCreator
                 //var switcher = nodeSwitchers.First();
                 var startConnector = switcher.Connectors.First(c => c.IsNode(nodes) && nodes.GetNodeFor(c).Id == sortedNode.Id);
 
-                if (switcher.HasOpenContact())
+                if (switcher.HasOnlyOpenContact() || (switcher.HasOpenContact() && startConnector.IsCommon() && !bothContactSwitchersRemovalFlag[switcher.Id].OpenContactRemoved))
                 {
                     List<Contact> contacts = [new Contact(switcher, ContactDefaultState.Open)];
 
@@ -289,14 +290,14 @@ public static class LogicBoxCreator
                         contacts.Add(new Contact(sw, defaultState));
                         usedSwitchers.Add(sw);
 
-                        if (!sw.HasBothContacts() || (sw.HasBothContacts() && bothContactSwitchersRemovalFlag[sw.Id]))
+                        if (sw.HasOnlyOpenContact())
                         {
                             ///Remove it in order to do not use it twice 
                             allNodeSwitchers.Remove(sw);
                         }
                         else if (sw.HasBothContacts())
                         {
-                            bothContactSwitchersRemovalFlag[sw.Id] = true;
+                            bothContactSwitchersRemovalFlag[sw.Id] = bothContactSwitchersRemovalFlag[sw.Id] with { OpenContactRemoved = true };
                         }
                     }
 
@@ -318,7 +319,7 @@ public static class LogicBoxCreator
                     boxes.Add(box);
                 }
 
-                if (switcher.HasCloseContact())
+                if (switcher.HasOnlyCloseContact() || (switcher.HasCloseContact() && startConnector.IsCommon() && !bothContactSwitchersRemovalFlag[switcher.Id].CloseContactRemoved))
                 {
                     List<Contact> contacts = [new Contact(switcher, ContactDefaultState.Close)];
 
@@ -334,14 +335,14 @@ public static class LogicBoxCreator
                         var defaultState = viaOpenContact ? ContactDefaultState.Open : ContactDefaultState.Close;
                         contacts.Add(new Contact(sw, defaultState));
                         usedSwitchers.Add(sw);
-                        if (!sw.HasBothContacts() || (sw.HasBothContacts() && bothContactSwitchersRemovalFlag[sw.Id]))
+                        if (sw.HasOnlyCloseContact())
                         {
                             ///Remove it in order to do not use it twice 
                             allNodeSwitchers.Remove(sw);
                         }
                         else if (sw.HasBothContacts())
                         {
-                            bothContactSwitchersRemovalFlag[sw.Id] = true;
+                            bothContactSwitchersRemovalFlag[sw.Id] = bothContactSwitchersRemovalFlag[sw.Id] with { CloseContactRemoved = true }; ;
                         }
                     }
 
@@ -406,7 +407,7 @@ public static class LogicBoxCreator
             {
                 connector = nextConnector!;
 
-                yield return (switcher, switcher.HasOpenContact(), connector);
+                yield return (switcher, switcherConnector.IsOpen() || nextConnector.IsOpen(), connector);
             }
 
             if (nextConnector is not null && switcher.HasBothContacts() && switcherConnector.IsCommon()) /// CommonConnector pin is like Node, thus, we should cut the chain

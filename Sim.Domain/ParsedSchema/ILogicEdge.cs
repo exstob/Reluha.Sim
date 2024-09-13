@@ -35,3 +35,7 @@ public class PolePositive : IPoleEdge
 public class PoleNegative : IPoleEdge
 {
 }
+
+public class Poles : IPoleEdge
+{
+}
