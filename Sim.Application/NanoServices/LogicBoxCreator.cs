@@ -263,13 +263,6 @@ public static class LogicBoxCreator
 
             foreach (var switcher  in nodeSwitchers)
             {
-                //nodeSwitchers = nodeSwitchers
-                //    .OrderByDescending(sw => sw.Connectors.Any(c => c.IsNode(nodes) && nodes.GetNodeFor(c).Used))
-                //    //.ThenByDescending(sw => sw.HasBothContacts())
-                //    .ThenByDescending(sw => nodes.GetNodeFor(sw.Connectors.First(c => c.IsNode(nodes))).Id)
-                //.ToList();
-
-                //var switcher = nodeSwitchers.First();
                 var startConnector = switcher.Connectors.First(c => c.IsNode(nodes) && nodes.GetNodeFor(c).Id == sortedNode.Id);
 
                 if (switcher.HasOnlyOpenContact() || (switcher.HasOpenContact() && startConnector.IsCommon() && !bothContactSwitchersRemovalFlag[switcher.Id].OpenContactRemoved))
@@ -290,14 +283,16 @@ public static class LogicBoxCreator
                         contacts.Add(new Contact(sw, defaultState));
                         usedSwitchers.Add(sw);
 
-                        if (sw.HasOnlyOpenContact())
+                        if (sw.HasOnlyOneContact())
                         {
                             ///Remove it in order to do not use it twice 
                             allNodeSwitchers.Remove(sw);
                         }
                         else if (sw.HasBothContacts())
                         {
-                            bothContactSwitchersRemovalFlag[sw.Id] = bothContactSwitchersRemovalFlag[sw.Id] with { OpenContactRemoved = true };
+                            bothContactSwitchersRemovalFlag[sw.Id] = viaOpenContact 
+                                ? bothContactSwitchersRemovalFlag[sw.Id] with { OpenContactRemoved = true }
+                                : bothContactSwitchersRemovalFlag[sw.Id] with { CloseContactRemoved = true };
                         }
                     }
 
@@ -335,14 +330,16 @@ public static class LogicBoxCreator
                         var defaultState = viaOpenContact ? ContactDefaultState.Open : ContactDefaultState.Close;
                         contacts.Add(new Contact(sw, defaultState));
                         usedSwitchers.Add(sw);
-                        if (sw.HasOnlyCloseContact())
+                        if (sw.HasOnlyOneContact())
                         {
                             ///Remove it in order to do not use it twice 
                             allNodeSwitchers.Remove(sw);
                         }
                         else if (sw.HasBothContacts())
                         {
-                            bothContactSwitchersRemovalFlag[sw.Id] = bothContactSwitchersRemovalFlag[sw.Id] with { CloseContactRemoved = true }; ;
+                            bothContactSwitchersRemovalFlag[sw.Id] = viaOpenContact
+                                ? bothContactSwitchersRemovalFlag[sw.Id] with { OpenContactRemoved = true }
+                                : bothContactSwitchersRemovalFlag[sw.Id] with { CloseContactRemoved = true };
                         }
                     }
 

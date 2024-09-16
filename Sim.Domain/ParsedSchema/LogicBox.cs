@@ -13,16 +13,33 @@ public enum LogicBoxType
     Parallel
 }
 
-public class LogicBox(LogicBoxType boxType) 
+public class LogicBox 
 {
-    public LogicBoxType BoxType { get; init; } = boxType;
+    public LogicBox(LogicBoxType boxType)
+    {
+        BoxType = boxType;
+    }
+
+    public LogicBox(List<LogicBox> boxes) 
+    {
+        if (boxes == null || !boxes.Any())
+            throw new ArgumentException("boxes cannot be null or empty");
+
+        BoxType = LogicBoxType.Serial;
+        this.Boxes = boxes;
+        FirstPin = boxes.First().FirstPin;
+        SecondPin = boxes.Last().SecondPin;
+    }
+
+    public LogicBoxType BoxType { get; init; }
     public List<Contact> Contacts { get; set; } = [];
     public List<LogicBox> Boxes { get; set; } = [];
 
-    public required ILogicEdge FirstPin { get; set; }
-    public required ILogicEdge SecondPin { get; set; }
+    public ILogicEdge FirstPin { get; set; }
+    public ILogicEdge SecondPin { get; set; }
 
     public void Add(Contact contact) => Contacts.Add(contact);
+    public List<ILogicEdge> Pins() => [FirstPin, SecondPin];
 
     bool IsRoot() => Boxes.Count > 0;
     

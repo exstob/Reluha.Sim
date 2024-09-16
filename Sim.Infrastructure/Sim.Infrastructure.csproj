@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="LocalStorage\BridgeConnection.json" />
     <None Remove="LocalStorage\ChangePolarity.json" />
     <None Remove="LocalStorage\DualContactGroup.json" />
     <None Remove="LocalStorage\ParallelConnections.json" />
@@ -17,6 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="LocalStorage\BridgeConnection.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="LocalStorage\ChangePolarity.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>

@@ -42,12 +42,18 @@ public static class Parser
         {
             if (!LogicBoxReducer.TryPackParallelContactBoxes(boxes, out var parBoxes))
             {
-                return (boxes, contacts);
+                if (!LogicBoxReducer.TryBridgeBoxes(boxes, out parBoxes))
+                { 
+                    return (boxes, contacts);
+                }
             }
 
             if (!LogicBoxReducer.TryPackSerialContactBoxes(parBoxes, out var serialBoxes))
             {
-                return (parBoxes, contacts);
+                if (!LogicBoxReducer.TryBridgeBoxes(parBoxes, out serialBoxes))
+                {
+                    return (parBoxes, contacts);
+                }
             }
             boxes = serialBoxes;
 
