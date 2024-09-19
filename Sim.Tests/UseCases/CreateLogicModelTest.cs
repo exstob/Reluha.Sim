@@ -30,8 +30,8 @@ public class CreateLogicModelTest
     [InlineData("DualContactGroup.json", "(Minus & (x.R1 | (!x.R1 & x.R2))) ^ Plus")]
     [InlineData("ParallelOfParallelConnection.json", "(Plus & (((x.R6 | x.R5) & ((x.R7 & x.R9) | (x.R8 & x.R10)) & (x.R11 | x.R12)) | ((x.R18 | x.R19) & (x.R20 | x.R21) & (x.R22 | x.R23) & (x.R24 | x.R25) & (x.R26 | x.R27)) | ((x.R2 | x.R1) & (x.R3 | x.R4)))) ^ (Minus & (x.R15 | x.R16 | x.R17) & (x.R13 | x.R14))")]
     [InlineData("ChangePolarity.json", "(((Plus & (x.R1 | x.R21) & x.R25) | (Minus & (x.R22 | x.R23 | !x.R24 | !x.R1) & !x.R25)) & x.R26) ^ (((Plus & (x.R32 | !x.R1) & (x.R29 | x.R30) & x.R28) | (Minus & (!x.R33 | x.R1) & (!x.R31 & !x.R28))) & x.R27)")]
-    ////[InlineData("SerialAndParallelAndDualConnections.json", "(Plus & (x.R1 | (!x.R1 & x.R2))) ^ (Minus)")]
-    [InlineData("BridgeConnection.json", "(Plus & ((!x.R2 & !x.R5) | (!x.R1 & !x.R4) | (!x.R2 & !x.R3 & !x.R4) | (!x.R1 & !x.R3 & !x.R5))) ^ Minus")]
+    [InlineData("BridgeConnection.json", "(Plus & ((!x.R2 & (!x.R5 | (!x.R3 & !x.R4))) | (!x.R1 & (!x.R4 | (!x.R3 & !x.R5))))) ^ Minus")]
+    [InlineData("SerialAndParallelAndDualConnections.json", "(Plus & (((x.R1 & x.R3) & (x.R14 | (((x.R5 & x.R4) | ((x.R6 & x.R2) & !x.R2)) & (!x.R4 & (((x.R13 & x.R12) & (x.R11 | (!x.R10 & (x.R9 | ((x.R8 & x.R7) & x.R10))))) | (((x.R9 | ((x.R8 & x.R7) & x.R10)) | (!x.R10 & x.R11)) & (x.R10 | ((x.R8 & x.R7) & x.R9)))))))) | ((!x.R1 & (!x.R2 | ((x.R6 & x.R2) & (x.R5 & x.R4)))) & ((!x.R4 & (((x.R13 & x.R12) & (x.R11 | (!x.R10 & (x.R9 | ((x.R8 & x.R7) & x.R10))))) | (((x.R9 | ((x.R8 & x.R7) & x.R10)) | (!x.R10 & x.R11)) & (x.R10 | ((x.R8 & x.R7) & x.R9))))) | (((x.R5 & x.R4) | ((x.R6 & x.R2) & !x.R2)) & x.R14))))) ^ ((Minus & x.R18) & (!x.R17 | x.R16 | x.R15))")]
     public async Task CreateModel_OK(string fileName, string logicResult)
     {
         var scheme = repo.GetUiScheme(fileName);

@@ -13,14 +13,14 @@ public enum LogicBoxType
     Parallel
 }
 
-public class LogicBox 
+public class LogicBox
 {
     public LogicBox(LogicBoxType boxType)
     {
         BoxType = boxType;
     }
 
-    public LogicBox(List<LogicBox> boxes) 
+    public LogicBox(List<LogicBox> boxes)
     {
         if (boxes == null || !boxes.Any())
             throw new ArgumentException("boxes cannot be null or empty");
@@ -40,6 +40,7 @@ public class LogicBox
 
     public void Add(Contact contact) => Contacts.Add(contact);
     public List<ILogicEdge> Pins() => [FirstPin, SecondPin];
+    public List<Node> Nodes() => FirstPin is Node node1 && SecondPin is Node node2 ? [node1, node2] : [];
 
     bool IsRoot() => Boxes.Count > 0;
     

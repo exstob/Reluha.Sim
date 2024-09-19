@@ -42,15 +42,19 @@ public static class Parser
         {
             if (!LogicBoxReducer.TryPackParallelContactBoxes(boxes, out var parBoxes))
             {
-                if (!LogicBoxReducer.TryBridgeBoxes(boxes, out parBoxes))
-                { 
+                if (!LogicBoxReducer.TrySimplifyTriangleBoxes(boxes, out parBoxes))
+                {
+                    return (boxes, contacts);
+                }
+                else if (!LogicBoxReducer.TryPackParallelContactBoxes(parBoxes, out parBoxes))
+                {
                     return (boxes, contacts);
                 }
             }
 
             if (!LogicBoxReducer.TryPackSerialContactBoxes(parBoxes, out var serialBoxes))
             {
-                if (!LogicBoxReducer.TryBridgeBoxes(parBoxes, out serialBoxes))
+                if (!LogicBoxReducer.TrySimplifyTriangleBoxes(parBoxes, out serialBoxes))
                 {
                     return (parBoxes, contacts);
                 }

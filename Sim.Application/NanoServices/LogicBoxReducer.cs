@@ -23,10 +23,11 @@ public static class LogicBoxReducer
 
         var parallelBoxes = boxes
             .Where(b => b.FirstPin is Node && b.SecondPin is Node)
-            .GroupBy(b => new { b.FirstPin, b.SecondPin }) /// group nodeBoxes with same Node
+            .GroupBy(b => new { CoupleId = string.Join(",", b.Nodes().OrderBy(n => n.Id)) }) /// group nodeBoxes with same Node
             .Where(b => b.Count() > 1)
-            .Select(g => new LogicBox(LogicBoxType.Parallel) { FirstPin = g.Key.FirstPin, SecondPin = g.Key.SecondPin, Boxes = g.ToList() })
+            .Select(g => new LogicBox(LogicBoxType.Parallel) { FirstPin = g.First().FirstPin, SecondPin = g.First().SecondPin, Boxes = g.ToList() })
             .ToList();
+
         foreach (var parBox in parallelBoxes)
         {
             boxes = boxes.Except(parBox.Boxes).ToList();
@@ -37,7 +38,12 @@ public static class LogicBoxReducer
         {
             var pin1IntersectedWith1 = boxes.Where(b => b.FirstPin.Equals(pb.FirstPin)).ToList();
             var pin1IntersectedWith2 = boxes.Where(b => b.SecondPin.Equals(pb.FirstPin)).ToList();
-            if ((pin1IntersectedWith1.Count + pin1IntersectedWith2.Count) < 3 && pb.FirstPin is Node node1) /// it means we can simplified the node
+            var nodeCount = pin1IntersectedWith1.Count + pin1IntersectedWith2.Count;
+
+            var node1 = pb.FirstPin as Node;
+            if (node1?.RelayPin is not null) nodeCount++;
+
+            if (nodeCount < 3 && node1 is {}) /// it means we can simplified the node
             {
                 var pin = node1.RelayPin ?? new Pin(node1.Id);
                 pin1IntersectedWith1.ForEach(box => box.FirstPin = pin);
@@ -47,7 +53,12 @@ public static class LogicBoxReducer
 
             var pin2IntersectedWith1 = boxes.Where(b => b.FirstPin.Equals(pb.SecondPin)).ToList();
             var pin2IntersectedWith2 = boxes.Where(b => b.SecondPin.Equals(pb.SecondPin)).ToList();
-            if ((pin2IntersectedWith1.Count + pin2IntersectedWith2.Count) < 3 && pb.SecondPin is Node node2) /// it means we can simplified the node
+            nodeCount = pin2IntersectedWith1.Count + pin2IntersectedWith2.Count;
+
+            var node2 = pb.SecondPin as Node;
+            if (node2?.RelayPin is not null) nodeCount++;
+
+            if (nodeCount < 3 && node2 is {}) /// it means we can simplified the node
             {
                 var pin = node2.RelayPin ?? new Pin(node2.Id);
                 pin2IntersectedWith1.ForEach(box => box.FirstPin = pin);
@@ -130,7 +141,7 @@ public static class LogicBoxReducer
     }
 
 
-    public static bool TryBridgeBoxes(List<LogicBox> inputBoxes, out List<LogicBox> outputBoxes)
+    public static bool TrySimplifyTriangleBoxes(List<LogicBox> inputBoxes, out List<LogicBox> outputBoxes)
     {
         bool found = false;
         List<LogicBox> boxes = inputBoxes;
@@ -170,59 +181,38 @@ public static class LogicBoxReducer
 
                 if (commonBases.Count == 1) // If exactly one common edge is found
                 {
-                    var angel1 = triangle1.Except(commonBases).ToList();
+                    found = true;
                     var angel2 = triangle2.Except(commonBases).ToList();
 
                     var commonBase = commonBases.Single();
-                    var shoulder_1_1 = angel1.First();
-                    var shoulder_2_1 = angel2.Find(an => an.Pins().Intersect(shoulder_1_1.Pins()).Count() == 1 );
+                    
+                    /// Here we are creating the equivalent schema of triangle connection
+                    /// So the triangle abc represent as (a|bc) | (b|ac)
 
-                    var shoulder_1_2 = angel1[1];
-                    var shoulder_2_2 = angel2.Find(an => an.Pins().Intersect(shoulder_1_2.Pins()).Count() == 1);
-
-                    found = true;
-                    /// Here we are creating the equivalent schema of bridge connection
-                    ///   bridge      __
-                    ///     /|\   to  __
-                    ///     \|/       ___
-                    ///               ___
-                    var serialBox1 = new LogicBox([shoulder_1_1, shoulder_2_1]);
-                    var serialBox2 = new LogicBox([shoulder_1_2, shoulder_2_2]);
-                    var serialBox3 = new LogicBox([shoulder_1_1, commonBase, shoulder_2_2]);
-                    var serialBox4 = new LogicBox([shoulder_1_2, commonBase, shoulder_2_1]);
-
-                    var bridgeBox = new LogicBox(LogicBoxType.Parallel)
+                    var serialBox1 = new LogicBox(LogicBoxType.Serial)
                     {
-                        FirstPin = shoulder_1_1.FirstPin,
-                        SecondPin = shoulder_2_1!.SecondPin,
-                        Boxes = [serialBox1, serialBox2, serialBox3, serialBox4,],
+                        FirstPin = angel2[1].FirstPin,
+                        SecondPin = angel2[1].SecondPin,
+                        Boxes = [commonBase, angel2[0]],
                     };
 
-                    boxes = boxes.Except([shoulder_1_1!, shoulder_1_2!, shoulder_2_1!, shoulder_2_2!, commonBase!]).ToList();
-                    boxes.Add(bridgeBox);
-
-                    var pin1IntersectedWith1 = boxes.Where(b => b.FirstPin.Equals(bridgeBox.FirstPin)).ToList();
-                    var pin1IntersectedWith2 = boxes.Where(b => b.SecondPin.Equals(bridgeBox.FirstPin)).ToList();
-                    if ((pin1IntersectedWith1.Count + pin1IntersectedWith2.Count) < 3 && bridgeBox.FirstPin is Node node1) /// it means we can simplified the node
+                    var serialBox2 = new LogicBox(LogicBoxType.Serial)
                     {
-                        var pin = node1.RelayPin ?? new Pin(node1.Id);
-                        pin1IntersectedWith1.ForEach(box => box.FirstPin = pin);
-                        pin1IntersectedWith2.ForEach(box => box.SecondPin = pin);
-                    }
+                        FirstPin = angel2[0].FirstPin,
+                        SecondPin = angel2[0].SecondPin,
+                        Boxes = [commonBase, angel2[1]],
+                    };
 
+                    boxes = boxes.Except([commonBase]).ToList();
+                    boxes.Add(serialBox1);
+                    boxes.Add(serialBox2);
 
-                    var pin2IntersectedWith1 = boxes.Where(b => b.FirstPin.Equals(bridgeBox.SecondPin)).ToList();
-                    var pin2IntersectedWith2 = boxes.Where(b => b.SecondPin.Equals(bridgeBox.SecondPin)).ToList();
-                    if ((pin2IntersectedWith1.Count + pin2IntersectedWith2.Count) < 3 && bridgeBox.SecondPin is Node node2) /// it means we can simplified the node
-                    {
-                        var pin = node2.RelayPin ?? new Pin(node2.Id);
-                        pin2IntersectedWith1.ForEach(box => box.FirstPin = pin);
-                        pin2IntersectedWith2.ForEach(box => box.SecondPin = pin);
-                    }
+                    goto FINISH;
                 }
             }
         }
 
+        FINISH:
         outputBoxes = boxes;
         return found;
     }
