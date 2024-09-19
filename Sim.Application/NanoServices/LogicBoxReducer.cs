@@ -145,7 +145,7 @@ public static class LogicBoxReducer
     {
         bool found = false;
         List<LogicBox> boxes = inputBoxes;
-        List<LogicBox> nodeBoxes = inputBoxes.Where(b => b.FirstPin is Node && b.SecondPin is Node).ToList();
+        List<LogicBox> nodeBoxes = inputBoxes.Where(b => (b.FirstPin is Node or IPoleEdge) && b.SecondPin is Node).ToList();
 
         var triangles = new List<List<LogicBox>>();
         // Iterate through all combinations to find the triangle connection
@@ -220,7 +220,8 @@ public static class LogicBoxReducer
     static private bool IsTriangle(LogicBox b1, LogicBox b2, LogicBox b3)
     {
         var ends = new HashSet<ILogicEdge> { b1.FirstPin, b1.SecondPin, b2.FirstPin, b2.SecondPin, b3.FirstPin, b3.SecondPin };
-        return ends.Count == 3;
+        var countPoles = ends.Count(end => end is IPoleEdge);
+        return ends.Count == 3 || (ends.Count == 4  && countPoles == 2);
     }
 
     static private (List<LogicBox> serialBoxes, ILogicEdge lastPin) TryFindSerialBoxes(LogicBox startBox, List<LogicBox> inputBoxes)

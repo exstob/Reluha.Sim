@@ -15,6 +15,7 @@
     <None Remove="LocalStorage\SerialAndParallelAndDualConnections.json" />
     <None Remove="LocalStorage\SerialAndParallelConnections.json" />
     <None Remove="LocalStorage\SerialConnections.json" />
+    <None Remove="LocalStorage\ShortCircuitState.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +41,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="LocalStorage\SerialConnections.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LocalStorage\ShortCircuitState.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

@@ -15,7 +15,7 @@ namespace Sim.Domain.Logic
         private bool _updated = false;
         //public string Name { get; set; } = name;
         public ContactState NormalContact { get => IsHigh() ? ContactValue.T : ContactValue.F; }
-        public ContactState PolarContact { get => IsNegative() ? ContactValue.T : ContactValue.F; }
+        public ContactState PolarContact { get; private set; }
         public bool IsUpdated { get => _updated; }
         public int StartDelay { get; set; } = 0;
         public int EndDelay { get; set; } = 0;
@@ -59,6 +59,7 @@ namespace Sim.Domain.Logic
             var relayNewState = posResult ^ negResult;
             _updated = relayNewState.Value != _relayState.Value;
             _relayState = relayNewState;
+            PolarContact = IsHigh() ? IsNegative() : PolarContact;
 
             return this;
         }
@@ -68,13 +69,5 @@ namespace Sim.Domain.Logic
 
     }
 
-
-
 }
-
-//public class InputContactGroupDto
-//{
-//    public dynamic v { get; set; }
-//}
-
 

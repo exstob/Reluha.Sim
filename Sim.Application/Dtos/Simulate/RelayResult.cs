@@ -10,6 +10,6 @@ namespace Sim.Application.Dtos.Simulate;
 public class RelayResult
 {
     public required string Name { get; set; }
-    public ContactValue NormalContact { get; init; }
-    public ContactValue PolarContact { get; init; }
+    public bool NormalContact { get; init; }
+    public bool PolarContact { get; init; }
 }
