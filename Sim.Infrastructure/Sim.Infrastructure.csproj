@@ -10,8 +10,10 @@
     <None Remove="LocalStorage\BridgeConnection.json" />
     <None Remove="LocalStorage\ChangePolarity.json" />
     <None Remove="LocalStorage\DualContactGroup.json" />
+    <None Remove="LocalStorage\ParallelAndChangePolarity.json" />
     <None Remove="LocalStorage\ParallelConnections.json" />
     <None Remove="LocalStorage\ParallelOfParallelConnection.json" />
+    <None Remove="LocalStorage\RelaySerialChain.json" />
     <None Remove="LocalStorage\SerialAndParallelAndDualConnections.json" />
     <None Remove="LocalStorage\SerialAndParallelConnections.json" />
     <None Remove="LocalStorage\SerialConnections.json" />
@@ -25,6 +27,9 @@
     <EmbeddedResource Include="LocalStorage\ChangePolarity.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="LocalStorage\ParallelAndChangePolarity.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="LocalStorage\DualContactGroup.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -32,6 +37,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="LocalStorage\ParallelOfParallelConnection.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LocalStorage\RelaySerialChain.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="LocalStorage\SerialAndParallelAndDualConnections.json">

@@ -36,7 +36,7 @@ static public class NodeCreator
             var node = new Node(nodeConnector.Id);
             node.Connectors.Add(nodeConnector);
             node.ElementNames.Add(nodeConnector.ElementName(model));
-            node.RelayPin = TryGetRelayPin(nodeConnector, model);
+            node.AddRelayPin(TryGetRelayPin(nodeConnector, model));
             //// if the connector was removed it means, it was processed
             nodeConnectors.Remove(nodeConnector);
             //allConnectors.Remove(nodeConnector);
@@ -66,7 +66,7 @@ static public class NodeCreator
                 {
                     node.Connectors.Add(relatedConnector);
                     node.ElementNames.Add(relatedConnector.ElementName(model));
-                    node.RelayPin ??= TryGetRelayPin(relatedConnector, model);
+                    node.AddRelayPin(TryGetRelayPin(relatedConnector, model));
                     nodeConnectors.Remove(relatedConnector);
                     //allConnectors.Remove(relatedConnector);
                 }
@@ -122,14 +122,14 @@ static public class NodeCreator
     //    return simpleCommonConnectors.Select((commonConnector, i) =>
     //    {
     //        var node = new Node(commonConnector.Id);
-    //        node.Connectors.Add(commonConnector);
+    //        node.Connectors.AddRelayPin(commonConnector);
 
     //        var relatedConnectorId = model.Binders.FindNextConnectorId(commonConnector.JointBindersId.Single(), commonConnector.Id);
     //        var allConnectors = model.AllElements().SelectMany(el => el.Connectors).ToList();
     //        /// Get a new connector if exist
     //        var relatedConnector = allConnectors.Find(c => c.Id == relatedConnectorId);
     //        if (relatedConnector != null)
-    //            node.Connectors.Add(relatedConnector);
+    //            node.Connectors.AddRelayPin(relatedConnector);
 
     //        return node;
     //    }).ToList();

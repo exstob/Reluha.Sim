@@ -78,6 +78,7 @@ namespace Sim.Domain.Logic
                 var (isUpdated, updatedRelays) = await this.Evaluate();
                 relays.AddRange(updatedRelays);
                 loop = isUpdated;
+                Console.WriteLine(string.Join(", ", updatedRelays));
             }
 
             return relays;

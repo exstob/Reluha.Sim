@@ -23,11 +23,6 @@ public static class LogicBoxCreator
         boxes.AddRange(childBoxes);
         connectedSwitchers.RemoveAll(csw => usedSwitchers.Contains(csw));
 
-        /// Analyze routes from CommonConnector contact
-        // (childBoxes, usedSwitchers) = LogicBoxCreator.CreateBoxesStartedFromCommonContacts(connectedSwitchers, model, nodes);
-        //boxes.AddRange(childBoxes);
-        //connectedSwitchers.RemoveAll(csw => usedSwitchers.Contains(csw));
-
         /// Analyze routes from Node to Node
         (childBoxes, usedSwitchers) = LogicBoxCreator.CreateBoxesStartedFromNode(connectedSwitchers, model, nodes);
         boxes.AddRange(childBoxes);
@@ -42,69 +37,6 @@ public static class LogicBoxCreator
 
         return boxes;
     }
-
-    private static (List<LogicBox> boxes, List<UiSwitcher> switchers) CreateBoxesStartedFromCommonContacts(List<UiSwitcher> connectedSwitchers, UiSchemeModel model, List<Node> nodes)
-    {
-        List<LogicBox> boxes = [];
-        List<UiSwitcher> usedSwitchers = [];
-        var fullSwitchers = connectedSwitchers.Where(sw => sw.HasBothContacts());
-        foreach (var switcher in fullSwitchers)
-        {
-
-            /// Calc route via OpenConnector contact
-            var startConnector = switcher.CommonConnector();
-            List<Contact> contacts = [new Contact(switcher, ContactDefaultState.Open)];
-            var serialSwitchers = TryFindSerialSwitchers(switcher.OpenConnector(), connectedSwitchers, model.Binders, nodes).ToList();
-            foreach ((UiSwitcher sw, bool viaOpenContact, _) in serialSwitchers)
-            {
-                var defaultState = viaOpenContact ? ContactDefaultState.Open : ContactDefaultState.Close;
-                contacts.Add(new Contact(sw, defaultState));
-                usedSwitchers.Add(sw);
-            }
-
-            var lastConnector = serialSwitchers.Count > 0
-                ? serialSwitchers.Last().connector
-                : switcher.OpenConnector();
-
-            var box1 = new LogicBox(LogicBoxType.Serial)
-            {
-                FirstPin = nodes.GetNodeFor(startConnector),
-                SecondPin = GetLogicEdge(lastConnector, model, nodes),
-                Contacts = contacts,
-
-            };
-            boxes.Add(box1);
-
-
-            /// Calc route via CloseConnector contact
-            contacts = [new Contact(switcher, ContactDefaultState.Close)];
-            serialSwitchers = TryFindSerialSwitchers(switcher.CloseConnector(), connectedSwitchers, model.Binders, nodes).ToList();
-            foreach ((UiSwitcher sw, bool viaOpenContact, _) in serialSwitchers)
-            {
-                var defState = viaOpenContact ? ContactDefaultState.Open : ContactDefaultState.Close;
-                contacts.Add(new Contact(sw, defState));
-                usedSwitchers.Add(sw);
-            }
-
-            lastConnector = serialSwitchers.Count > 0
-                ? serialSwitchers.Last().connector
-                : switcher.CloseConnector();
-
-            var box2 = new LogicBox(LogicBoxType.Serial)
-            {
-                FirstPin = nodes.GetNodeFor(startConnector),
-                SecondPin = GetLogicEdge(lastConnector, model, nodes),
-                Contacts = contacts,
-
-            };
-            boxes.Add(box2);
-
-            usedSwitchers.Add(switcher);
-        }
-
-        return (boxes, usedSwitchers);
-    }
-
 
     private static (List<LogicBox> boxes, List<UiSwitcher> switchers) CreateBoxesStartedFromPole(List<UiSwitcher> connectedSwitchers, UiSchemeModel model, List<Node> nodes)
     {
@@ -133,7 +65,7 @@ public static class LogicBoxCreator
                     Contacts = contacts
                 };
             }
-            /// Add Logic Box without contacts (it har direct connection with Relay or Node)
+            /// AddRelayPin Logic Box without contacts (it har direct connection with Relay or Node)
             else
             {
                 box = new LogicBox(LogicBoxType.Serial)
@@ -175,7 +107,7 @@ public static class LogicBoxCreator
 
 
             }
-            /// Add Logic Box without contacts (it har direct connection with Relay or Node)
+            /// AddRelayPin Logic Box without contacts (it har direct connection with Relay or Node)
             else
             {
                 box = new LogicBox(LogicBoxType.Serial)

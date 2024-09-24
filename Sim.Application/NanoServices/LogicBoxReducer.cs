@@ -217,6 +217,38 @@ public static class LogicBoxReducer
         return found;
     }
 
+    public static bool TryDefineRelayFanout(List<LogicBox> inputBoxes, out List<LogicBox> outputBoxes)
+    {
+        List<LogicBox> boxes = inputBoxes;
+
+        LogicBox CommonBox(Node node) => inputBoxes.First(cb => cb.FirstPin is IPoleEdge && cb.SecondPin.Equals(node));
+
+        var relayLogicBoxes = boxes
+            .Where(b => b.FirstPin is Node && b.SecondPin is RelayMinusPin or RelayPlusPin)
+            .GroupBy(p => new { p.FirstPin }) /// group nodeBoxes with same Node
+            .Where(g => g.Count() > 1)
+            .SelectMany(g => g.Select(b => new LogicBox([CommonBox((Node)g.Key.FirstPin), b])));
+
+        var relayDirectBoxes = boxes
+            .Where(b => b.FirstPin is IPoleEdge && b.SecondPin is Node node && node.RelayPins.Count > 1)
+            .SelectMany(b => (b.SecondPin as Node)!.RelayPins.Select(rp => new LogicBox(LogicBoxType.Serial)
+            {
+                FirstPin = b.FirstPin,
+                SecondPin = rp,
+                Contacts = b.Contacts,
+                Boxes = b.Boxes
+            }));
+
+        boxes.AddRange([.. relayLogicBoxes, .. relayDirectBoxes]);
+        foreach (var relayLogicBox in relayLogicBoxes)
+        {
+            boxes.Remove(relayLogicBox.Boxes.Skip(1).First());
+        }
+
+        outputBoxes = boxes;
+        return relayLogicBoxes.Any() || relayDirectBoxes.Any();
+    }
+
     static private bool IsTriangle(LogicBox b1, LogicBox b2, LogicBox b3)
     {
         var ends = new HashSet<ILogicEdge> { b1.FirstPin, b1.SecondPin, b2.FirstPin, b2.SecondPin, b3.FirstPin, b3.SecondPin };

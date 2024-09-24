@@ -11,6 +11,7 @@ public class Relay
 {
     public required string Name { get; set; }
     public required RelayState State { get; set; }
+    public override string ToString() => Name;
 
 }
 

@@ -35,7 +35,7 @@ public class SimulateLogicModelTest
         var simUseCase = new SimulateLogicModel(cache);
 
         var switcher = new UiSwitcher { LogicState = true, Name = "R8801", ExtraProps = new UiSwitcherExtraProps("normal", true) };
-        var simData = new SimulateData { SchemeId = model.Id.ToString(), Steps = [new SimulateStep { StepName = "st1", Switchers = [switcher] }] };
+        var simData = new SimulateData { SchemeId = model.SchemeId.ToString(), Steps = [new SimulateStep { StepName = "st1", Switchers = [switcher] }] };
 
 
         simData.ShouldNotBeNull();

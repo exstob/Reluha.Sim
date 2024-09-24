@@ -44,11 +44,13 @@ public static class Parser
             {
                 if (!LogicBoxReducer.TrySimplifyTriangleBoxes(boxes, out parBoxes))
                 {
-                    return (boxes, contacts);
+                    //return (boxes, contacts);
+                    break;
                 }
                 else if (!LogicBoxReducer.TryPackParallelContactBoxes(parBoxes, out parBoxes))
                 {
-                    return (boxes, contacts);
+                    //return (boxes, contacts);
+                    break;
                 }
             }
 
@@ -56,12 +58,20 @@ public static class Parser
             {
                 if (!LogicBoxReducer.TrySimplifyTriangleBoxes(parBoxes, out serialBoxes))
                 {
-                    return (parBoxes, contacts);
+                    //return (parBoxes, contacts);
+                    boxes = serialBoxes;
+                    break;
                 }
             }
             boxes = serialBoxes;
 
         } while (true);
+
+        if (!LogicBoxReducer.TryDefineRelayFanout(boxes, out var fanoutBoxes))
+        {
+            return (boxes, contacts);
+        }
+        return (fanoutBoxes, contacts);
     }
 
     public static List<Relay> ParseRelays(UiSchemeModel model, List<LogicBox> boxes)

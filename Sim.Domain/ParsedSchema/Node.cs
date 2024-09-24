@@ -13,8 +13,14 @@ public class Node(string id) : ILogicEdge
     public List<UiConnector> Connectors { get; init; } = [];
     public List<string> ElementNames { get; init; } = [];
     public IRelayEdge? RelayPin { get; set; }
+    public List<IRelayEdge> RelayPins { get; set; } = []; 
 
     public bool Used { get; set; } = false;
+    public void AddRelayPin(IRelayEdge? edge)
+    {
+        RelayPin ??= edge;
+        if (edge is not null ) RelayPins.Add(edge);
+    }
 
     public override string ToString()
     {
