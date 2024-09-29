@@ -7,14 +7,18 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["Sim.Api/Sim.Api.csproj", "Sim.Api/"]
-RUN dotnet restore "Sim.Api/Sim.Api.csproj"
-COPY . .
-WORKDIR "/src/Sim.Api"
-RUN dotnet build "Sim.Api.csproj" -c Release -o /app/build
+COPY . ./
+RUN dotnet restore "Reluha.Sim.sln"
+RUN dotnet build "Reluha.Sim.sln" -c Release -o /app/build
+
+# Build and run tests
+WORKDIR /src/Sim.Tests
+RUN dotnet build "Sim.Tests.csproj" -c Release
+RUN dotnet test "Sim.Tests.csproj" -c Release --no-build --verbosity normal
 
 FROM build AS publish
-RUN dotnet publish "Sim.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+WORKDIR /src
+RUN dotnet publish "Sim.Api/Sim.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
