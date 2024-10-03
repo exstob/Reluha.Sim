@@ -60,4 +60,6 @@ app.MapGet("/", () =>
     return Results.Ok("Hello!!!");
 });
 
+Console.Write("Before run app");
+
 app.Run();
