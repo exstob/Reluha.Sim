@@ -53,4 +53,4 @@ jobs:
           app-name: 'reluha'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7BE1FAEF46FB49BF85DF6F0FDC948C30 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F867FA1F5CB048279BD782A49F86B5D9 }}
