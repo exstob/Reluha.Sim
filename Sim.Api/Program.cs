@@ -55,9 +55,9 @@ app.MapPost("/simulate", async (ISimulateLogicModel simulator, SimulateData simD
 });
 
 
-app.MapGet("/ping", () =>
+app.MapGet("/", () =>
 {
-    return Results.Ok("Ready");
+    return Results.Ok("Hello!!!");
 });
 
 app.Run();
