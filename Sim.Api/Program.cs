@@ -13,7 +13,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin",
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000", "https://reluha.azurewebsites.net", "https://relaysim.azurewebsites.net")
+            policy.WithOrigins("http://localhost:3000", "https://reluha.azurewebsites.net", "https://relay-csd8d3dtczghftb8.switzerlandnorth-01.azurewebsites.net")
                   .AllowAnyMethod()
                   .AllowAnyHeader();
         });
