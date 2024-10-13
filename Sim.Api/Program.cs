@@ -13,7 +13,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin",
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000", "https://reluha.azurewebsites.net", "https://relay-csd8d3dtczghftb8.switzerlandnorth-01.azurewebsites.net")
+            policy.WithOrigins("http://localhost:3000", "https://reluha.azurewebsites.net")
                   .AllowAnyMethod()
                   .AllowAnyHeader();
         });
@@ -58,6 +58,11 @@ app.MapPost("/simulate", async (ISimulateLogicModel simulator, SimulateData simD
 app.MapGet("/", () =>
 {
     return Results.Ok("Hello!!!");
+});
+
+app.MapGet("/front", () =>
+{
+    Results.Redirect("https://white-ocean-05ee55103.5.azurestaticapps.net");
 });
 
 Console.Write("Before run app");
