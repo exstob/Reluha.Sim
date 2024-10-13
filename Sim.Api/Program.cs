@@ -13,7 +13,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowSpecificOrigin",
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000", "https://reluha.azurewebsites.net")
+            policy.WithOrigins("http://localhost:3000", "https://reluha.azurewebsites.net", "https://white-ocean-05ee55103.5.azurestaticapps.net")
                   .AllowAnyMethod()
                   .AllowAnyHeader();
         });
