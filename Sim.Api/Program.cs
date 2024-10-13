@@ -19,6 +19,12 @@ builder.Services.AddCors(options =>
         });
 });
 
+// Set the HTTPS port explicitly
+//builder.Services.AddHttpsRedirection(options =>
+//{
+//    options.HttpsPort = 5001; // Set the port you're using for HTTPS
+//});
+
 builder.Services
        .AddEndpointsApiExplorer()
        .AddSwaggerGen()
@@ -55,14 +61,14 @@ app.MapPost("/simulate", async (ISimulateLogicModel simulator, SimulateData simD
 });
 
 
-app.MapGet("/", () =>
+app.MapGet("/ping", () =>
 {
     return Results.Ok("Hello!!!");
 });
 
-app.MapGet("/front", () =>
+app.MapGet("/", () =>
 {
-    Results.Redirect("https://white-ocean-05ee55103.5.azurestaticapps.net");
+    return Results.Redirect("https://white-ocean-05ee55103.5.azurestaticapps.net");
 });
 
 Console.Write("Before run app");
