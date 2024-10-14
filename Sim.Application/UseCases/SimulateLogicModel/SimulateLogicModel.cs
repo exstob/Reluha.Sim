@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sim.Domain.ParsedScheme;
+using System.Diagnostics;
 
 namespace Sim.Application.UseCases.SimulateLogicModel;
 
@@ -24,6 +25,8 @@ public class SimulateLogicModel(IMemoryCache cache) : ISimulateLogicModel
         List<Relay> relays = [];
         if (_cache.TryGetValue<LogicModel>(simReq.SchemeId, out var model) && model is not null)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
             var switchers = simReq.Steps.Single().Switchers;
             foreach (var switcher in switchers)
             {
@@ -31,6 +34,8 @@ public class SimulateLogicModel(IMemoryCache cache) : ISimulateLogicModel
             }
 
             relays = await model.EvaluateAll();
+            stopwatch.Stop();
+            Console.WriteLine("Simulate elapsed time: " + stopwatch.Elapsed);
         }
 
         return new SimulateResult

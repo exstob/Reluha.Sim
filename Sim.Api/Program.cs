@@ -19,12 +19,6 @@ builder.Services.AddCors(options =>
         });
 });
 
-// Set the HTTPS port explicitly
-//builder.Services.AddHttpsRedirection(options =>
-//{
-//    options.HttpsPort = 5001; // Set the port you're using for HTTPS
-//});
-
 builder.Services
        .AddEndpointsApiExplorer()
        .AddSwaggerGen()
