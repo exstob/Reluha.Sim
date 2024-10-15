@@ -75,10 +75,10 @@ namespace Sim.Domain.Logic
 
             while (loop)
             {
-                var (isUpdated, updatedRelays) = await this.Evaluate();
+                var (isUpdated, updatedRelays) = await this.Evaluate().ConfigureAwait(false);
                 relays.AddRange(updatedRelays);
                 loop = isUpdated;
-                Console.WriteLine(string.Join(", ", updatedRelays));
+                Console.WriteLine(string.Join(" updated,", updatedRelays));
             }
 
             return relays;

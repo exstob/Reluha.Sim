@@ -43,14 +43,14 @@ app.UseCors("AllowSpecificOrigin");
 
 app.MapPost("/compile", async (ICreateLogicModel creator, UiSchemeModel elements) =>
 {
-    var initResult = await creator.Generate(elements);
+    var initResult = await creator.Generate(elements).ConfigureAwait(false);
     Console.WriteLine(initResult.SchemeId);
     return Results.Ok(initResult);
 });
 
 app.MapPost("/simulate", async (ISimulateLogicModel simulator, SimulateData simData) =>
 {
-    var result = await simulator.Simulate(simData);
+    var result = await simulator.Simulate(simData).ConfigureAwait(false);
     return Results.Ok(result);
 });
 
