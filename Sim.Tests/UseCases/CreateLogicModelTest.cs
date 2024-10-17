@@ -1,5 +1,6 @@
 ﻿using FakeItEasy;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Shouldly;
 using Sim.Application.UseCases.CreateLogicModel;
 using Sim.Domain.Logic;
@@ -17,6 +18,8 @@ public class CreateLogicModelTest
 {
     readonly Repository repo;
     private readonly IMemoryCache cache;
+    private readonly ILogger<CreateLogicModel> fakeLogger = A.Fake<ILogger<CreateLogicModel>>();
+
     public CreateLogicModelTest()
     {
         repo = new Repository();
@@ -36,7 +39,7 @@ public class CreateLogicModelTest
     public async Task CreateModelWithOneRelay_OK(string fileName, string logicResult)
     {
         var scheme = repo.GetUiScheme(fileName);
-        var useCase = new CreateLogicModel(cache);
+        var useCase = new CreateLogicModel(cache, fakeLogger);
 
         var result = await useCase.Generate(scheme);
 
@@ -51,7 +54,7 @@ public class CreateLogicModelTest
     public async Task CreateModelWithMultiRelay_OK(string fileName)
     {
         var scheme = repo.GetUiScheme(fileName);
-        var useCase = new CreateLogicModel(cache);
+        var useCase = new CreateLogicModel(cache, fakeLogger);
 
         var result = await useCase.Generate(scheme);
 

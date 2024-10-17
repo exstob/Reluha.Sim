@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Sim.Domain.ParsedScheme;
 using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 
 namespace Sim.Application.UseCases.SimulateLogicModel;
 
@@ -17,9 +18,10 @@ public interface ISimulateLogicModel : IUseCase
     public Task<SimulateResult> Simulate(SimulateData simReq);
 }
 
-public class SimulateLogicModel(IMemoryCache cache) : ISimulateLogicModel
+public class SimulateLogicModel(IMemoryCache cache, ILogger<SimulateLogicModel> logger) : ISimulateLogicModel
 {
     private readonly IMemoryCache _cache = cache;
+    private readonly ILogger<SimulateLogicModel> _logger = logger;
     public async Task<SimulateResult> Simulate(SimulateData simReq)
     {
         List<Relay> relays = [];
@@ -35,7 +37,7 @@ public class SimulateLogicModel(IMemoryCache cache) : ISimulateLogicModel
 
             relays = await model.EvaluateAll();
             stopwatch.Stop();
-            Console.WriteLine("Simulate elapsed time: " + stopwatch.Elapsed);
+            _logger.LogInformation("Simulate elapsed time: " + stopwatch.Elapsed.TotalMilliseconds);
         }
 
         return new SimulateResult

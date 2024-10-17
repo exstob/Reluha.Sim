@@ -8,6 +8,15 @@ using Sim.Application.Dtos.Simulate;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddLogging(config =>
+{
+    config.ClearProviders();
+    config.AddConsole();
+    config.AddDebug();
+    config.AddAzureWebAppDiagnostics();
+});
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -28,7 +37,7 @@ builder.Services.AddTransient<ICreateLogicModel, CreateLogicModel>();
 builder.Services.AddTransient<ISimulateLogicModel, SimulateLogicModel>();
 
 
-var app = builder.Build(); 
+var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
@@ -64,7 +73,5 @@ app.MapGet("/", () =>
 {
     return Results.Redirect("https://white-ocean-05ee55103.5.azurestaticapps.net");
 });
-
-Console.Write("Before run app");
 
 app.Run();

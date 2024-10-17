@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Dynamic;
+using System.Diagnostics;
 
 namespace Sim.Domain.Logic
 {
@@ -26,6 +27,7 @@ namespace Sim.Domain.Logic
         public string NegativeInputExpression { get; } = negInp;
 
         private Script<ChainState>? _negativeInputScript;
+        private Script<ChainState>? _inputScript;
 
         public override string ToString() => $"{_relayState.Value}";
 
@@ -40,23 +42,34 @@ namespace Sim.Domain.Logic
                 .AddImports("System");
 
 
-            if (_positiveInputScript is null)
+            //if (_positiveInputScript is null)
+            //{
+            //    _positiveInputScript = CSharpScript.Create<ChainState>(PositiveInputExpression, scriptOptions, typeof(InputContactGroupDto));
+            //    _positiveInputScript.Compile();
+            //}
+
+            //var posResult = (await _positiveInputScript.RunAsync(contactState, new CancellationToken())).ReturnValue;
+
+            //if (_negativeInputScript is null)
+            //{
+            //    _negativeInputScript = CSharpScript.Create<ChainState>(NegativeInputExpression, scriptOptions, typeof(InputContactGroupDto));
+            //    _negativeInputScript.Compile();
+            //}
+
+            //var negResult = (await _negativeInputScript.RunAsync(contactState, new CancellationToken())).ReturnValue;
+
+            //var relayNewState = posResult ^ negResult;
+
+            //Stopwatch stopwatch = new Stopwatch();
+            //stopwatch.Start();
+
+            if (_inputScript is null)
             {
-                _positiveInputScript = CSharpScript.Create<ChainState>(PositiveInputExpression, scriptOptions, typeof(InputContactGroupDto));
-                _positiveInputScript.Compile();
+                _inputScript = CSharpScript.Create<ChainState>(ToLogic(), scriptOptions, typeof(InputContactGroupDto));
+                _inputScript.Compile();
             }
 
-            var posResult = (await _positiveInputScript.RunAsync(contactState, new CancellationToken())).ReturnValue;
-
-            if (_negativeInputScript is null)
-            {
-                _negativeInputScript = CSharpScript.Create<ChainState>(NegativeInputExpression, scriptOptions, typeof(InputContactGroupDto));
-                _negativeInputScript.Compile();
-            }
-
-            var negResult = (await _negativeInputScript.RunAsync(contactState, new CancellationToken())).ReturnValue;
-
-            var relayNewState = posResult ^ negResult;
+            var relayNewState = (await _inputScript.RunAsync(contactState, new CancellationToken())).ReturnValue;
             _updated = relayNewState.Value != _relayState.Value;
             _relayState = relayNewState;
             PolarContact = IsHigh() ? IsNegative() : PolarContact;

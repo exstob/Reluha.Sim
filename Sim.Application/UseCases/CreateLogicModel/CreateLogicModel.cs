@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Sim.Application.Dtos.Simulate;
 using Sim.Application.NanoServices;
 using Sim.Domain.Logic;
@@ -18,16 +19,18 @@ public interface ICreateLogicModel : IUseCase
     public Task<SimulateResult> Generate(UiSchemeModel uiModel);
 }
 
-public class CreateLogicModel(IMemoryCache cache) : ICreateLogicModel
+public class CreateLogicModel(IMemoryCache cache, ILogger<CreateLogicModel> logger) : ICreateLogicModel
 {
     private readonly IMemoryCache _cache = cache;
+    private readonly ILogger<CreateLogicModel> _logger = logger;
     public async Task<SimulateResult> Generate(UiSchemeModel uiModel) 
     {
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
         var (relays, contacts) = Parser.Parse(uiModel);
         stopwatch.Stop();
-        Console.WriteLine("Parse elapsed time: " + stopwatch.Elapsed);
+        //Console.WriteLine("Parse elapsed time: " + stopwatch.Elapsed);
+        _logger.LogInformation("Parse elapsed time: " + stopwatch.Elapsed.TotalMilliseconds);
 
         var model = new LogicModel(relays, contacts);
 
@@ -35,7 +38,8 @@ public class CreateLogicModel(IMemoryCache cache) : ICreateLogicModel
         stopwatch.Start();
         relays = await model.EvaluateAll();
         stopwatch.Stop();
-        Console.WriteLine("Evaluate elapsed time: " + stopwatch.Elapsed);
+        //Console.WriteLine("Evaluate elapsed time: " + stopwatch.Elapsed);
+        _logger.LogInformation("Evaluate elapsed time: " + stopwatch.Elapsed.TotalMilliseconds);
 
         _cache.Set(model.Id.ToString(), model, TimeSpan.FromMinutes(10));
 

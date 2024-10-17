@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxTokenParser;
 
 namespace Sim.Domain.Logic
 {
@@ -15,8 +14,6 @@ namespace Sim.Domain.Logic
         public Ulid Id { get; } = Ulid.NewUlid();
         private readonly InputContactGroupDto _contactGroups = InitContacts(contacts);
         public readonly List<Relay> Relays = relays;
-        //private List<Contact> _contacts = contacts;
-
         private static InputContactGroupDto InitContacts(List<Contact> contacts)
         {
             InputContactGroupDto contactGroups = new();
@@ -47,7 +44,8 @@ namespace Sim.Domain.Logic
 
         public async Task<(bool, List<Relay>)> Evaluate()
         {
-            var tasks = Relays.Select(r => Task.Run(() => r.State.Calc(_contactGroups))).ToList();
+            //var tasks = Relays.Select(r => Task.Run(() => r.State.Calc(_contactGroups))).ToList();
+            var tasks = Relays.Select(r => r.State.Calc(_contactGroups)).ToList();
             await Task.WhenAll(tasks);
 
             var isUpdated = false;
@@ -78,7 +76,7 @@ namespace Sim.Domain.Logic
                 var (isUpdated, updatedRelays) = await this.Evaluate().ConfigureAwait(false);
                 relays.AddRange(updatedRelays);
                 loop = isUpdated;
-                Console.WriteLine(string.Join(" updated,", updatedRelays));
+                Console.WriteLine("Updated: " + string.Join(", ", updatedRelays));
             }
 
             return relays;
