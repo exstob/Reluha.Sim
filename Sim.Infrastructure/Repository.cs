@@ -9,6 +9,8 @@ namespace Sim.Infrastructure;
 public interface IRepository
 {
     public UiSchemeModel GetUiScheme(string fileName);
+    public string GetSchemeContent(string fileName);
+    public List<string> GetUiSchemeNames();
 }
 
 public class Repository: IRepository
@@ -17,10 +19,6 @@ public class Repository: IRepository
     {
         var assembly = Assembly.GetExecutingAssembly();
         var resourceName = $"{assembly.GetName().Name}.LocalStorage.{fileName}";
-
-        var names = Assembly
-            .GetExecutingAssembly()
-        .GetManifestResourceNames();
 
         try
         {
@@ -50,5 +48,46 @@ public class Repository: IRepository
             return null;
         }
 
+    }
+
+    public string GetSchemeContent(string fileName = "SerialConnections.json")
+    {
+        var assembly = Assembly.GetExecutingAssembly();
+        var resourceName = $"{assembly.GetName().Name}.LocalStorage.{fileName}";
+
+        try
+        {
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                if (stream == null)
+                {
+                    throw new FileNotFoundException("Resource not found: " + resourceName);
+                }
+
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error accessing resource: {ex.Message}");
+            return null;
+        }
+
+    }
+
+    public List<string> GetUiSchemeNames() 
+    {
+
+        var assembly = Assembly.GetExecutingAssembly();
+        var resourceNames = assembly.GetManifestResourceNames()
+                                    .Where(r => r.Contains(".LocalStorage."))
+                                    .Select(r => r.Split(".LocalStorage.").Last())
+                                    .ToList();
+
+        return resourceNames;
     }
 }

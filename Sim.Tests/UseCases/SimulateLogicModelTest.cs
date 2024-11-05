@@ -35,7 +35,7 @@ public class SimulateLogicModelTest
 
         var model = await createUseCase.Generate(scheme);
 
-        var simUseCase = new SimulateLogicModel(cache, fakeSimLogger);
+        var simUseCase = new SimulateLogicModel(cache, fakeSimLogger );
 
         var switcher = new UiSwitcher { LogicState = true, Name = "R8801", ExtraProps = new UiSwitcherExtraProps("normal", true) };
         var simData = new SimulateData { SchemeId = model.SchemeId.ToString(), Steps = [new SimulateStep { StepName = "st1", Switchers = [switcher] }] };
