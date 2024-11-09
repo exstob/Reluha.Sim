@@ -19,7 +19,7 @@ public class SimulateLogicModelTest
 {
     readonly Repository repo;
     private readonly IMemoryCache cache;
-    private readonly ILogger<CreateLogicModel> fakeCreateLogger = A.Fake<ILogger<CreateLogicModel>>();
+    private readonly ILogger<RunLogicModel> fakeCreateLogger = A.Fake<ILogger<RunLogicModel>>();
     private readonly ILogger<SimulateLogicModel> fakeSimLogger = A.Fake<ILogger<SimulateLogicModel>>();
     public SimulateLogicModelTest()
     {
@@ -31,7 +31,7 @@ public class SimulateLogicModelTest
     public async void SimulateModel_OK()
     {
         var scheme = repo.GetUiScheme();
-        var createUseCase = new CreateLogicModel(cache, fakeCreateLogger);
+        var createUseCase = new RunLogicModel(cache, fakeCreateLogger);
 
         var model = await createUseCase.Generate(scheme);
 

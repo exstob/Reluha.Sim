@@ -8,6 +8,7 @@ using Sim.Application.Dtos.Simulate;
 using Sim.Infrastructure;
 using Sim.Application.UseCases.GetCircuitsUC;
 using Sim.Application.UseCases.GetCircuitUC;
+using Sim.Application.UseCases.BuildLogicModel;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +38,8 @@ builder.Services
        .AddMemoryCache();
 
 builder.Services.AddSingleton<IRepository, Repository>();
-builder.Services.AddTransient<ICreateLogicModel, CreateLogicModel>();
+builder.Services.AddTransient<IRunLogicModel, RunLogicModel>();
+builder.Services.AddTransient<IBuildLogicModel, BuildLogicModel > ();
 builder.Services.AddTransient<ISimulateLogicModel, SimulateLogicModel>();
 builder.Services.AddTransient<IGetCircuitNamesUC, GetCircuitNamesUC>();
 builder.Services.AddTransient<IGetCircuitUC, GetCircuitUC>();
@@ -62,7 +64,14 @@ app.UseCors("AllowSpecificOrigin");
 
 var api_version = Environment.GetEnvironmentVariable("API__version");
 
-app.MapPost($"/api/{api_version}/compile", async (ICreateLogicModel creator, UiSchemeModel elements) =>
+app.MapPost($"/api/{api_version}/build", async (IBuildLogicModel builder, UiSchemeModel elements) =>
+{
+    var buildResult = await builder.Generate(elements).ConfigureAwait(false);
+    Console.WriteLine(buildResult.SchemeId);
+    return Results.Ok(buildResult);
+});
+
+app.MapPost($"/api/{api_version}/run", async (IRunLogicModel creator, UiSchemeModel elements) =>
 {
     var initResult = await creator.Generate(elements).ConfigureAwait(false);
     Console.WriteLine(initResult.SchemeId);
