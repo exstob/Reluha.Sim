@@ -18,6 +18,7 @@
     <None Remove="LocalStorage\SerialAndParallelConnections.json" />
     <None Remove="LocalStorage\SerialConnections.json" />
     <None Remove="LocalStorage\ShortCircuitState.json" />
+    <None Remove="LocalStorage\TwoStageMultiplexer.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -52,6 +53,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
     <EmbeddedResource Include="LocalStorage\ShortCircuitState.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LocalStorage\TwoStageMultiplexer.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

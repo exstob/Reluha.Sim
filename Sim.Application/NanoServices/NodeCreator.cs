@@ -27,7 +27,6 @@ static public class NodeCreator
         var allConnectors = model.AllElements().SelectMany(el => el.Connectors).Where(con => con.Connected).ToList();
 
         var nodes = new List<Node>();
-        //var nodeConnectorStack = new Stack<UiConnector>(nodeConnectors);
 
         while (nodeConnectors.Count > 0)
         {
@@ -39,7 +38,6 @@ static public class NodeCreator
             node.AddRelayPin(TryGetRelayPin(nodeConnector, model));
             //// if the connector was removed it means, it was processed
             nodeConnectors.Remove(nodeConnector);
-            //allConnectors.Remove(nodeConnector);
 
 
             ////// Find all related connectors    _ _ _ 

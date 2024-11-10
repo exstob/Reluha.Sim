@@ -23,7 +23,7 @@ public static class LogicBoxReducer
 
         var parallelBoxes = boxes
             .Where(b => b.FirstPin is Node && b.SecondPin is Node)
-            .GroupBy(b => new { CoupleId = string.Join(",", b.Nodes().OrderBy(n => n.Id)) }) /// group nodeBoxes with same Node
+            .GroupBy(b => new { CoupleId = string.Join(",", b.Nodes().Select(n => n.Id).Order()) }) /// group nodeBoxes with same Node
             .Where(b => b.Count() > 1)
             .Select(g => new LogicBox(LogicBoxType.Parallel) { FirstPin = g.First().FirstPin, SecondPin = g.First().SecondPin, Boxes = g.ToList() })
             .ToList();
@@ -74,12 +74,19 @@ public static class LogicBoxReducer
     {
         List<LogicBox> boxes = inputBoxes;
 
-        var parallelBoxes = boxes
+        var parallelBoxes1 = boxes
             .Where(b => b.FirstPin is IPoleEdge && b.SecondPin is Node)
             .GroupBy(p => new { p.SecondPin }) /// group nodeBoxes with same Node
             .Where(b => b.Count() > 1)
-            .Select(g => new LogicBox(LogicBoxType.Parallel) { FirstPin = new Poles(), SecondPin = g.Key.SecondPin, Boxes = g.ToList() })
-            .ToList();
+            .Select(g => new LogicBox(LogicBoxType.Parallel) { FirstPin = new Poles(), SecondPin = g.Key.SecondPin, Boxes = g.ToList() });
+
+        var parallelBoxes2 = boxes
+            .Where(b => b.SecondPin is IPoleEdge && b.FirstPin is Node)
+            .GroupBy(p => new { p.FirstPin }) /// group nodeBoxes with same Node
+            .Where(b => b.Count() > 1)
+            .Select(g => new LogicBox(LogicBoxType.Parallel) { FirstPin = new Poles(), SecondPin = g.Key.FirstPin, Boxes = g.ToList() });
+
+        var parallelBoxes = parallelBoxes1.Concat(parallelBoxes2).ToList();
 
         foreach (var parBox in parallelBoxes)
         {
