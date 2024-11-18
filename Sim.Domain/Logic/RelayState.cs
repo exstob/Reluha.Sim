@@ -42,27 +42,6 @@ namespace Sim.Domain.Logic
                 .AddImports("System");
 
 
-            //if (_positiveInputScript is null)
-            //{
-            //    _positiveInputScript = CSharpScript.Create<ChainState>(PositiveInputExpression, scriptOptions, typeof(InputContactGroupDto));
-            //    _positiveInputScript.Compile();
-            //}
-
-            //var posResult = (await _positiveInputScript.RunAsync(contactState, new CancellationToken())).ReturnValue;
-
-            //if (_negativeInputScript is null)
-            //{
-            //    _negativeInputScript = CSharpScript.Create<ChainState>(NegativeInputExpression, scriptOptions, typeof(InputContactGroupDto));
-            //    _negativeInputScript.Compile();
-            //}
-
-            //var negResult = (await _negativeInputScript.RunAsync(contactState, new CancellationToken())).ReturnValue;
-
-            //var relayNewState = posResult ^ negResult;
-
-            //Stopwatch stopwatch = new Stopwatch();
-            //stopwatch.Start();
-
             if (_inputScript is null)
             {
                 _inputScript = CSharpScript.Create<ChainState>(ToLogic(), scriptOptions, typeof(InputContactGroupDto));
@@ -75,6 +54,18 @@ namespace Sim.Domain.Logic
             PolarContact = IsHigh() ? IsNegative() : PolarContact;
 
             return this;
+        }
+
+        public void Compile(InputContactGroupDto contactState)
+        {
+            var scriptOptions = ScriptOptions.Default
+                .AddReferences(typeof(ChainState).Assembly)
+                .AddReferences(typeof(ContactState).Assembly)
+                .AddReferences(typeof(Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo).Assembly)
+                .AddImports("System");
+
+            _inputScript = CSharpScript.Create<ChainState>(ToLogic(), scriptOptions, typeof(InputContactGroupDto));
+            _inputScript.Compile();
         }
 
         private bool IsHigh() => _relayState == ChainValue.P || _relayState == ChainValue.N;

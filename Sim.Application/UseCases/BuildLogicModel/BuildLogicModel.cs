@@ -25,10 +25,19 @@ public class BuildLogicModel(IMemoryCache cache, ILogger<BuildLogicModel> logger
     private readonly ILogger<BuildLogicModel> _logger = logger;
     public async Task<BuildResult> Generate(UiSchemeModel uiModel)
     {
+        Stopwatch stopwatch = new Stopwatch();
+        stopwatch.Start();
 
         var (relays, contacts) = Parser.Parse(uiModel);
 
         var model = new LogicModel(relays, contacts);
+        model.Compile();
+
+        _cache.Set(model.Id.ToString(), model, TimeSpan.FromMinutes(10));
+        _logger.LogInformation(message: "Build model " + model.Id);
+
+        stopwatch.Stop();
+        _logger.LogInformation("Build model elapsed time: " + stopwatch.Elapsed.TotalMilliseconds);
 
         return new BuildResult
         {

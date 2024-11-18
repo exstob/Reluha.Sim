@@ -1,4 +1,5 @@
-﻿using Sim.Domain.ParsedScheme;
+﻿using Microsoft.CodeAnalysis.Scripting;
+using Sim.Domain.ParsedScheme;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -41,6 +42,8 @@ namespace Sim.Domain.Logic
             var expandDict = _contactGroups.x as IDictionary<string, object>;
             return (ContactState)expandDict![contactName];
         }
+
+        public void Compile() => Relays.ForEach(r => r.State.Compile(_contactGroups));
 
         public async Task<(bool, List<Relay>)> Evaluate()
         {

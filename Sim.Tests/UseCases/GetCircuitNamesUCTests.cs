@@ -27,7 +27,7 @@ public class GetCircuitNamesUCTests
         var useCase = new GetCircuitNamesUC(new Repository(), fakeLogger);
         var result = useCase.GetCircuits();
 
-        result.Count().ShouldBe(11);
+        result.Count().ShouldBe(12);
         result[0].ShouldBe("BridgeConnection.json");
     }
 }

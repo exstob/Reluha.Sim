@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sim.Application.Dtos.Simulate;
+using Sim.Domain.ParsedScheme;
 
 namespace Sim.Application.UseCases.CreateLogicModel;
 
@@ -24,23 +25,25 @@ public class RunLogicModel(IMemoryCache cache, ILogger<RunLogicModel> logger) : 
     private readonly IMemoryCache _cache = cache;
     private readonly ILogger<RunLogicModel> _logger = logger;
     public async Task<SimulateResult> Generate(UiSchemeModel uiModel) 
-    {
+    {            
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
-        var (relays, contacts) = Parser.Parse(uiModel);
+        LogicModel model;
+        if (uiModel.compiledSchemeId is not null && _cache.TryGetValue<LogicModel>(uiModel.compiledSchemeId, out var cachedModel) && cachedModel is not null)
+        {
+            model = cachedModel;
+            _logger.LogInformation(message: "Use cached model " + cachedModel.Id);
+        }
+        else
+        {
+            var (relays, contacts) = Parser.Parse(uiModel);
+            model = new LogicModel(relays, contacts);
+            _cache.Set(model.Id.ToString(), model, TimeSpan.FromMinutes(10));
+        }
+
+        var evalRelays = await model.EvaluateAll();
         stopwatch.Stop();
-        _logger.LogInformation("Parse elapsed time: " + stopwatch.Elapsed.TotalMilliseconds);
-
-        var model = new LogicModel(relays, contacts);
-
-        stopwatch.Reset();
-        stopwatch.Start();
-        relays = await model.EvaluateAll();
-        stopwatch.Stop();
-        //Console.WriteLine("Evaluate elapsed time: " + stopwatch.Elapsed);
-        _logger.LogInformation("Evaluate elapsed time: " + stopwatch.Elapsed.TotalMilliseconds);
-
-        _cache.Set(model.Id.ToString(), model, TimeSpan.FromMinutes(10));
+        _logger.LogInformation("Run model elapsed time: " + stopwatch.Elapsed.TotalMilliseconds);
 
         return new SimulateResult
         {
@@ -48,7 +51,7 @@ public class RunLogicModel(IMemoryCache cache, ILogger<RunLogicModel> logger) : 
             Steps = [new SimulateStepResult
                 {
                     StepName = "Init",
-                    Relays = relays.Select(r => new RelayResult { Name = r.Name, NormalContact = r.State.NormalContact, PolarContact = r.State.PolarContact }).ToList(),
+                    Relays = evalRelays.Select(r => new RelayResult { Name = r.Name, NormalContact = r.State.NormalContact, PolarContact = r.State.PolarContact }).ToList(),
                 }]
         };
     }
