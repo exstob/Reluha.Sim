@@ -31,7 +31,7 @@ public class BuildLogicModel(IMemoryCache cache, ILogger<BuildLogicModel> logger
         var (relays, contacts) = Parser.Parse(uiModel);
 
         var model = new LogicModel(relays, contacts);
-        model.Compile();
+        await model.Compile();
 
         _cache.Set(model.Id.ToString(), model, TimeSpan.FromMinutes(10));
         _logger.LogInformation(message: "Build model " + model.Id);

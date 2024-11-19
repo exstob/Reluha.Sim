@@ -53,6 +53,7 @@ namespace Sim.Tests
             ];
 
             var model = new LogicModel(relays, contacts);
+            await model.Compile();
 
             var (result, _) = await model.Evaluate();
             var r1 = model.GetContact("R1");

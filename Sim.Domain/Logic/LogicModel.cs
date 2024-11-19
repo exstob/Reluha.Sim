@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.Scripting;
+﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
 using Sim.Domain.ParsedScheme;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ namespace Sim.Domain.Logic
         public Ulid Id { get; } = Ulid.NewUlid();
         private readonly InputContactGroupDto _contactGroups = InitContacts(contacts);
         public readonly List<Relay> Relays = relays;
+        private ScriptState? script;
+
         private static InputContactGroupDto InitContacts(List<Contact> contacts)
         {
             InputContactGroupDto contactGroups = new();
@@ -43,12 +46,35 @@ namespace Sim.Domain.Logic
             return (ContactState)expandDict![contactName];
         }
 
-        public void Compile() => Relays.ForEach(r => r.State.Compile(_contactGroups));
+        public async Task Compile() 
+        {
+            script ??= await GenerateScript();
+        } 
+
+        private async Task<ScriptState> GenerateScript()
+        {
+            string modelScript = string.Join(Environment.NewLine, Relays.Select(r => $"public ChainState {r.Name}() => {r.State.ToLogic()};"));
+
+            var scriptOptions = ScriptOptions.Default
+                .AddReferences(typeof(ChainState).Assembly)
+                .AddReferences(typeof(ContactState).Assembly)
+                .AddReferences(typeof(Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo).Assembly)
+                .AddImports("System")
+                .AddImports("Sim.Domain.Logic");
+
+            var _inputScript = CSharpScript.Create(modelScript, scriptOptions, typeof(InputContactGroupDto));
+            _inputScript.Compile();
+
+            var scriptState = await _inputScript.RunAsync(_contactGroups, new CancellationToken());
+            return scriptState;
+
+        }
 
         public async Task<(bool, List<Relay>)> Evaluate()
         {
             //var tasks = Relays.Select(r => Task.Run(() => r.State.Calc(_contactGroups))).ToList();
-            var tasks = Relays.Select(r => r.State.Calc(_contactGroups)).ToList();
+            // var tasks = Relays.Select(r => r.State.Calc(_contactGroups)).ToList();
+            var tasks = Relays.Select(r => r.State.CalcFromExternal(_contactGroups, script, $"{r.Name}()")).ToList();
             await Task.WhenAll(tasks);
 
             var isUpdated = false;
@@ -71,6 +97,7 @@ namespace Sim.Domain.Logic
 
         public async Task<List<Relay>> EvaluateAll()
         {
+            await Compile();
             List<Relay> relays = [];
             bool loop = true;
 

@@ -56,6 +56,16 @@ namespace Sim.Domain.Logic
             return this;
         }
 
+        public async Task<RelayState> CalcFromExternal(InputContactGroupDto contactState, ScriptState? script, string executeCode)
+        {
+            var relayNewState = (await script!.ContinueWithAsync<ChainState>(executeCode)).ReturnValue;
+            _updated = relayNewState.Value != _relayState.Value;
+            _relayState = relayNewState;
+            PolarContact = IsHigh() ? IsNegative() : PolarContact;
+
+            return this;
+        }
+
         public void Compile(InputContactGroupDto contactState)
         {
             var scriptOptions = ScriptOptions.Default
