@@ -47,6 +47,11 @@ builder.Services
        .AddSwaggerGen()
        .AddMemoryCache();
 
+//builder.Services.ConfigureHttpJsonOptions(options =>
+//{
+//    options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
+//});
+
 builder.Services.AddSignalR();
 
 builder.Services.AddSingleton<IRepository, Repository>();
@@ -55,21 +60,23 @@ builder.Services.AddTransient<IBuildLogicModel, BuildLogicModel > ();
 builder.Services.AddTransient<ISimulateLogicModel, SimulateLogicModel>();
 builder.Services.AddTransient<IGetCircuitNamesUC, GetCircuitNamesUC>();
 builder.Services.AddTransient<IGetCircuitUC, GetCircuitUC>();
-builder.Services.AddSingleton<MqttServices>();
+builder.Services.AddSingleton<SimulateHub>();
 
-builder.Services.AddHostedMqttServer(options =>
-{
-    options.WithDefaultEndpoint();
-    options.WithDefaultEndpointPort(1883);
-    options.WithConnectionBacklog(100);
+builder.Services.InjectMqttServices();
 
-});    
+//builder.Services.AddHostedMqttServer(options =>
+//{
+//    options.WithDefaultEndpoint();
+//    options.WithDefaultEndpointPort(1883);
+//    options.WithConnectionBacklog(100);
 
+//});    
 
-builder.Services.AddMqttTcpServerAdapter();
-builder.Services.AddMqttWebSocketServerAdapter();
+// Add WebSocket and TCP server adapters
+//builder.Services.AddMqttTcpServerAdapter();
+//builder.Services.AddMqttWebSocketServerAdapter();
 
-builder.Services.AddMqttConnectionHandler();
+//builder.Services.AddMqttConnectionHandler();
 builder.Services.AddConnections();
 
 
@@ -125,8 +132,9 @@ app.MapGet($"/api/{api_version}/circuits/{{name}}", (IGetCircuitUC getCircuit, s
 });
 
 
-app.MapGet("/ping", () =>
+app.MapGet("/ping", async (MqClient client) =>
 {
+    await client.Ping_Server();
     return Results.Ok($"API version is {api_version}");
 });
 
@@ -137,21 +145,21 @@ app.MapGet("/", () =>
 
 // Configure MQTT application
 app.UseWebSockets();
-app.UseMqttServer(server =>
-{
-    var mqttServices = app.Services.GetRequiredService<MqttServices>();
-    mqttServices.InitMqttServer(server);
+//app.UseMqttServer(server =>
+//{
+//    var mqttServices = app.Services.GetRequiredService<MqBroker>();
+//    mqttServices.InitMqttServer(server);
 
-    server.StartedAsync += async args =>
-    {
-        var logger = app.Services.GetRequiredService<ILogger<Program>>();
-        logger.LogInformation("MQTT Server started.");
-        await Task.CompletedTask;
-    };
+//    server.StartedAsync += async args =>
+//    {
+//        var logger = app.Services.GetRequiredService<ILogger<Program>>();
+//        logger.LogInformation("MQTT Server started.");
+//        await Task.CompletedTask;
+//    };
 
-    server.ClientConnectedAsync += mqttServices.OnClientConnected;
-    server.InterceptingPublishAsync += mqttServices.OnIntercepted;
+//    server.ClientConnectedAsync += mqttServices.OnClientConnected;
+//    server.InterceptingPublishAsync += mqttServices.OnIntercepted;
 
-});
+//});
 
 app.Run();

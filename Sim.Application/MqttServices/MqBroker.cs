@@ -11,14 +11,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Sim.Application.MqttServices;
 
-sealed public class MqttServices
+sealed public class MqBroker
 {
     private MqttServer? _mqttServer;
-    private readonly ILogger<MqttServices> _logger;
+    private readonly ILogger<MqBroker> _logger;
 
     private string _lastClientId;
 
-    public MqttServices(ILogger<MqttServices> logger)
+    public MqBroker(ILogger<MqBroker> logger)
     {
         _logger = logger;
     }

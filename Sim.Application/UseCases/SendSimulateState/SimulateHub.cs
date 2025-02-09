@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Sim.Application.MqttServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,24 +14,54 @@ public class SimulateHub : Hub
 
     public override Task OnConnectedAsync()
     {
-        string userId = Context.UserIdentifier; // Assume you're using authentication
-        UserConnections[userId] = Context.ConnectionId;
+        //string userId = Context.UserIdentifier ?? "incognito"; // Assume you're using authentication
+
+        var httpContext = Context.GetHttpContext();
+        if (httpContext != null)
+        {
+            var schemeId = httpContext.Request.Query["schemeId"];
+            if (!string.IsNullOrEmpty(schemeId))
+            {
+                UserConnections[schemeId] = Context.ConnectionId;
+                Console.WriteLine($"Web socket is connected with schemeId: {schemeId}");
+            }
+            else
+            {
+                Console.WriteLine("schemeId not found in query parameters.");
+            }
+        }
+
         return base.OnConnectedAsync();
     }
 
     public override Task OnDisconnectedAsync(Exception? exception)
     {
-        string userId = Context.UserIdentifier;
-        UserConnections.Remove(userId);
+        string userId = Context.UserIdentifier ?? "incognito";
+        var httpContext = Context.GetHttpContext();
+        if (httpContext != null)
+        {
+            var schemeId = httpContext.Request.Query["schemeId"];
+            if (!string.IsNullOrEmpty(schemeId))
+            {
+                UserConnections.Remove(userId);
+                Console.WriteLine($"Web socket is connected with schemeId: {schemeId}");
+            }
+            else
+            {
+                Console.WriteLine("schemeId not found in query parameters.");
+            }
+        }
+
         return base.OnDisconnectedAsync(exception);
     }
 
-    public async Task PushSimulateState(string userId, string message)
+    public async Task PushSimulateState(string schemeId, SensorData data)
     {
-        if (UserConnections.TryGetValue(userId, out var connectionId))
+        if (UserConnections.TryGetValue(schemeId, out var connectionId))
         {
-            await Clients.Client(connectionId).SendAsync("ReceiveMessage", message);
+            await Clients.Client(connectionId).SendAsync("ReceiveSimulateState", data);
         }
+        await Clients.All.SendAsync("ReceiveSimulateState", schemeId, data);
     }
 
     public async Task MessageFromWeb(string user, string message)
