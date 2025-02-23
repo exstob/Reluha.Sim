@@ -9,11 +9,14 @@ namespace Sim.Application.MqttServices;
 
 public class SensorData
 {
-    public  string? Name { get; set; }
+    [JsonPropertyName("name")]
+    public required string Name { get; set; }
     [JsonPropertyName("id")]
     public required string Id { get; set; }
     [JsonPropertyName("schemeId")]
     public required string SchemeId { get; set; }
-    public bool NormalContact { get; init; }
-    public bool PolarContact { get; init; }
+    [JsonPropertyName("normalContact")]
+    public bool? NormalContact { get; init; }
+    [JsonPropertyName("polarContact")]
+    public bool? PolarContact { get; init; }
 }

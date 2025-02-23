@@ -38,7 +38,7 @@ public class RunLogicModel(IMemoryCache cache, ILogger<RunLogicModel> logger) : 
         {
             var (relays, contacts) = Parser.Parse(uiModel);
             model = new LogicModel(relays, contacts);
-            _cache.Set(model.Id.ToString(), model, TimeSpan.FromMinutes(10));
+            _cache.Set(model.Id.ToString(), model, TimeSpan.FromMinutes(60));
         }
 
         var evalRelays = await model.EvaluateAll();

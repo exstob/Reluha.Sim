@@ -2,7 +2,7 @@
   "profiles": {
     "Sim.Api": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
           "API__version": "1.0"

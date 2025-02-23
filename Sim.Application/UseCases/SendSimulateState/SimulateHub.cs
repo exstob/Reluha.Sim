@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Sim.Application.Dtos.Simulate;
 using Sim.Application.MqttServices;
+using Sim.Domain.UiSchematic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,13 +57,32 @@ public class SimulateHub : Hub
         return base.OnDisconnectedAsync(exception);
     }
 
-    public async Task PushSimulateState(string schemeId, SensorData data)
+    public async Task PushSwitchState(string schemeId, UiSwitcher switcher)
     {
+        if (Clients == null)
+        {
+            Console.WriteLine("Workspace is unavailable");
+            return;
+        }
+
         if (UserConnections.TryGetValue(schemeId, out var connectionId))
         {
-            await Clients.Client(connectionId).SendAsync("ReceiveSimulateState", data);
+            await Clients.Client(connectionId).SendAsync("ReceiveSwitchState", switcher);
         }
-        await Clients.All.SendAsync("ReceiveSimulateState", schemeId, data);
+    }
+    public async Task PushSimulateState(SimulateResult result)
+    {
+        if (Clients == null)
+        {
+            Console.WriteLine("Workspace is unavailable");
+            return;
+        }
+        
+        if (UserConnections.TryGetValue(result.SchemeId, out var connectionId))
+        {
+            await Clients.Client(connectionId).SendAsync("ReceiveSimulateState", result);
+        }
+        //await Clients.All.SendAsync("ReceiveSimulateState", result.SchemeId, result);
     }
 
     public async Task MessageFromWeb(string user, string message)

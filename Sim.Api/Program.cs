@@ -64,102 +64,76 @@ builder.Services.AddSingleton<SimulateHub>();
 
 builder.Services.InjectMqttServices();
 
-//builder.Services.AddHostedMqttServer(options =>
-//{
-//    options.WithDefaultEndpoint();
-//    options.WithDefaultEndpointPort(1883);
-//    options.WithConnectionBacklog(100);
-
-//});    
-
-// Add WebSocket and TCP server adapters
-//builder.Services.AddMqttTcpServerAdapter();
-//builder.Services.AddMqttWebSocketServerAdapter();
-
-//builder.Services.AddMqttConnectionHandler();
 builder.Services.AddConnections();
 
 
-var app = builder.Build();
+var webApp = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (webApp.Environment.IsDevelopment())
 {
-    app.UseSwagger()
+    webApp.UseSwagger()
        .UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+webApp.UseHttpsRedirection();
+webApp.UseStaticFiles();
 
-app.UseRouting();
+webApp.UseRouting();
 
-app.UseCors("AllowSpecificOriginPolicy");
+webApp.UseCors("AllowSpecificOriginPolicy");
 
 var api_version = Environment.GetEnvironmentVariable("API__version");
 
-app.MapHub<SimulateHub>("/simulate-hub");
+webApp.MapHub<SimulateHub>("/simulate-hub");
 
-app.MapPost($"/api/{api_version}/build", async (IBuildLogicModel builder, UiSchemeModel elements) =>
+webApp.MapPost($"/api/{api_version}/build", async (IBuildLogicModel builder, UiSchemeModel elements) =>
 {
     var buildResult = await builder.Generate(elements).ConfigureAwait(false);
     Console.WriteLine(buildResult.SchemeId);
     return Results.Ok(buildResult);
 });
 
-app.MapPost($"/api/{api_version}/run", async (IRunLogicModel creator, UiSchemeModel elements) =>
+webApp.MapPost($"/api/{api_version}/run", async (IRunLogicModel creator, UiSchemeModel elements) =>
 {
     var initResult = await creator.Generate(elements).ConfigureAwait(false);
     Console.WriteLine(initResult.SchemeId);
     return Results.Ok(initResult);
 });
 
-app.MapPost($"/api/{api_version}/simulate", async (ISimulateLogicModel simulator, SimulateData simData) =>
+webApp.MapPost($"/api/{api_version}/simulate", async (ISimulateLogicModel simulator, SimulateData simData) =>
 {
     var result = await simulator.Simulate(simData).ConfigureAwait(false);
     return Results.Ok(result);
 });
 
-app.MapGet($"/api/{api_version}/circuits", (IGetCircuitNamesUC getCircuitNames) =>
+webApp.MapGet($"/api/{api_version}/circuits", (IGetCircuitNamesUC getCircuitNames) =>
 {
     var result = getCircuitNames.GetCircuits();
     return Results.Ok(result);
 });
 
-app.MapGet($"/api/{api_version}/circuits/{{name}}", (IGetCircuitUC getCircuit, string name) =>
+webApp.MapGet($"/api/{api_version}/circuits/{{name}}", (IGetCircuitUC getCircuit, string name) =>
 {
     var result = getCircuit.GetCircuit(name);
     return Results.Ok(result);
 });
 
 
-app.MapGet("/ping", async (MqClient client) =>
+webApp.MapGet("/ping", async (MqClient client) =>
 {
-    await client.Ping_Server();
+    await client.PingAndSubscribeServer();
     return Results.Ok($"API version is {api_version}");
 });
 
-app.MapGet("/", () =>
+webApp.MapGet("/", () =>
 {
     return Results.Redirect("https://white-ocean-05ee55103.5.azurestaticapps.net");
 });
 
 // Configure MQTT application
-app.UseWebSockets();
-//app.UseMqttServer(server =>
-//{
-//    var mqttServices = app.Services.GetRequiredService<MqBroker>();
-//    mqttServices.InitMqttServer(server);
+webApp.UseWebSockets();
 
-//    server.StartedAsync += async args =>
-//    {
-//        var logger = app.Services.GetRequiredService<ILogger<Program>>();
-//        logger.LogInformation("MQTT Server started.");
-//        await Task.CompletedTask;
-//    };
 
-//    server.ClientConnectedAsync += mqttServices.OnClientConnected;
-//    server.InterceptingPublishAsync += mqttServices.OnIntercepted;
+webApp.InitMqttServices();
 
-//});
-
-app.Run();
+webApp.Run();

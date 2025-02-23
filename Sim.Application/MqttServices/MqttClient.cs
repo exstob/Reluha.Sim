@@ -13,10 +13,13 @@ using MQTTnet.Packets;
 using MQTTnet.Protocol;
 using System.Text.Json;
 using Sim.Application.UseCases.SendSimulateState;
+using Sim.Application.Dtos.Simulate;
+using Sim.Domain.UiSchematic;
+using Sim.Application.UseCases.SimulateLogicModel;
 
 namespace Sim.Application.MqttServices;
 
-public class MqClient(MqttClientFactory factory, MqttClientOptionsBuilder builder, SimulateHub hub)
+public class MqClient(MqttClientFactory factory, MqttClientOptionsBuilder builder, SimulateHub hub, ISimulateLogicModel simulator)
 {
     private IMqttClient _mqttClient = factory.CreateMqttClient();
     private readonly MqttClientOptions _option = builder
@@ -25,22 +28,13 @@ public class MqClient(MqttClientFactory factory, MqttClientOptionsBuilder builde
             .Build();
 
     private SimulateHub _hub = hub;
+    private ISimulateLogicModel _simulator = simulator;
+
 
     //private readonly JsonSerializerOptions serializeOptions = new () { PropertyNameCaseInsensitive = true };
 
-public async Task Ping_Server()
+    public async Task PingAndSubscribeServer()
     {
-        _mqttClient.ApplicationMessageReceivedAsync += async e =>
-        {
-            var payload = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-            Console.WriteLine($"Received application message: {payload}");
-
-            var data = JsonSerializer.Deserialize<SensorData>(payload);
-
-            await _hub.PushSimulateState(data.SchemeId, data);
-
-        };
-
         if (!_mqttClient.IsConnected)
             await _mqttClient.ConnectAsync(_option, CancellationToken.None);
 
@@ -54,6 +48,69 @@ public async Task Ping_Server()
         await _mqttClient.PublishAsync(message, CancellationToken.None);
 
         Console.WriteLine("The MQTT server replied to the ping request.");
+
+        await SubscribeOnSensor();
+    }
+
+    public async Task SubscribeOnSensor()
+    {
+        _mqttClient.ApplicationMessageReceivedAsync += async e =>
+        {
+            var payload = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
+            Console.WriteLine($"Received application message: {payload}");
+
+
+            var data = JsonSerializer.Deserialize<SensorData>(payload);
+            if (data == null)
+            {
+                Console.WriteLine("Failed to deserialize the payload.");
+                return;
+            }
+
+            var switchers = new List<UiSwitcher>();
+            if (data.NormalContact.HasValue)
+            {
+                var normalSwitcher = new UiSwitcher()
+                {
+                    Id = data.Id,
+                    Name = data.Name,
+                    ExtraProps = new UiSwitcherExtraProps("normal", false),
+                    LogicState = data.NormalContact.Value
+                };
+                switchers.Add(normalSwitcher);
+                //_ = Task.Run(() => _hub.PushSwitchState(data.SchemeId, normalSwitcher));
+                await _hub.PushSwitchState(data.SchemeId, normalSwitcher);
+            }
+
+            if (data.PolarContact.HasValue)
+            {
+                var polarSwitcher = new UiSwitcher()
+                {
+                    Id = data.Id,
+                    Name = data.Name,
+                    ExtraProps = new UiSwitcherExtraProps("polar", false),
+                    LogicState = data.PolarContact.Value
+                };
+                switchers.Add(polarSwitcher);
+                //_ = Task.Run(() => _hub.PushSwitchState(data.SchemeId, polarSwitcher));
+                await _hub.PushSwitchState(data.SchemeId, polarSwitcher);
+            }
+
+            var simulateData = new SimulateData()
+            {
+                SchemeId = data.SchemeId,
+                Steps = [new() {
+                        StepName = $"Step-{data.Name}-{DateTime.Now}",
+                        Switchers = switchers
+                        }]
+            };
+
+            var result = await _simulator.Simulate(simulateData);
+
+
+            //_ = Task.Run(() => _hub.PushSimulateState(result));
+            await _hub.PushSimulateState(result);
+        };
 
 
         var mqttSubscribeOptions = factory
