@@ -17,6 +17,11 @@ using MQTTnet.AspNetCore;
 using MQTTnet.Server;
 using Microsoft.Extensions.Options;
 using MQTTnet;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Sim.Infrastructure.Models;
+using System;
+using Sim.Api;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +33,9 @@ builder.Services.AddLogging(config =>
     config.AddDebug();
     config.AddAzureWebAppDiagnostics();
 });
+
+builder.Services.AddDbContext<SchemeDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
 builder.Services.AddCors(options =>
@@ -75,6 +83,7 @@ if (webApp.Environment.IsDevelopment())
        .UseSwaggerUI();
 }
 
+webApp.InitRepository();
 webApp.UseHttpsRedirection();
 webApp.UseStaticFiles();
 
@@ -119,9 +128,8 @@ webApp.MapGet($"/api/{api_version}/circuits/{{name}}", (IGetCircuitUC getCircuit
 });
 
 
-webApp.MapGet("/ping", async (MqClient client) =>
+webApp.MapGet("/ping", () =>
 {
-    await client.PingAndSubscribeServer();
     return Results.Ok($"API version is {api_version}");
 });
 
