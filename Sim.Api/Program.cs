@@ -22,9 +22,15 @@ using Microsoft.Extensions.Configuration;
 using Sim.Infrastructure.Models;
 using System;
 using Sim.Api;
+using DotNetEnv;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+if (builder.Environment.IsDevelopment())
+{
+    Env.Load();
+}
 
 builder.Services.AddLogging(config =>
 {
@@ -35,7 +41,7 @@ builder.Services.AddLogging(config =>
 });
 
 builder.Services.AddDbContext<SchemeDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(Environment.GetEnvironmentVariable("NEON_POSTGRES_CONNECTION")));
 
 
 builder.Services.AddCors(options =>
@@ -135,7 +141,14 @@ webApp.MapGet("/ping", () =>
 
 webApp.MapGet("/", () =>
 {
-    return Results.Redirect("https://white-ocean-05ee55103.5.azurestaticapps.net");
+    if (webApp.Environment.IsDevelopment())
+    {
+        return Results.Redirect("http://localhost:3000");
+    }
+    else
+    {
+        return Results.Redirect("https://white-ocean-05ee55103.5.azurestaticapps.net");
+    }
 });
 
 // Configure MQTT application
