@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using Sim.Domain.ParsedScheme;
 using System.Diagnostics;
 using Microsoft.Extensions.Logging;
+using Sim.Domain.ParsedSchema;
+using Sim.Application.MqttServices;
 
 namespace Sim.Application.UseCases.SimulateLogicModel;
 
@@ -18,10 +20,11 @@ public interface ISimulateLogicModel : IUseCase
     public Task<SimulateResult> Simulate(SimulateData simReq);
 }
 
-public class SimulateLogicModel(IMemoryCache cache, ILogger<SimulateLogicModel> logger) : ISimulateLogicModel
+public class SimulateLogicModel(IMemoryCache cache, MqClient client, ILogger<SimulateLogicModel> logger) : ISimulateLogicModel
 {
     private readonly IMemoryCache _cache = cache;
     private readonly ILogger<SimulateLogicModel> _logger = logger;
+    private readonly MqClient _client = client;
     public async Task<SimulateResult> Simulate(SimulateData simReq)
     {
         List<Relay> relays = [];
@@ -36,6 +39,14 @@ public class SimulateLogicModel(IMemoryCache cache, ILogger<SimulateLogicModel> 
             }
 
             relays = await model.EvaluateAll();
+            foreach (var relay in relays)
+            {
+                if (relay?.Connection?.MqttTopic is {} topic) 
+                {
+                    await _client.PublishAsync($"/relays/{topic}" , relay.State.NormalContact.ToString());
+                }
+                    
+            }
             stopwatch.Stop();
             _logger.LogInformation("Simulate elapsed time: " + stopwatch.Elapsed.TotalMilliseconds);
         }

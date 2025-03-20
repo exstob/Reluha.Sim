@@ -10,6 +10,7 @@ using System.Xml.Linq;
 using Sim.Domain.Logic;
 using System.Reflection;
 using System.Diagnostics;
+using Sim.Domain.ParsedSchema;
 
 
 namespace Sim.Application.NanoServices;

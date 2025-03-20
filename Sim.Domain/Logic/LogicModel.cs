@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
+using Sim.Domain.ParsedSchema;
 using Sim.Domain.ParsedScheme;
 using System;
 using System.Collections.Generic;

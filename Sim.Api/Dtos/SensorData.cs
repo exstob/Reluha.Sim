@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Sim.Application.MqttServices;
+namespace Sim.Api.Dtos;
 
 public class SensorData
 {

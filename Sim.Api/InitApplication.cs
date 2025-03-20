@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Sim.Application.UseCases.SimulateLogicModel;
 
 namespace Sim.Api;
 
@@ -16,15 +17,16 @@ public static class InitApplication
         using (var scope = app.Services.CreateScope())
         {
             var dbContext = scope.ServiceProvider.GetRequiredService<SchemeDbContext>();
+            var logger = scope.ServiceProvider.GetRequiredService<ILogger<WebApplication>>();
 
             try
             {
                 dbContext.Database.Migrate();
-                Console.WriteLine("Database migrated successfully!");
+                logger.LogInformation("Database migrated successfully!");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Database migration failed: {ex.Message}");
+                logger.LogError($"Database migration failed: {ex.Message}");
             }
         }
     }

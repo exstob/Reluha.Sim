@@ -1,4 +1,5 @@
-﻿using Sim.Domain.UiSchematic;
+﻿using Sim.Domain.ParsedSchema;
+using Sim.Domain.UiSchematic;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Shouldly;
 using Sim.Domain.Logic;
+using Sim.Domain.ParsedSchema;
 using Sim.Domain.ParsedScheme;
 using Sim.Domain.UiSchematic;
 

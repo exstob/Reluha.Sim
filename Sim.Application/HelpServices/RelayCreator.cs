@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Sim.Domain.Logic;
+using Sim.Domain.ParsedSchema;
 using Sim.Domain.ParsedScheme;
 using Sim.Domain.UiSchematic;
 
@@ -23,6 +24,11 @@ public class RelayCreator
             if (plusPin != null && minusPin != null)
             {
                 var relay = new Relay { Name = iuRelay.Name, State = new RelayState(plusPin.ToString(), minusPin.ToString()) };
+                if (iuRelay.ExtraProps.MqttTopic is not null) 
+                {
+                    relay.Connection = new() { MqttTopic = iuRelay.ExtraProps.MqttTopic };
+                }
+
                 relays.Add(relay);
             }
             else

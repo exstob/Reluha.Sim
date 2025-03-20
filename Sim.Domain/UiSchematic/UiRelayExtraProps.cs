@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Sim.Domain.UiSchematic;
 
-public record UiRelay : UiElement
-{
-    public new UiRelayExtraProps ExtraProps { get; set; }
-}
+public record UiRelayExtraProps(int? TimeUp, int? TimeDown, string MqttTopic);
+

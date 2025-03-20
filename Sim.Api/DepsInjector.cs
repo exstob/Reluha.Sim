@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using MQTTnet;
+using Sim.Api;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,15 +14,14 @@ public static class DepsInjector
 {
     static public void InjectMqttServices(this IServiceCollection service) 
     {
-        service.AddSingleton<MqBroker>();
-        service.AddSingleton<MqClient>();
-        service.AddSingleton<MqttClientFactory>();
-        service.AddSingleton<MqttClientOptionsBuilder>();
+        service.AddTransient<MqttWorker>();
+        service.AddTransient<MqttClientFactory>();
+        service.AddTransient<MqttClientOptionsBuilder>();
     }
 
     static public void InitMqttServices(this WebApplication app)
     {
-        var mqClient = app.Services.GetRequiredService<MqClient>();
+        var mqWorker = app.Services.GetRequiredService<MqttWorker>();
 
         app.Lifetime.ApplicationStarted.Register(() =>
         {
@@ -29,7 +29,7 @@ public static class DepsInjector
             {
                 try
                 {
-                    await mqClient.PingAndSubscribeServer();
+                    await mqWorker.PingAndSubscribeServer();
                 }
                 catch (Exception ex)
                 {

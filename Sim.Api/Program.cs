@@ -40,6 +40,9 @@ builder.Services.AddLogging(config =>
     config.AddAzureWebAppDiagnostics();
 });
 
+Console.WriteLine("Env_NEON_POSTGRES_CONNECTION");
+Console.WriteLine(Environment.GetEnvironmentVariable("NEON_POSTGRES_CONNECTION"));
+
 builder.Services.AddDbContext<SchemeDbContext>(options =>
     options.UseNpgsql(Environment.GetEnvironmentVariable("NEON_POSTGRES_CONNECTION")));
 
@@ -68,15 +71,17 @@ builder.Services
 
 builder.Services.AddSignalR();
 
+builder.Services.InjectMqttServices();
+builder.Services.AddSingleton<MqClient>();
 builder.Services.AddSingleton<IRepository, Repository>();
 builder.Services.AddTransient<IRunLogicModel, RunLogicModel>();
-builder.Services.AddTransient<IBuildLogicModel, BuildLogicModel > ();
+builder.Services.AddTransient<IBuildLogicModel, BuildLogicModel> ();
 builder.Services.AddTransient<ISimulateLogicModel, SimulateLogicModel>();
 builder.Services.AddTransient<IGetCircuitNamesUC, GetCircuitNamesUC>();
 builder.Services.AddTransient<IGetCircuitUC, GetCircuitUC>();
 builder.Services.AddSingleton<SimulateHub>();
 
-builder.Services.InjectMqttServices();
+
 
 builder.Services.AddConnections();
 
